@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Documentation on The Arcade</title>
+    <link>http://localhost:1313/series/documentation/</link>
+    <description>Recent content in Documentation on The Arcade</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>© 2024 Sidharth AKA retr0ds</copyright>
+    <lastBuildDate>Wed, 27 Mar 2024 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/series/documentation/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Windows Shellcoding Series 0</title>
+      <link>http://localhost:1313/posts/shellcoding_series/series0_pop_a_calc/</link>
+      <pubDate>Wed, 27 Mar 2024 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/shellcoding_series/series0_pop_a_calc/</guid>
+      <description>Windows Shellcoding Series 0 # Init() # Welcome to the prequel blogpost of my Shellcoding Series With this I intend to start of a series of Shellcoding based blogposts aiming to develop and post interesting shellcodes</description>
+      
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Reversing on The Arcade</title>
+    <link>http://localhost:1313/categories/reversing/</link>
+    <description>Recent content in Reversing on The Arcade</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>© 2024 Sidharth AKA retr0ds</copyright>
+    <lastBuildDate>Wed, 27 Mar 2024 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/categories/reversing/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Popping a calculator - 32 bit - Part 3/3</title>
+      <link>http://localhost:1313/posts/shellcoding_series/series1_pop_a_calc_part_3/</link>
+      <pubDate>Wed, 27 Mar 2024 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/shellcoding_series/series1_pop_a_calc_part_3/</guid>
+      <description>Writing the Shellcode x86 W32 # 32 bit also goes through the same steps as 64 bits so I woudn&amp;rsquo;t be explaining it in detail rather, I have commented it on the side for you to understand and pick up based on context from x64</description>
+      
+    </item>
+    
+    <item>
+      <title>Popping a calculator - 64 bit - Part 2/3</title>
+      <link>http://localhost:1313/posts/shellcoding_series/series1_pop_a_calc_part_2/</link>
+      <pubDate>Wed, 27 Mar 2024 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/shellcoding_series/series1_pop_a_calc_part_2/</guid>
+      <description>Writing the Shellcode x64 # This part of the blog covers the 64 bit shellcode to pop a calculator.</description>
+      
+    </item>
+    
+    <item>
+      <title>Popping a calculator - Basic - Part 1/3</title>
+      <link>http://localhost:1313/posts/shellcoding_series/series1_pop_a_calc_part_1/</link>
+      <pubDate>Wed, 27 Mar 2024 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/shellcoding_series/series1_pop_a_calc_part_1/</guid>
+      <description>Windows Shellcoding Series 1 - Part 1/3 # Popping a calculator # Init() # Now in the series I would be covering both the 64 bit and 32 bit versions of the shellcode to pop a calculator and would go about explaining them both separately.</description>
+      
+    </item>
+    
+    <item>
+      <title>Windows Shellcoding Series 0</title>
+      <link>http://localhost:1313/posts/shellcoding_series/series0_basic/</link>
+      <pubDate>Wed, 27 Mar 2024 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/shellcoding_series/series0_basic/</guid>
+      <description>Windows Shellcoding Series 0 # Init() # Welcome to the prequel blogpost of my Shellcoding Series With this I intend to start of a series of Shellcoding based blogposts aiming to develop and post interesting shellcodes</description>
+      
+    </item>
+    
+    <item>
+      <title>Vessel Cartographer HTBCTF23</title>
+      <link>http://localhost:1313/posts/vessel_cartographer_htb2023/</link>
+      <pubDate>Fri, 24 Mar 2023 22:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/vessel_cartographer_htb2023/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;tl;dr&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Dynamically resolved hashed API&lt;/li&gt;
+&lt;li&gt;Tls_call_back based anti-debug check&lt;/li&gt;
+&lt;li&gt;AntiDebugFlag check implemented using ProcessInformationClass&lt;/li&gt;
+&lt;li&gt;AES_CBC decryption of image  to find flag&lt;/li&gt;
+&lt;/ul&gt;</description>
+      
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,2507 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="scroll-smooth" data-default-appearance="dark"
+  data-auto-appearance="true"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8" />
+  
+  <meta http-equiv="content-language" content="en" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  
+  <title>Popping a calculator - 64 bit - Part 2/3 &middot; The Arcade</title>
+  <meta name="title" content="Popping a calculator - 64 bit - Part 2/3 &middot; The Arcade" />
+  
+  
+  <meta name="keywords" content="Blog, Shellcode, Windows, Series, Pop_a_calc, " />
+  
+  
+  <link rel="canonical" href="http://localhost:1313/posts/shellcoding_series/series1_pop_a_calc_part_2/" />
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <link type="text/css" rel="stylesheet" href="/css/main.bundle.min.00dd8b9350ecc82ac2af1f4674a9aad6c9a42e761652b3143d532e4b352bd5ca4750a9e040a76fd03e5d53ef1eb025fa8d60f7c673632f7ca0683ece7f990542.css"
+    integrity="sha512-AN2Lk1DsyCrCrx9GdKmq1smkLnYWUrMUPVMuSzUr1cpHUKngQKdv0D5dU&#43;8esCX6jWD3xnNjL3ygaD7Of5kFQg==" />
+  
+  
+  <script type="text/javascript" src="/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js"
+    integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj&#43;e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <script defer type="text/javascript" id="script-bundle" src="/js/main.bundle.min.17ffe617e664d257760ee5f71869a6d9328d3613601c03a2eb7a194bbfb06ddc629a70f7b348e6e9446e81d0789555aebce09d27debd0329fc297601a1ee6a77.js"
+    integrity="sha512-F//mF&#43;Zk0ld2DuX3GGmm2TKNNhNgHAOi63oZS7&#43;wbdximnD3s0jm6URugdB4lVWuvOCdJ969Ayn8KXYBoe5qdw==" data-copy="" data-copied=""></script>
+  
+  
+  <script src="/js/zoom.min.js"></script>
+  
+  
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:title" content="Popping a calculator - 64 bit - Part 2/3" />
+<meta property="og:description" content="Writing the Shellcode x64 # This part of the blog covers the 64 bit shellcode to pop a calculator." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/posts/shellcoding_series/series1_pop_a_calc_part_2/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-03-27T00:00:00+00:00" />
+<meta property="article:modified_time" content="2024-03-27T00:00:00+00:00" />
+<meta property="og:see_also" content="http://localhost:1313/posts/shellcoding_series/series1_pop_a_calc_part_3/" /><meta property="og:see_also" content="http://localhost:1313/posts/shellcoding_series/series1_pop_a_calc_part_1/" /><meta property="og:see_also" content="http://localhost:1313/posts/shellcoding_series/series0_basic/" />
+
+
+  <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Popping a calculator - 64 bit - Part 2/3"/>
+<meta name="twitter:description" content="Writing the Shellcode x64 # This part of the blog covers the 64 bit shellcode to pop a calculator."/>
+
+  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Welcome to Posts!",
+    "name": "Popping a calculator - 64 bit - Part 2\/3",
+    "headline": "Popping a calculator - 64 bit - Part 2\/3",
+    
+    "abstract": "Writing the Shellcode x64 # This part of the blog covers the 64 bit shellcode to pop a calculator.",
+    "inLanguage": "en",
+    "url" : "http:\/\/localhost:1313\/posts\/shellcoding_series\/series1_pop_a_calc_part_2\/",
+    "author" : {
+      "@type": "Person",
+      "name": "Sidharth AKA retr0ds"
+    },
+    "copyrightYear": "2024",
+    "dateCreated": "2024-03-27T00:00:00\u002b00:00",
+    "datePublished": "2024-03-27T00:00:00\u002b00:00",
+    
+    "dateModified": "2024-03-27T00:00:00\u002b00:00",
+    
+    "keywords": ["Blog","Shellcode","Windows","Series","Pop_a_calc"],
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "3827"
+  }]
+  </script>
+
+
+  
+  
+  <meta name="author" content="Sidharth AKA retr0ds" />
+  
+  
+  
+  <link href="mailto:sidharth0x56@gmail.com" rel="me" />
+  
+  
+  <link href="https://discord.gg/retr0ds" rel="me" />
+  
+  
+  <link href="https://github.com/retr0ds" rel="me" />
+  
+  
+  <link href="https://instagram.com/retr0ds" rel="me" />
+  
+  
+  <link href="https://linkedin.com/in/sidharth0x56" rel="me" />
+  
+  
+  <link href="https://twitter.com/_retr0ds_" rel="me" />
+  
+  
+  <link href="https://youtube.com/retr0ds417" rel="me" />
+  
+  
+  
+  
+
+<script src="/lib/jquery/jquery.slim.min.js" integrity=""></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+  
+  
+  <meta name="theme-color"/>
+  
+  
+</head>
+<body
+  class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32">
+  <div id="the-top" class="absolute flex self-center">
+    <a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600"
+      href="#main-content"><span
+        class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>Skip to main content</a>
+  </div>
+  
+  
+  <div class="min-h-[148px]"></div>
+<div class="fixed inset-x-0 pl-[24px] pr-[24px]" style="z-index:100">
+  <div id="menu-blur" class="absolute opacity-0 inset-x-0 top-0 h-full single_hero_background nozoom bg-neutral dark:bg-neutral-800"></div>
+  <div class="relative max-w-[64rem] ml-auto mr-auto">
+    <div style="padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px"
+    class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start space-x-3">
+    
+    
+    
+    <div>
+        <a href="/" class="flex">
+            <span class="sr-only">The Arcade</span>
+
+            <img src="/img/resized_gimp_photos.png" width="543" height="465"
+                class="logo max-h-[5rem] max-w-[5rem] object-scale-down object-left nozoom" alt="The Arcade" />
+
+        </a>
+    </div>
+    
+    <div class="flex flex-1 items-center justify-between">
+        <nav class="flex space-x-3">
+
+            
+            <a href="/" class="text-base font-medium text-gray-500 hover:text-gray-900">The Arcade</a>
+            
+
+        </nav>
+        <nav class="hidden md:flex items-center space-x-5 md:ml-12 h-12">
+
+            
+            
+            
+  <a href="/posts/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="">
+        Posts
+    </p>
+</a>
+
+
+            
+            
+  <a href="/categories/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="">
+        Categories
+    </p>
+</a>
+
+
+            
+            
+  <a href="/tags/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="">
+        Tags
+    </p>
+</a>
+
+
+            
+            
+  <a href="https://twitter/_retr0ds_"  target="_blank"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <span  class="mr-1" >
+        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg>
+  </span>
+
+
+    </span>
+    
+    <p class="text-base font-medium" title="">
+        
+    </p>
+</a>
+
+
+            
+            
+  <a href="https://github.com/retr0ds"  target="_blank"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <span >
+        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+
+  </span>
+
+
+    </span>
+    
+    <p class="text-base font-medium" title="">
+        
+    </p>
+</a>
+
+
+            
+            
+
+            
+
+
+            
+            <button id="search-button" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+
+            
+            
+            <div
+                class="ltr:mr-14 rtl:ml-14 flex items-center">
+                <button id="appearance-switcher" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400">
+                    <div class="flex items-center justify-center dark:hidden">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                    </div>
+                    <div class="items-center justify-center hidden dark:flex">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                    </div>
+                </button>
+            </div>
+            
+
+        </nav>
+        <div class="flex md:hidden items-center space-x-5 md:ml-12 h-12">
+
+            <span></span>
+
+            
+
+
+            
+            <button id="search-button-mobile" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+            
+            
+            <button id="appearance-switcher-mobile" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400" style="margin-right:5px">
+                <div class="flex items-center justify-center dark:hidden">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                </div>
+                <div class="items-center justify-center hidden dark:flex">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                </div>
+            </button>
+            
+
+        </div>
+    </div>
+    <div class="-my-2 -mr-2 md:hidden">
+
+        <label id="menu-button" for="menu-controller" class="block">
+            <input type="checkbox" id="menu-controller" class="hidden" />
+            
+            <div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400">
+                
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+
+  </span>
+
+
+            </div>
+            <div id="menu-wrapper" style="padding-top:5px;"
+                class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50">
+                <ul
+                    class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl">
+
+                    <li>
+                        <span
+                            class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+</span>
+                    </li>
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/posts/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="">
+            Posts
+        </p>
+    </a>
+</li>
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/categories/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="">
+            Categories
+        </p>
+    </a>
+</li>
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/tags/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="">
+            Tags
+        </p>
+    </a>
+</li>
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="https://twitter/_retr0ds_"  target="_blank"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <div  class="mr-2" >
+            
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg>
+  </span>
+
+
+        </div>
+        
+        <p class="text-bg font-bg" title="">
+            
+        </p>
+    </a>
+</li>
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="https://github.com/retr0ds"  target="_blank"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <div >
+            
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+
+  </span>
+
+
+        </div>
+        
+        <p class="text-bg font-bg" title="">
+            
+        </p>
+    </a>
+</li>
+
+
+
+                    
+
+                </ul>
+                
+                
+
+            </div>
+        </label>
+    </div>
+</div>
+
+
+
+
+<script>
+    (function () {
+        var $mainmenu = $('.main-menu');
+        var path = window.location.pathname;
+        $mainmenu.find('a[href="' + path + '"]').each(function (i, e) {
+            $(e).children('p').addClass('active');
+        });
+    })();
+</script>
+
+
+  </div>
+</div>
+<script>
+  window.addEventListener('scroll', function (e) {
+    var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    var background_blur = document.getElementById('menu-blur');
+    background_blur.style.opacity = (scroll / 300);
+  });
+</script>
+
+  
+  <div class="relative flex flex-col grow">
+    <main id="main-content" class="grow">
+      
+
+
+<article>
+  
+  
+  
+  
+  
+  
+ 
+  
+   
+  
+ 
+
+
+
+
+
+    
+    <div class="fixed inset-x-0 top-0 h-[800px] single_hero_background nozoom"
+    style="background-image:url(/img/background.svg);">
+    
+
+
+    <div class="absolute inset-0 bg-gradient-to-t from-neutral dark:from-neutral-800 to-transparent mix-blend-normal">
+    </div>
+    <div
+        class="absolute inset-0 opacity-60 bg-gradient-to-t from-neutral dark:from-neutral-800 to-neutral-100 dark:to-neutral-800 mix-blend-normal">
+    </div>
+</div>
+
+<div id="background-blur" class="fixed opacity-0 inset-x-0 top-0 h-full single_hero_background nozoom backdrop-blur-2xl"></div>
+<script>
+    window.addEventListener('scroll', function (e) {
+        var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        var background_blur = document.getElementById('background-blur');
+        background_blur.style.opacity = (scroll / 300)
+    });
+</script>
+
+  
+  
+
+  <header id="single_header" class="mt-5 max-w-prose">
+    
+    <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+      Popping a calculator - 64 bit - Part 2/3
+    </h1>
+    <div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
+      
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  <time datetime="2024-03-27 00:00:00 &#43;0000 UTC">27 March 2024</time><span class="px-2 text-primary-500">&middot;</span><span>3827 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">18 mins</span><span class="px-2 text-primary-500">&middot;</span>
+
+
+<script type="text/javascript" src="/js/zen-mode.min.ccc8b2a0c4505216444ca25530c7328aa0bef94f43dabaf3e598e1b4271de9eec76c1cb35917471a4f7ccb8d84051b3acef42baa30724ac3a667fcf1fec4432a.js" integrity="sha512-zMiyoMRQUhZETKJVMMcyiqC&#43;&#43;U9D2rrz5ZjhtCcd6e7HbByzWRdHGk98y42EBRs6zvQrqjBySsOmZ/zx/sRDKg=="></script>
+
+<span class="mb-[2px]">
+    <span id="zen-mode-button"
+          class="text-lg hover:text-primary-500"
+          title="Enable zen mode"
+          data-title-i18n-disable="Enable zen mode"
+          data-title-i18n-enable="Disable zen mode">
+        <span class="inline-block align-text-bottom">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="50px" height="50px">
+    <path fill="currentColor" d="M 12.980469 4 C 9.1204688 4 5.9804688 7.14 5.9804688 11 L 6 26 L 9.9804688 26 L 9.9804688 11 C 9.9804688 9.35 11.320469 8 12.980469 8 L 40.019531 8 C 41.679531 8 43.019531 9.35 43.019531 11 L 43.019531 39 C 43.019531 40.65 41.679531 42 40.019531 42 L 29 42 C 29 43.54 28.420938 44.94 27.460938 46 L 40.019531 46 C 43.879531 46 47.019531 42.86 47.019531 39 L 47.019531 11 C 47.019531 7.14 43.879531 4 40.019531 4 L 12.980469 4 z M 7 28 C 4.794 28 3 29.794 3 32 L 3 42 C 3 44.206 4.794 46 7 46 L 23 46 C 25.206 46 27 44.206 27 42 L 27 32 C 27 29.794 25.206 28 23 28 L 7 28 z M 7 32 L 23 32 L 23.001953 42 L 7 42 L 7 32 z"/>
+</svg>
+  </span>
+
+</span>
+    </span>
+</span>
+  
+
+  
+  
+</div>
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/categories/reversing/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Reversing
+  </span>
+</span>
+  </span>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/blog/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Blog
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/shellcode/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Shellcode
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/windows/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Windows
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/series/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Series
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/pop_a_calc/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Pop_a_calc
+  </span>
+</span>
+  </span>
+  
+  
+  
+  
+</div>
+
+
+
+    </div>
+
+    
+    
+    
+    
+    
+
+    
+      
+      
+<div class="flex author">
+  
+    
+    
+      
+    
+    
+      
+        
+      
+      <img class="!mt-0 !mb-0 h-24 w-24 rounded-full ltr:mr-4 rtl:ml-4" width="96" height="96"
+      alt="Sidharth AKA retr0ds" src="/img/avatar_hu3d74ebcabbd9ef870c91c6755caacf1c_288894_192x192_fill_q75_box_center.jpg" />
+    
+  
+  <div class="place-self-center">
+    
+    <div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">
+      Author
+    </div>
+    <div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">
+      Sidharth AKA retr0ds
+    </div>
+    
+    
+    <div class="text-sm text-neutral-700 dark:text-neutral-400">Malware analyst</div>
+    
+    <div class="text-2xl sm:text-lg">
+  <div class="flex flex-wrap text-neutral-400 dark:text-neutral-500">
+    
+      
+        <a
+          class="px-1 hover:text-primary-700 dark:hover:text-primary-400"
+          href="mailto:sidharth0x56@gmail.com"
+          target="_blank"
+          aria-label="Email"
+          rel="me noopener noreferrer"
+          ><span class="inline-block align-text-bottom">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M207.8 20.73c-93.45 18.32-168.7 93.66-187 187.1c-27.64 140.9 68.65 266.2 199.1 285.1c19.01 2.888 36.17-12.26 36.17-31.49l.0001-.6631c0-15.74-11.44-28.88-26.84-31.24c-84.35-12.98-149.2-86.13-149.2-174.2c0-102.9 88.61-185.5 193.4-175.4c91.54 8.869 158.6 91.25 158.6 183.2l0 16.16c0 22.09-17.94 40.05-40 40.05s-40.01-17.96-40.01-40.05v-120.1c0-8.847-7.161-16.02-16.01-16.02l-31.98 .0036c-7.299 0-13.2 4.992-15.12 11.68c-24.85-12.15-54.24-16.38-86.06-5.106c-38.75 13.73-68.12 48.91-73.72 89.64c-9.483 69.01 43.81 128 110.9 128c26.44 0 50.43-9.544 69.59-24.88c24 31.3 65.23 48.69 109.4 37.49C465.2 369.3 496 324.1 495.1 277.2V256.3C495.1 107.1 361.2-9.332 207.8 20.73zM239.1 304.3c-26.47 0-48-21.56-48-48.05s21.53-48.05 48-48.05s48 21.56 48 48.05S266.5 304.3 239.1 304.3z"/></svg>
+
+  </span>
+
+</span></a
+        >
+      
+    
+      
+        <a
+          class="px-1 hover:text-primary-700 dark:hover:text-primary-400"
+          href="https://discord.gg/retr0ds"
+          target="_blank"
+          aria-label="Discord"
+          rel="me noopener noreferrer"
+          ><span class="inline-block align-text-bottom">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path fill="currentColor" d="M524.531,69.836a1.5,1.5,0,0,0-.764-.7A485.065,485.065,0,0,0,404.081,32.03a1.816,1.816,0,0,0-1.923.91,337.461,337.461,0,0,0-14.9,30.6,447.848,447.848,0,0,0-134.426,0,309.541,309.541,0,0,0-15.135-30.6,1.89,1.89,0,0,0-1.924-.91A483.689,483.689,0,0,0,116.085,69.137a1.712,1.712,0,0,0-.788.676C39.068,183.651,18.186,294.69,28.43,404.354a2.016,2.016,0,0,0,.765,1.375A487.666,487.666,0,0,0,176.02,479.918a1.9,1.9,0,0,0,2.063-.676A348.2,348.2,0,0,0,208.12,430.4a1.86,1.86,0,0,0-1.019-2.588,321.173,321.173,0,0,1-45.868-21.853,1.885,1.885,0,0,1-.185-3.126c3.082-2.309,6.166-4.711,9.109-7.137a1.819,1.819,0,0,1,1.9-.256c96.229,43.917,200.41,43.917,295.5,0a1.812,1.812,0,0,1,1.924.233c2.944,2.426,6.027,4.851,9.132,7.16a1.884,1.884,0,0,1-.162,3.126,301.407,301.407,0,0,1-45.89,21.83,1.875,1.875,0,0,0-1,2.611,391.055,391.055,0,0,0,30.014,48.815,1.864,1.864,0,0,0,2.063.7A486.048,486.048,0,0,0,610.7,405.729a1.882,1.882,0,0,0,.765-1.352C623.729,277.594,590.933,167.465,524.531,69.836ZM222.491,337.58c-28.972,0-52.844-26.587-52.844-59.239S193.056,219.1,222.491,219.1c29.665,0,53.306,26.82,52.843,59.239C275.334,310.993,251.924,337.58,222.491,337.58Zm195.38,0c-28.971,0-52.843-26.587-52.843-59.239S388.437,219.1,417.871,219.1c29.667,0,53.307,26.82,52.844,59.239C470.715,310.993,447.538,337.58,417.871,337.58Z"/></svg>
+
+  </span>
+
+</span></a
+        >
+      
+    
+      
+        <a
+          class="px-1 hover:text-primary-700 dark:hover:text-primary-400"
+          href="https://github.com/retr0ds"
+          target="_blank"
+          aria-label="Github"
+          rel="me noopener noreferrer"
+          ><span class="inline-block align-text-bottom">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+
+  </span>
+
+</span></a
+        >
+      
+    
+      
+        <a
+          class="px-1 hover:text-primary-700 dark:hover:text-primary-400"
+          href="https://instagram.com/retr0ds"
+          target="_blank"
+          aria-label="Instagram"
+          rel="me noopener noreferrer"
+          ><span class="inline-block align-text-bottom">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
+
+  </span>
+
+</span></a
+        >
+      
+    
+      
+        <a
+          class="px-1 hover:text-primary-700 dark:hover:text-primary-400"
+          href="https://linkedin.com/in/sidharth0x56"
+          target="_blank"
+          aria-label="Linkedin"
+          rel="me noopener noreferrer"
+          ><span class="inline-block align-text-bottom">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+
+  </span>
+
+</span></a
+        >
+      
+    
+      
+        <a
+          class="px-1 hover:text-primary-700 dark:hover:text-primary-400"
+          href="https://twitter.com/_retr0ds_"
+          target="_blank"
+          aria-label="X-Twitter"
+          rel="me noopener noreferrer"
+          ><span class="inline-block align-text-bottom">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg>
+  </span>
+
+</span></a
+        >
+      
+    
+      
+        <a
+          class="px-1 hover:text-primary-700 dark:hover:text-primary-400"
+          href="https://youtube.com/retr0ds417"
+          target="_blank"
+          aria-label="Youtube"
+          rel="me noopener noreferrer"
+          ><span class="inline-block align-text-bottom">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z"/></svg>
+
+  </span>
+
+</span></a
+        >
+      
+    
+  </div>
+
+</div>
+  </div>
+</div>
+
+    
+
+    
+
+    
+
+    
+    <div class="mb-5"></div>
+    
+  
+  </header>
+  
+  <section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row">
+    
+     <div
+      class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8">
+      <div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-[140px]">
+
+         <details open class="toc-right mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block">
+  <summary
+    class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    Table of Contents
+  </summary>
+  <div
+    class="min-w-[220px] py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#writing-the-shellcode-x64">Writing the Shellcode x64</a></li>
+        <li><a href="#get-the-kernel-base-address">Get The Kernel Base Address</a>
+          <ul>
+            <li>
+              <ul>
+                <li><a href="#some-important-windows-data-structures-tibpebteb">Some important Windows Data Structures (TIB/PEB/TEB)</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#get-the-address-to-the-export-table">Get the address to the Export table</a></li>
+        <li><a href="#find-the-base-address-of-the-winexec-function">Find the Base address of the WinExec function</a></li>
+        <li><a href="#load-the-arguments-into-the-winexec-function">Load the arguments into the WinExec function</a></li>
+        <li><a href="#call-the-function">Call the function</a></li>
+        <li><a href="#compiling-64-bit">Compiling 64 bit</a></li>
+        <li><a href="#source-code">Source Code</a>
+          <ul>
+            <li><a href="#assemble">Assemble</a></li>
+            <li><a href="#get-payload-bytes">Get Payload bytes</a></li>
+            <li><a href="#link">Link</a></li>
+            <li><a href="#to-run">To Run</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</details>
+<details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden">
+  <summary
+    class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    Table of Contents
+  </summary>
+  <div
+    class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#writing-the-shellcode-x64">Writing the Shellcode x64</a></li>
+        <li><a href="#get-the-kernel-base-address">Get The Kernel Base Address</a>
+          <ul>
+            <li>
+              <ul>
+                <li><a href="#some-important-windows-data-structures-tibpebteb">Some important Windows Data Structures (TIB/PEB/TEB)</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#get-the-address-to-the-export-table">Get the address to the Export table</a></li>
+        <li><a href="#find-the-base-address-of-the-winexec-function">Find the Base address of the WinExec function</a></li>
+        <li><a href="#load-the-arguments-into-the-winexec-function">Load the arguments into the WinExec function</a></li>
+        <li><a href="#call-the-function">Call the function</a></li>
+        <li><a href="#compiling-64-bit">Compiling 64 bit</a></li>
+        <li><a href="#source-code">Source Code</a>
+          <ul>
+            <li><a href="#assemble">Assemble</a></li>
+            <li><a href="#get-payload-bytes">Get Payload bytes</a></li>
+            <li><a href="#link">Link</a></li>
+            <li><a href="#to-run">To Run</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+ 
+<script>
+  (function () {
+    var $toc = $('#TableOfContents');
+    if ($toc.length > 0) {
+      var $window = $(window);
+
+      function onScroll() {
+        var currentScroll = $window.scrollTop();
+        var h = $('.anchor');
+        var id = "";
+        h.each(function (i, e) {
+          e = $(e);
+          if (e.offset().top - $(window).height()/3 <= currentScroll) {
+            id = e.attr('id');
+          }
+        });
+        var active = $toc.find('a.active');      
+        if (active.length == 1 && active.eq(0).attr('href') == '#' + id) return true;
+
+        active.each(function (i, e) {
+           
+            $(e).removeClass('active').siblings('ul').hide();
+          
+        });
+        $toc.find('a[href="#' + id + '"]').addClass('active')
+        $toc.find('a[href="#' + id + '"]').parentsUntil('#TableOfContents').each(function (i, e) {
+          $(e).children('a').parents('ul').show();          
+        });
+      }
+
+      $window.on('scroll', onScroll);
+      $(document).ready(function () {
+         
+          $toc.find('a').parent('li').find('ul').hide();
+        
+        onScroll();
+      });
+    }
+  })();
+</script>
+   </div>
+      </div>
+      
+
+      <div class="min-w-0 min-h-0 max-w-fit">
+        
+        
+<details style="margin-left:0px" class="mt-2 mb-5 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5" >
+    
+    <summary
+        class="py-1 text-lg font-semibold cursor-pointer bg-primary-200 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-primary-800 dark:text-neutral-100">
+        Shellcoding - This article is part of a series.
+    </summary>
+    
+    
+    
+    <div
+        class="py-1 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+        <a href="http://localhost:1313/posts/shellcoding_series/series0_basic/">
+            Part 1: Windows Shellcoding Series 0
+        </a>
+    </div>
+    
+    
+    
+    <div
+        class="py-1 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+        <a href="http://localhost:1313/posts/shellcoding_series/series1_pop_a_calc_part_1/">
+            Part 2: Popping a calculator - Basic - Part 1/3
+        </a>
+    </div>
+    
+    
+    
+    <div
+        class="py-1 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+        Part 3: This Article
+    </div>
+    
+    
+    
+    <div
+        class="py-1 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+        <a href="http://localhost:1313/posts/shellcoding_series/series1_pop_a_calc_part_3/">
+            Part 4: Popping a calculator - 32 bit - Part 3/3
+        </a>
+    </div>
+    
+    
+
+
+</details>
+
+
+
+        <div class="article-content max-w-prose mb-20">
+          
+
+<h2 class="relative group">Writing the Shellcode x64 
+    <div id="writing-the-shellcode-x64" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#writing-the-shellcode-x64" aria-label="Anchor">#</a>
+    </span>        
+    
+</h2>
+<p>This part of the blog covers the 64 bit shellcode to pop a calculator. Here I would be explaining my approach at writing source, you can skip right down to the bottom if you just want the compilation information <a href="#compiling-64-bit"  >
+    here</a></p>
+<p>For the source code you can visit the <a href="https://github.com/retr0ds/Malware-learning/blob/main/shellcode/pop_calculator/x64/pop_calc.asm"   target="_blank">
+    github repo</a></p>
+
+
+<h2 class="relative group">Get The Kernel Base Address 
+    <div id="get-the-kernel-base-address" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#get-the-kernel-base-address" aria-label="Anchor">#</a>
+    </span>        
+    
+</h2>
+<p>This is the assembly that I ended up writing to get the <code>kernel32 base</code></p>
+<pre tabindex="0"><code class="language-x64!=" data-lang="x64!=">xor rax, rax
+xor rcx, rcx
+mov rcx, gs:[rax + 0x60] ; Address of PEB is loaded
+mov rcx, [rcx+0x18]      ; Address of PEB_LDR_Module is loaded
+mov rcx, [rcx+0x20]      ; Address of InMemoryOrderModuleList is loaded this is pointing to kernelbase.dll
+mov rcx, [rcx+ 0x00]     ; Pointing to ntdll&#39;s ldr_data_table_entry
+mov rcx, [rcx + 0x00]    ; kernel32.dll&#39;s ldr_data_table_entry is now referenced
+mov rcx, [rcx+0x20] 	  ; base Address of kernel32.dll is now loaded
+mov r10, rcx             ; r10 and rcx have kernel32 base
+</code></pre><p>Now looking at this it might not be that comprehensible, so I&rsquo;ll try my best to explain it in the simplest terms</p>
+<p><strong>Line 1 &amp; 2</strong> - Are pretty obvious we are zero&rsquo;ing out the rax and rcx registers</p>
+<p><strong>Line 3</strong> - We load the <code>PEB</code> base address using the offset from the <code>gs</code> register into <code>rcx</code></p>
+<p>For the people that are familiar with basic windows internals you might be familiar with the <code>gs</code> register.
+For the ones new to WinRev</p>
+<p><em><strong>What is gs and fs?</strong></em></p>
+<p>In earlier days of computing, there was a need for <strong>segment registers</strong> like some of which you might have heard of like <code>cs</code>(code segment) <code>es</code>(extra segment),<code>ss</code>(stack segment) ,<code>ds</code>(data segment) etc.</p>
+<p>These registers were born out of <strong>necessity</strong> to keep track of these <strong>segments and hold their addresses</strong> back when memory paging wasn&rsquo;t introduced to manage memory.</p>
+<p>So they used to keep these registers as base for segments and continue referencing memory at particular <strong>offsets</strong> from these registers to refer to various resources and code in appropriate sections.</p>
+<p>But when memory paging came by the need for these registers were obsolete, and yet they are still present in Intel Architecture purely for backwards compatibility reasons and are still supported in different forms.</p>
+<p>Windows specifically uses a few segment registers like <code>fs</code> and <code>gs</code> to keep track of certain important structures related to a process like the PEB and TEB.</p>
+<p>You can read up more on PEB and TEB on the internet
+But in simple words let&rsquo;s look at some</p>
+
+
+<h4 class="relative group">Some important Windows Data Structures (TIB/PEB/TEB) 
+    <div id="some-important-windows-data-structures-tibpebteb" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#some-important-windows-data-structures-tibpebteb" aria-label="Anchor">#</a>
+    </span>        
+    
+</h4>
+<p><strong>TIB</strong> - <a href="https://en.wikipedia.org/wiki/Win32_Thread_Information_Block#:~:text=The%20Thread%20Information%20Block%20"   target="_blank">
+    Thread Information Block</a>   - was used for the non WindowsNT versions, to hold basic process information. Widnows still supports it for backwards compatibilty reasons.</p>
+<p><strong>PEB</strong> - <a href="https://ntopcode.wordpress.com/2018/02/26/anatomy-of-the-process-environment-block-peb-windows-internals/"   target="_blank">
+    Process Environment Block</a> - The Process Environment Block structure contains the process wide data structures which include global context, startup parameters, data structures for the program image loader, the program image base address, and synchronization objects</p>
+<p><strong>TEB</strong> - <a href="%28https://en.wikipedia.org/wiki/Win32_Thread_Information_Block#:~:text=The%20Thread%20Information%20Block%20%29"  >
+    Thread Environment Block</a> - Is an extentsion of the TIB and hence TEB and TIB are used synonymously. The TEB is the structure for Windows NT, 2000, XP, Vista, 7, 8, 10 and 11.</p>
+<p>In 32 bit, the <code>fs</code> register is used and this is used to point to the TIB of a given thread
+These are the structure offsets inside TIB at which we can find various other important structural fields</p>
+<p><strong>FS:[0x00]</strong> : Current SEH Frame
+<strong>FS:[0x18]</strong> : TEB (Thread Environment Block)
+<strong>FS:[0x20]</strong> : PID
+<strong>FS:[0x24]</strong> : TID
+<strong>FS:[0x30]</strong> : PEB (Process Environment Block)
+<strong>FS:[0x34]</strong> : Last Error Value</p>
+<p>In 64 bit, the <code>gs</code> regsiter is used in place of <code>fs</code> to keep track of the TIB structure</p>
+<p><strong>GS:[0x30]</strong> : TEB
+<strong>GS:[0x40]</strong> : PID
+<strong>GS:[0x48]</strong> : TID
+<strong>GS:[0x60]</strong> : PEB</p>
+<p>Now using these registers and offset we can find our way into the PEB of any given windows binary.</p>
+<p><strong>Line 4</strong> - Now <code>rcx</code> which holds the base to <code>PEB</code> is added with <code>0x18</code> to get to the offset of <code>PEB_LDR_DATA</code></p>
+<p><strong>About PEB and PEB_LDR_DATA structure</strong></p>
+<p><strong>PEB Structure</strong></p>
+<p>As mentioned easlier, the <code>PEB</code> structure contains various information about a particular process like the base address, if it is being debugged or not, any inherited flags from other parent processes etc.</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/Bkl9OzFJC.png" alt="image" />
+    
+  </figure>
+
+
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BJcj_GKkR.png" alt="image" />
+    
+  </figure>
+
+
+<a href="https://www.geoffchappell.com/studies/windows/km/ntoskrnl/inc/api/pebteb/peb/index.htm"   target="_blank">
+    Source</a></p>
+<p>But the one we are most interested in is the <code>PEB_LDR_DATA</code>.</p>
+<p>The <strong>PEB_LDR_DATA</strong> structure is the defining record of which user-mode modules are loaded in a process. Each process has one <code>PEB_LDR_DATA</code> structure associated with it. Its address is kept in the Ldr member of the process’s PEB.
+<strong>PEB_LDR_STRUCTURE</strong></p>
+<pre tabindex="0"><code class="language-cpp=" data-lang="cpp=">typedef struct _PEB_LDR_DATA
+{
+     ULONG Length;
+     UCHAR Initialized;
+     PVOID SsHandle;
+     LIST_ENTRY InLoadOrderModuleList;
+     LIST_ENTRY InMemoryOrderModuleList;
+     LIST_ENTRY InInitializationOrderModuleList;
+     PVOID EntryInProgress;
+} PEB_LDR_DATA, *PPEB_LDR_DATA;
+</code></pre><p>As you can see it contains pointers to three important <strong>linked lists</strong></p>
+<p>Namely,</p>
+<ul>
+<li><strong>InLoadOrderModuleList</strong></li>
+<li><strong>InMemoryOrderModuleList</strong></li>
+<li><strong>InInitializationOrderModuleList</strong></li>
+</ul>
+<p>They hold information about the modules (<strong>dlls</strong>) that are loaded by a proces</p>
+<p>These are linked lists which share the same elements but they are just linked in a different order as suggested by their names</p>
+<p>To explain them in brief I shall site it from a book -</p>
+<p><strong>Source</strong> - The art of memory forensics book</p>
+<ul>
+<li>
+<p><strong>InLoadOrderModuleList</strong> - This linked list organizes modules in the order in which they are loaded into a process. Because the process executable is alwyas first to load in the process address space, its entry is first in this list.</p>
+</li>
+<li>
+<p><strong>InMemoryOrderModuleList</strong> - This linked list organizes modules in the order in which they appear in the process&rsquo;s virtual memory layout. The last DLL to load may end up first in memory due to ASLR and other factors</p>
+</li>
+<li>
+<p><strong>InIntializationOrderModuleList</strong> - This linked list organizes the modules in the order in which their DLL Main was executed. Just because a dll in loaded doesn&rsquo;t mean the DllMain is always called. For example, when we load a dll as a data file or as a resource.</p>
+</li>
+</ul>
+<p><strong>Line 5</strong> - Now The address to the <code>First Link</code> of the linked list of InMemoryOrderModuleList is loaded.</p>
+<p>The offset is at <code>0x20</code> for 64 bit</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/S1SK6QKyR.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>The first link is pointing to an entry about <code>Kernelbase.dll</code>, so at the offset <code>0x20</code> we have <strong>LDR_TABLE_ENTRY</strong> structure
+<em><strong>Why InMemoryOrderModuleList?</strong></em></p>
+<p>Well,
+In all windows versions, the second and third DLLs in the linked list of <code>InMemoryOrderModuleList</code> is always <code>ntdll.dll</code> and <code>kernel32.dll</code>.</p>
+<p>We can also accomplish this using <code>InLoadOrderModuleList</code> however, the order of DLLs were changed from Vista onwards, so this doesn&rsquo;t ensure portability of shellcode.</p>
+<p>Hence we stick with <code>InMemoryOrderModuleList</code></p>
+<p>Now after executing line 5 rcx points to the <strong><a href="https://www.geoffchappell.com/studies/windows/km/ntoskrnl/inc/api/ntldr/ldr_data_table_entry/index.htm?tx=179,185"   target="_blank">
+    LDR_DATA_TABLE_ENTRY</a></strong> of <code>kernelbase.dll</code></p>
+<p><strong>Line 6</strong> - Now we load the address of the <code>second entry</code> into the <code>rcx</code> , which now holds the base to ntdll (as the first entry was already <code>kernelbase.dll</code> and it was pointed to by)</p>
+<p><strong>LDR_TABLE_DATA_STRUCTURE</strong></p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rJuiBVF1C.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>The way it works is as depicted below</p>
+<p><a href="https://imphash.medium.com/windows-process-internals-a-few-concepts-to-know-before-jumping-on-memory-forensics-part-2-4f45022fb1f8"   target="_blank">
+    Source</a></p>
+<p>Because we started accessing from the <code>InMemoryOrderModuleList</code> it keeps pointing to the next <code>InMemoryOrderModuleList</code> entry in the <code>LDR_DATA_TABLE_ENTRY</code> structure. Hence we are able to retrieve ntdll&rsquo;s <code>LDR_DATA_TABLE_ENTRY</code> structure by just calling offset 0</p>
+<p><strong>LINE 7</strong> - Similar to line 6 we now load the next dll (ie) the third dll <strong>in memory order</strong>.</p>
+<p><strong>LINE 8</strong> - Now we load the base of <code>kernel32.dll</code> at offset <code>0x20</code></p>
+<p>Now you may wonder, why is it at <code>0x20</code> and not <code>0x30</code> as shown in the <code>LDR_DATA_TABLE_ENTRY</code> structure above</p>
+<p>That because of the very reason mentioned earlier, even though we got to the kernel32.dll&rsquo;s <code>LDR_DATA_TABLE_ENTRY</code> by calling offset-0x00 , we used a pointer to the <strong>LIST_ENTRY</strong> <code>InMemoryOrderLinks</code> and not to the start of the structure.</p>
+<p>Now to acess the DLL Base we need to find the relative offset from The <code>InMemoryOrderLinks</code> entry. Which ends up being <strong>0x30 - 0x10 = 0x20</strong></p>
+<p>So now <code>rcx</code> and <code>r10</code> holds the<code> base address</code> of the <code>kernel32.dll</code></p>
+<p><strong>Line 9</strong> - It just copies the value inside rcx into r10 for future uses</p>
+
+
+<h2 class="relative group">Get the address to the Export table 
+    <div id="get-the-address-to-the-export-table" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#get-the-address-to-the-export-table" aria-label="Anchor">#</a>
+    </span>        
+    
+</h2>
+<pre tabindex="0"><code class="language-x64!=" data-lang="x64!=">mov ecx, [rcx + 0x3c]     ; Find RVA to PE header
+add rcx, r10              ; Points to the PE header
+;mov rcx, [rcx + 0x78]    ; RVA of Export table directory
+mov ecx, [rcx + 0x88]     ; RVA of Export table directory
+add rcx, r10              ; Export table directory address loaded
+xor r9, r9
+mov r9d, [rcx + 0x1c]     ; RVA Export Address Table
+add r9, r10               ; Address to export Address Table
+xor r11, r11
+mov r11d, [rcx + 0x20]    ; RVA Export Name pointer table address 
+add r11, r10              ; Adrdess of Export Name pointer table 
+xor r12, r12              
+mov r12d, [rcx + 0x24]    ; RVA of Ordinal Table
+add r12, r10              ; Address of Ordinal Table
+</code></pre><p>Here Initially rcx and r10 hold the base of the kernel32 dll</p>
+<p><strong>Line 1</strong> - Here we find the <code>RVA (Relative virtual address from the base of Kernel32)</code>, to the the PE Header
+The offset of <code>0x3c</code> is never changed and remains the same in the PE format, as it is used to get to the <code>PE header</code>.</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BJSle14gC.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>Enough being side tracked, but as you can see in the image, the letter PE show up at the <code>RVA 0xE8</code> and <code>the offset/the RVA</code> of this can always be found at <code>0x3C</code> from the base.</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/S1Ym-k4g0.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p><strong>Line 2</strong> - Now we just add this offset (in our case E8) to the base of kernel32 dll to get the pointer to the PE header</p>
+<p><strong>Line 3 &amp; 4</strong> - You may notice that line 3 is commented out and it has been given the same  comment as RVA of <code>Export Table Directory</code> as similar to line 4. Now I don&rsquo;t know the reason why, but in our case when I used tools such as <code>PE VIEW</code> and <code>CFF Explorer</code> both the tools showed the offset to find the <code>RVA(Relative virtual address from the base of the dll)</code> for <code>Export Table Directory</code> as <code>0x88</code> from the PE header.</p>
+<p>But, in the countless blogs that I did refer to and did take notes from as I was researching on shellcode and how it works, and many other windows related blogs all of them mention the <code>RVA</code> to be found at the <code>offset</code> <strong><code>0x78</code></strong> and not at <strong><code>0x88</code></strong>.</p>
+<p>So if someone kind enough to know the reason behind this is out there, feel free contact me and help me understand this 😭😭 and I&rsquo;ll edit this blog and put out the explanation as well.</p>
+<p>But yes, that being said, the RVA for <code>kernel32.dll</code>&rsquo;s in this particular case is at the offset 0x88 from the PE header, so rn we load that and move it into ecx and add it with r10 the <code>kernel32.dll</code>&rsquo;s base address.</p>
+<p><strong>Line 5</strong> - Next we need to find the <code>Export Table Address</code>. Now you may wonder why is there a need for <code>Export Table Directory</code> and <code>Export Table</code> as two separate things. Why couldn&rsquo;t we just have the Export Table as a single entity so that we could just take the address refering to the name directly.</p>
+<p>Well, the way windows has organized is not just a simple<code> Export Table</code> rather, it&rsquo;s a well defined <code>structure</code> that has general information with regards to exports furthermore it has three important table <strong>pointers</strong> pertaining to the sole purpose of keeping track of what all functions and modules are being exported out of a binary.</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/r1jQng4xR.png" alt="image" />
+    
+  </figure>
+
+
+source: <a href="https://ferreirasc.github.io/PE-Export-Address-Table/"   target="_blank">
+    Export Address Table (EAT)</a></p>
+<ul>
+<li>Export Address Table pointer
+<ul>
+<li>It contains the RVA to the list of exported functions. And an associated ord value. The ord value can be used to find the RVA of the exported function</li>
+</ul>
+</li>
+<li>Name Pointer Table
+<ul>
+<li>It contains the names of the exported functions and associated address of this name string in memory. This table can be parsed to find the address to a particular function&rsquo;s address</li>
+</ul>
+</li>
+<li>Ordinal Table
+<ul>
+<li>It contains the address of the various symbols and an associated ordinal value</li>
+</ul>
+</li>
+</ul>
+<p>So, these <code>3 tables</code> are interconnected and are needed for a succesful retreival of an exported function&rsquo;s address.</p>
+<p><strong>Line 6, 7 and 8</strong> - Now we get the register <code>r9</code> that is going to hold the address of the<code> Export Address Table</code> ready. And the <code>RVA</code>(Relative Virtual Address from the base of the kernel32.dll) to the export address table at an offset of <code>0x1c</code> from the address of<code> Export table directory</code>.This <code>RVA</code> is always a dword hence we stored it under <code>r9d</code>. And finally we add this <code>RVA</code> to the base of <code>kernel32.dll</code> to get the address to <code>Export Address Table</code>.</p>
+<p><strong>Line 9, 10 and 11</strong> - Now we get the register <code>r11</code> that is going to hold the address of the  ready. And the <code>RVA</code>(Relative Virtual Address from the base of the kernel32.dll) to the Name Pointer Table at an offset of 0x20 from the address of <code>Export table directory</code>. This <code>RVA</code> is always a dword hence we stored it under <code>r11d</code>.And finally we add this <code>RVA</code> to the base of <code>kernel32.dll</code> to get the address to <code>Name pointer table</code>.</p>
+<p><strong>Line 12, 13 and 14</strong> - Now we get the register <code>r12</code> that is going to hold the address of the  ready. And the <code>RVA</code>(Relative Virtual Address from the base of the kernel32.dll) to the Ordinal Table at an offset of 0x24 from the address of <code>Export table directory</code>. This <code>RVA</code> is always a dword hence we stored it under <code>r12d</code>.And finally we add this <code>RVA</code> to the base of <code>kernel32.dll</code> to get the address to <code>Ordinal Table</code>.</p>
+<p>Summary of registers so far:</p>
+<p><strong>r10</strong> - Holds kernel32.dll&rsquo;s base
+<strong>r9</strong> - Holds the Export Address Table pointer
+<strong>r11</strong> - Holds Name Pointer Table Address
+<strong>r12</strong> - Holds Ordinal Table Address</p>
+
+
+<h2 class="relative group">Find the Base address of the WinExec function 
+    <div id="find-the-base-address-of-the-winexec-function" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#find-the-base-address-of-the-winexec-function" aria-label="Anchor">#</a>
+    </span>        
+    
+</h2>
+<pre tabindex="0"><code class="language-x64!=" data-lang="x64!=">xor rcx, rcx                  ; rcx is cleared
+mov rcx, 0x7                  ; Length of WinExec is loaded into rcx
+mov rax, 0x00636578456e6957   ; &#34;\00cexEniW&#34; is loaded into rax
+push rax                      ; The string name is pushed onto the stack
+push rcx                      ; Length is pushed onto the stack
+call dynamic_api_resolve      ; dynamic_api_resolve label is called
+mov r14, rax                  ; return address of the WinExec is put into r14
+jmp next                      ; we jump to the next label
+
+dynamic_api_resolve:
+pop rbx                       ; return address is stored in rbx
+pop rcx                       ; Length of the api is stored into rcx
+xor rax, rax                  ; rax is cleared
+mov rdx, rsp                  ; Move the address of name of the api into rdx
+push rcx                      ; Length of the api is pushed onto the stack
+
+loop:
+
+mov rcx, [rsp]                ; The counter is being refreshed each time
+xor rdi, rdi                  ; clear rdi for getting the name
+mov edi, [r11 + rax * 4]      ; RVA of function name symbol  = Address of Name Pointer Table + counter * 4
+add rdi, r10                  ; Address of  Function name symbol = RVA of function name symbol + base address 
+mov rsi, rdx                  ; moving string to be compared into rsi
+
+repe cmpsb                    ; comparing strings in rdi and rsi
+je get_addr                   ; If equal we jump to get the address
+inc rax                       ; Else increment counter
+jmp loop                      ; jump back into loop
+
+
+get_addr:
+pop rcx                       ; Remove string length from top of stack
+mov ax, [r12 + rax * 2]       ; Ordinal number of kernel 32 API (WinExec) = Adress of ordinal table + Counter * 2
+
+mov eax, [r9 + rax * 4]       ; RVA of API = Address of Export Address Table + Ordinal number of WinExec * 4
+add rax, r10                  ; Address of the API = RVA of API + base address
+push rbx                      ; Pushing the Return Address back onto the stack
+ret
+</code></pre><p><strong>Line 1 &amp; 2</strong> - We start off with clearing out <code>rcx</code> register and set it to be <code>0x7</code> which is <code>len(&quot;WinExec&quot;)</code></p>
+<p><strong>Line 3</strong> - It&rsquo;s <code>&quot;WinExec\00&quot;</code> in little endian moved into <code>rax</code></p>
+<p><strong>Line 5, 6 &amp; 7</strong> - Now we push the <code>&quot;WinExec\00&quot;</code> first followed by the length and call our <code>dynamic_api_resolve</code> label</p>
+<p>Continuing with the control flow,</p>
+<p><strong>Line 11</strong> - We initially store the return address at the top of the stack and store it in <code>rbx</code>.</p>
+<p><strong>Line 12 - 15</strong> - Next value on top of the stack is the length that we pushed. That is being stored back in <code>rcx</code>, then <code>rax</code> is cleared. Now that the length is popped, the value at <code>rsp</code> (ie the top of the stack) is now the string of <code>'WinExec'</code>. The address of <code>rsp</code> is put into <code>rdx</code>, and <code>rcx</code> is pushed back onto the stack.</p>
+<p><strong>Line 17</strong>: Defines the start of a label which is used to loop</p>
+<p><strong>Line 19 - 23</strong> : We move the counter into <code>rcx</code>. Clear <code>rdi</code> for future purposes.Now remember, <code>r11</code> holds the <code>Address of the Name Pointer Table</code>.</p>
+<p>So, we add Address of Name pointer table + a counter (this we are mainting to keep track of which index of the Name pointer table is the symbol of our WinExec function at)</p>
+<p>And this counter is <code>multiplied by 4</code> because all the RVA values inside this function is stored in <code>dword</code> format.</p>
+<p>So, right now we load the <code>RVA of the string into edi</code>, and adding the <code>kernel32 base</code> to get the address of the actual string. We keep this arbitrary string in rdi.</p>
+<p><code>rdx</code> had our <code>&quot;WinExec&quot;</code> whose address is now being moved into <code>rsi</code></p>
+<p><strong>Line 25 - 28</strong> -
+<code>repe cmpsb</code> is executed. Now this is a instruction which compares the string values inside <code>rdi</code> and <code>rsi</code> and sets the zero flag accordingly. It compares it byte by byte, but it&rsquo;s all masked under the single instruction of <code>repe cmpsb</code>.</p>
+<p>Now <code>if the strings are equal</code> then we go ahead and jump to <code>get_addr</code>. Which we&rsquo;ll get to in a bit. But if it is not equal then we increment the counter value by 1, to go to the next <code>RVA</code> of the next string. And we jump <code>back to loop</code> ie (line 17)</p>
+<p><strong>Line 31 - 33</strong> - label <code>get_addr</code> is defined. Now as we know, the top of the stack contains the length of the string <code>&quot;WinExec&quot;</code>. We pop this from the top of the stack back into <code>rcx</code>.</p>
+<p>Now we need to find the <code>ordinal number</code> of the particular <code>WinExec</code>. And ordinal number is simply put an <code>index</code> that windows maintains for each and every export.</p>
+<p>Think of it as a <code>process ID</code> but for exported functions. Each exported function has a <code>unique ID</code> which windows uses to reference the respective functions.
+And this ordinal number is stored as a <code>WORD</code>. Like so,</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rJG6BG4lR.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>The names might look too confusing, but as of now just focus on Name RVA and it&rsquo;s type as shown below in the image, <code>Name Ordinal</code> and it&rsquo;s type and <code>Function RVA</code> and it&rsquo;s type in the image</p>
+<p>So the ordinal numbers are arranged in order as you can see, and a corresponding <code>ordinal number</code> can be found out using the corresponding <code>counter variable</code>.</p>
+<p>Because we kept track of <code>rax</code>, the <code>index of the RVA</code> of the function, now we can find the ordinal numebr using the same <code>rax</code> counter.</p>
+<p>All we have to do is just take this <code>counter/index</code> and <code>multiply it by 2</code> because of <code>WORD</code> and then add it to the base address of the <code>orindal table</code>.</p>
+<p>Now derefencing this calculated pointer would get us the ordinal number of the appropriate name string. Because ordinal numbers are stored as words, we stored it back in <code>ax</code></p>
+<p><strong>Line 35 - 38</strong> - Now we take this ordinal number and multiply it by 4 (Function RVA is stored as <code>DWORD</code>) and add this to the base of the <code>Export Address Table</code> to get the function <code>RVA</code> of our desired function which is <code>&quot;WinExec&quot;</code></p>
+<p>We now take this <code>RVA</code> and add it with <code>r10</code>(the <code>kernel32.dll</code>&rsquo;s) base address to finally get the address of the desired API and store it under the <code>rax</code> register. (The return value of any call function is stored under <code>rax</code>). Now we push the <code>rbx</code>(the register that held on to the return address) and execute <code>ret</code>.</p>
+<p>Executing <code>ret</code> would take us back to</p>
+<p><strong>Line 7 &amp; 8</strong> - Now address of the <code>WinExec</code> function inside <code>rax</code> is moved into the <code>r14</code> register and we now jump to a label called next</p>
+
+
+<h2 class="relative group">Load the arguments into the WinExec function 
+    <div id="load-the-arguments-into-the-winexec-function" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#load-the-arguments-into-the-winexec-function" aria-label="Anchor">#</a>
+    </span>        
+    
+</h2>
+<pre tabindex="0"><code class="language-x64!=" data-lang="x64!=">;------------------------now r14 has our API -----------------------------------
+
+next:
+xor rcx, rcx                  ; clears out rcx   
+mul rcx                       ; rax, rdx and rcx are 0
+
+push rax                      ; Null Terminate string on stack
+mov rax, 0x6578652e636c6163   ; Moving &#34;exe.clac&#34; into rax
+push rax
+
+mov rcx, rsp                  ; into first argument
+inc rdx                       ; Argument to winEXe show_Normal
+</code></pre><p>For this part we shall refer to the msdn documention on <a href="https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-winexec"   target="_blank">
+    WinExec</a></p>
+<p>And as we,</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HyytyQ4gR.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>We need to give</p>
+<ol>
+<li>the cmdline string of the program that we want to run</li>
+<li>The cmdshow argument (this is basically controls how to open the program in what typ eof window) We shall still with just the most basic <code>show_window_normal</code> which holds the value 1 as it can be seen <a href="https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow"   target="_blank">
+    here</a>.</li>
+</ol>
+<p><strong>Line 1 - 3</strong> - We now reach the next label. <code>rcx</code> is cleared and we use mul rcx to also clear rax, rdx as well</p>
+<p><strong>Line 5 - 7</strong> - Now that <code>rax</code> is 0, we just push it onto the stack to act as a <code>null terminator</code> for the upcoming string that we are about to push.</p>
+<p>Then we mov <code>0x6578652e636c6163</code> which is <code>calc.exe</code> in little endian. Now we push it onto the stack as well</p>
+<p>Then we load the first argument into rcx, which is at the top of the stack. The windows calling convention goes like <code>rcx</code>, <code>rdx</code>, <code>r8</code>, <code>r9</code> .</p>
+<p>Now we increment that value of <code>rdx</code> by 1, setting 1 as the <code>second argument</code>.</p>
+
+
+<h2 class="relative group">Call the function 
+    <div id="call-the-function" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#call-the-function" aria-label="Anchor">#</a>
+    </span>        
+    
+</h2>
+<pre tabindex="0"><code class="language-x64!=" data-lang="x64!=">sub rsp, 0x20
+call r14
+</code></pre><p>Here we do <code>sub rsp, 0x20</code>. Because I learnt <code>WinExec clobbers</code> the first 32 bytes on the stack as it is a function that is only to be in use for <code>16 bit mode</code> and any system running in either 32 or 64 bit mode should use <code>CreateProcess</code> as mentioned in the above image. So this extra space that we create acts as a <code>safety net</code> to prevent it from clobbering our useful bytes.</p>
+<p>Now we go ahead and call <code>r14</code> which holds the address of WinExec.</p>
+<p>That brings us to the end of our x64 shellcode.</p>
+
+
+<h2 class="relative group">Compiling 64 bit 
+    <div id="compiling-64-bit" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#compiling-64-bit" aria-label="Anchor">#</a>
+    </span>        
+    
+</h2>
+
+
+<h2 class="relative group">Source Code 
+    <div id="source-code" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#source-code" aria-label="Anchor">#</a>
+    </span>        
+    
+</h2>
+<p>The full source and the associated files for this can be found here on my github -
+<a href="https://github.com/retr0ds/Malware-learning/blob/main/shellcode/pop_calculator/x64/"   target="_blank">
+    x64 Assembly to pop a calculator</a></p>
+
+
+<h3 class="relative group">Assemble 
+    <div id="assemble" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#assemble" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>To compile the shellcode and get the object file we can use any assembler, I prefer <code>nasm</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">nasm -f win64 pop_calc.asm -o pop_calc.o
+</span></span></code></pre></div>
+
+<h3 class="relative group">Get Payload bytes 
+    <div id="get-payload-bytes" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#get-payload-bytes" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>This is not necessary to just compile and run the shellcode. But, assuming we want to use this as <code>payload</code>, this is the one-liner used to generate the instruction bytes</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="k">for</span> i in <span class="k">$(</span>objdump -D pop_calc.o <span class="p">|</span> grep <span class="s2">&#34;^ &#34;</span> <span class="p">|</span> cut -f2<span class="k">)</span><span class="p">;</span> <span class="k">do</span> <span class="nb">echo</span> -n <span class="s2">&#34;\x</span><span class="nv">$i</span><span class="s2">&#34;</span> <span class="p">;</span> <span class="k">done</span>
+</span></span></code></pre></div>
+
+<h3 class="relative group">Link 
+    <div id="link" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#link" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>Before running this shellcode as such we would requrire <code>linking</code>, which can be done by</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ld -m i386pep pop_calc.o -o pop_calc.exe
+</span></span></code></pre></div>
+
+<h3 class="relative group">To Run 
+    <div id="to-run" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#to-run" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">pop_calc.exe
+</span></span></code></pre></div>
+        </div>
+                
+        
+<details style="margin-left:0px" class="mt-2 mb-5 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5">
+    
+    <summary
+        class="py-1 text-lg font-semibold cursor-pointer bg-primary-200 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-primary-800 dark:text-neutral-100">
+        Shellcoding - This article is part of a series.
+    </summary>
+    
+    
+    
+    <div
+        class="py-1 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+        <a href="http://localhost:1313/posts/shellcoding_series/series0_basic/">
+            Part 1: Windows Shellcoding Series 0
+        </a>
+    </div>
+    
+    
+    
+    <div
+        class="py-1 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+        <a href="http://localhost:1313/posts/shellcoding_series/series1_pop_a_calc_part_1/">
+            Part 2: Popping a calculator - Basic - Part 1/3
+        </a>
+    </div>
+    
+    
+    
+    <div
+        class="py-1 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+        Part 3: This Article
+    </div>
+    
+    
+    
+    <div
+        class="py-1 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+        <a href="http://localhost:1313/posts/shellcoding_series/series1_pop_a_calc_part_3/">
+            Part 4: Popping a calculator - 32 bit - Part 3/3
+        </a>
+    </div>
+    
+    
+
+
+</details>
+
+        
+  
+  <section class="flex flex-row flex-wrap justify-center pt-4 text-xl">
+    
+      
+      <a
+      target="_blank"
+      class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+      href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http://localhost:1313/posts/shellcoding_series/series1_pop_a_calc_part_2/&amp;title=Popping%20a%20calculator%20-%2064%20bit%20-%20Part%202/3"
+      title="Share on LinkedIn"
+      aria-label="Share on LinkedIn"
+      >
+      
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+
+  </span>
+
+
+    </a>
+      
+    
+      
+      <a
+      target="_blank"
+      class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+      href="https://twitter.com/intent/tweet/?url=http://localhost:1313/posts/shellcoding_series/series1_pop_a_calc_part_2/&amp;text=Popping%20a%20calculator%20-%2064%20bit%20-%20Part%202/3"
+      title="Tweet on Twitter"
+      aria-label="Tweet on Twitter"
+      >
+      
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg>
+  </span>
+
+
+    </a>
+      
+    
+      
+      <a
+      target="_blank"
+      class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+      href="https://reddit.com/submit/?url=http://localhost:1313/posts/shellcoding_series/series1_pop_a_calc_part_2/&amp;resubmit=true&amp;title=Popping%20a%20calculator%20-%2064%20bit%20-%20Part%202/3"
+      title="Submit to Reddit"
+      aria-label="Submit to Reddit"
+      >
+      
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M201.5 305.5c-13.8 0-24.9-11.1-24.9-24.6 0-13.8 11.1-24.9 24.9-24.9 13.6 0 24.6 11.1 24.6 24.9 0 13.6-11.1 24.6-24.6 24.6zM504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-132.3-41.2c-9.4 0-17.7 3.9-23.8 10-22.4-15.5-52.6-25.5-86.1-26.6l17.4-78.3 55.4 12.5c0 13.6 11.1 24.6 24.6 24.6 13.8 0 24.9-11.3 24.9-24.9s-11.1-24.9-24.9-24.9c-9.7 0-18 5.8-22.1 13.8l-61.2-13.6c-3-.8-6.1 1.4-6.9 4.4l-19.1 86.4c-33.2 1.4-63.1 11.3-85.5 26.8-6.1-6.4-14.7-10.2-24.1-10.2-34.9 0-46.3 46.9-14.4 62.8-1.1 5-1.7 10.2-1.7 15.5 0 52.6 59.2 95.2 132 95.2 73.1 0 132.3-42.6 132.3-95.2 0-5.3-.6-10.8-1.9-15.8 31.3-16 19.8-62.5-14.9-62.5zM302.8 331c-18.2 18.2-76.1 17.9-93.6 0-2.2-2.2-6.1-2.2-8.3 0-2.5 2.5-2.5 6.4 0 8.6 22.8 22.8 87.3 22.8 110.2 0 2.5-2.2 2.5-6.1 0-8.6-2.2-2.2-6.1-2.2-8.3 0zm7.7-75c-13.6 0-24.6 11.1-24.6 24.9 0 13.6 11.1 24.6 24.6 24.6 13.8 0 24.9-11.1 24.9-24.6 0-13.8-11-24.9-24.9-24.9z"/></svg>
+
+  </span>
+
+
+    </a>
+      
+    
+      
+      <a
+      target="_blank"
+      class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+      href="https://pinterest.com/pin/create/bookmarklet/?url=http://localhost:1313/posts/shellcoding_series/series1_pop_a_calc_part_2/&amp;description=Popping%20a%20calculator%20-%2064%20bit%20-%20Part%202/3"
+      title="Pin on Pinterest"
+      aria-label="Pin on Pinterest"
+      >
+      
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M496 256c0 137-111 248-248 248-25.6 0-50.2-3.9-73.4-11.1 10.1-16.5 25.2-43.5 30.8-65 3-11.6 15.4-59 15.4-59 8.1 15.4 31.7 28.5 56.8 28.5 74.8 0 128.7-68.8 128.7-154.3 0-81.9-66.9-143.2-152.9-143.2-107 0-163.9 71.8-163.9 150.1 0 36.4 19.4 81.7 50.3 96.1 4.7 2.2 7.2 1.2 8.3-3.3.8-3.4 5-20.3 6.9-28.1.6-2.5.3-4.7-1.7-7.1-10.1-12.5-18.3-35.3-18.3-56.6 0-54.7 41.4-107.6 112-107.6 60.9 0 103.6 41.5 103.6 100.9 0 67.1-33.9 113.6-78 113.6-24.3 0-42.6-20.1-36.7-44.8 7-29.5 20.5-61.3 20.5-82.6 0-19-10.2-34.9-31.4-34.9-24.9 0-44.9 25.7-44.9 60.2 0 22 7.4 36.8 7.4 36.8s-24.5 103.8-29 123.2c-5 21.4-3 51.6-.9 71.2C65.4 450.9 0 361.1 0 256 0 119 111 8 248 8s248 111 248 248z"/></svg>
+
+  </span>
+
+
+    </a>
+      
+    
+      
+      <a
+      target="_blank"
+      class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+      href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:1313/posts/shellcoding_series/series1_pop_a_calc_part_2/&amp;quote=Popping%20a%20calculator%20-%2064%20bit%20-%20Part%202/3"
+      title="Share on Facebook"
+      aria-label="Share on Facebook"
+      >
+      
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z"/></svg>
+
+  </span>
+
+
+    </a>
+      
+    
+      
+      <a
+      target="_blank"
+      class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+      href="mailto:?body=http://localhost:1313/posts/shellcoding_series/series1_pop_a_calc_part_2/&amp;subject=Popping%20a%20calculator%20-%2064%20bit%20-%20Part%202/3"
+      title="Send via email"
+      aria-label="Send via email"
+      >
+      
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M207.8 20.73c-93.45 18.32-168.7 93.66-187 187.1c-27.64 140.9 68.65 266.2 199.1 285.1c19.01 2.888 36.17-12.26 36.17-31.49l.0001-.6631c0-15.74-11.44-28.88-26.84-31.24c-84.35-12.98-149.2-86.13-149.2-174.2c0-102.9 88.61-185.5 193.4-175.4c91.54 8.869 158.6 91.25 158.6 183.2l0 16.16c0 22.09-17.94 40.05-40 40.05s-40.01-17.96-40.01-40.05v-120.1c0-8.847-7.161-16.02-16.01-16.02l-31.98 .0036c-7.299 0-13.2 4.992-15.12 11.68c-24.85-12.15-54.24-16.38-86.06-5.106c-38.75 13.73-68.12 48.91-73.72 89.64c-9.483 69.01 43.81 128 110.9 128c26.44 0 50.43-9.544 69.59-24.88c24 31.3 65.23 48.69 109.4 37.49C465.2 369.3 496 324.1 495.1 277.2V256.3C495.1 107.1 361.2-9.332 207.8 20.73zM239.1 304.3c-26.47 0-48-21.56-48-48.05s21.53-48.05 48-48.05s48 21.56 48 48.05S266.5 304.3 239.1 304.3z"/></svg>
+
+  </span>
+
+
+    </a>
+      
+    
+      
+      <a
+      target="_blank"
+      class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+      href="https://api.whatsapp.com/send?text=http://localhost:1313/posts/shellcoding_series/series1_pop_a_calc_part_2/&amp;resubmit=true&amp;title=Popping%20a%20calculator%20-%2064%20bit%20-%20Part%202/3"
+      title=""
+      aria-label=""
+      >
+      
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+
+  </span>
+
+
+    </a>
+      
+    
+      
+      <a
+      target="_blank"
+      class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+      href="https://t.me/share/url?url=http://localhost:1313/posts/shellcoding_series/series1_pop_a_calc_part_2/&amp;resubmit=true&amp;title=Popping%20a%20calculator%20-%2064%20bit%20-%20Part%202/3"
+      title=""
+      aria-label=""
+      >
+      
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M248,8C111.033,8,0,119.033,0,256S111.033,504,248,504,496,392.967,496,256,384.967,8,248,8ZM362.952,176.66c-3.732,39.215-19.881,134.378-28.1,178.3-3.476,18.584-10.322,24.816-16.948,25.425-14.4,1.326-25.338-9.517-39.287-18.661-21.827-14.308-34.158-23.215-55.346-37.177-24.485-16.135-8.612-25,5.342-39.5,3.652-3.793,67.107-61.51,68.335-66.746.153-.655.3-3.1-1.154-4.384s-3.59-.849-5.135-.5q-3.283.746-104.608,69.142-14.845,10.194-26.894,9.934c-8.855-.191-25.888-5.006-38.551-9.123-15.531-5.048-27.875-7.717-26.8-16.291q.84-6.7,18.45-13.7,108.446-47.248,144.628-62.3c68.872-28.647,83.183-33.623,92.511-33.789,2.052-.034,6.639.474,9.61,2.885a10.452,10.452,0,0,1,3.53,6.716A43.765,43.765,0,0,1,362.952,176.66Z"/></svg>
+
+  </span>
+
+
+    </a>
+      
+    
+  </section>
+
+
+        
+
+
+<h2 class="mt-8 text-2xl font-extrabold mb-10">Related</h2>
+<section class="w-full grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+  
+  
+
+  <a href="/posts/shellcoding_series/series1_pop_a_calc_part_3/" class="min-w-full">
+    
+    <div class="min-h-full border border-neutral-200 dark:border-neutral-700 border-2 rounded overflow-hidden shadow-2xl relative">
+        
+        <div class="w-full thumbnail_card_related nozoom" style="background-image:url(/img/featured.svg);"></div>
+        
+      
+
+      <div class="px-6 py-4">
+
+        
+        <div class="font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral"
+          href="/posts/shellcoding_series/series1_pop_a_calc_part_3/">Popping a calculator - 32 bit - Part 3/3</div>
+        
+
+        <div class="text-sm text-neutral-500 dark:text-neutral-400">
+          
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  <time datetime="2024-03-27 00:00:00 &#43;0000 UTC">27 March 2024</time><span class="px-2 text-primary-500">&middot;</span><span>1010 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">5 mins</span>
+  
+
+  
+  
+</div>
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/categories/reversing/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Reversing
+  </span>
+</span>
+  </span>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/blog/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Blog
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/shellcode/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Shellcode
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/windows/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Windows
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/pop_a_calc/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Pop_a_calc
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/series/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Series
+  </span>
+</span>
+  </span>
+  
+  
+  
+  
+</div>
+
+
+
+        </div>
+
+        
+      </div>
+      <div class="px-6 pt-4 pb-2">
+
+      </div>
+    </div>
+  </a>
+  
+  
+
+  <a href="/posts/shellcoding_series/series1_pop_a_calc_part_1/" class="min-w-full">
+    
+    <div class="min-h-full border border-neutral-200 dark:border-neutral-700 border-2 rounded overflow-hidden shadow-2xl relative">
+        
+        <div class="w-full thumbnail_card_related nozoom" style="background-image:url(/img/featured.svg);"></div>
+        
+      
+
+      <div class="px-6 py-4">
+
+        
+        <div class="font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral"
+          href="/posts/shellcoding_series/series1_pop_a_calc_part_1/">Popping a calculator - Basic - Part 1/3</div>
+        
+
+        <div class="text-sm text-neutral-500 dark:text-neutral-400">
+          
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  <time datetime="2024-03-27 00:00:00 &#43;0000 UTC">27 March 2024</time><span class="px-2 text-primary-500">&middot;</span><span>1129 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">6 mins</span>
+  
+
+  
+  
+</div>
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/categories/reversing/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Reversing
+  </span>
+</span>
+  </span>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/blog/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Blog
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/shellcode/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Shellcode
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/windows/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Windows
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/series/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Series
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/pop_a_calc/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Pop_a_calc
+  </span>
+</span>
+  </span>
+  
+  
+  
+  
+</div>
+
+
+
+        </div>
+
+        
+      </div>
+      <div class="px-6 pt-4 pb-2">
+
+      </div>
+    </div>
+  </a>
+  
+  
+
+  <a href="/posts/shellcoding_series/series0_basic/" class="min-w-full">
+    
+    <div class="min-h-full border border-neutral-200 dark:border-neutral-700 border-2 rounded overflow-hidden shadow-2xl relative">
+        
+        <div class="w-full thumbnail_card_related nozoom" style="background-image:url(/img/featured.svg);"></div>
+        
+      
+
+      <div class="px-6 py-4">
+
+        
+        <div class="font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral"
+          href="/posts/shellcoding_series/series0_basic/">Windows Shellcoding Series 0</div>
+        
+
+        <div class="text-sm text-neutral-500 dark:text-neutral-400">
+          
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  <time datetime="2024-03-27 00:00:00 &#43;0000 UTC">27 March 2024</time><span class="px-2 text-primary-500">&middot;</span><span>561 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">3 mins</span>
+  
+
+  
+  
+</div>
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/categories/reversing/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Reversing
+  </span>
+</span>
+  </span>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/blog/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Blog
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/shellcode/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Shellcode
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/windows/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Windows
+  </span>
+</span>
+  </span>
+  
+  
+  
+  
+</div>
+
+
+
+        </div>
+
+        
+      </div>
+      <div class="px-6 pt-4 pb-2">
+
+      </div>
+    </div>
+  </a>
+  
+</section>
+
+  
+      </div>
+     
+      
+      
+        
+        
+          
+          
+        
+      <script>
+        var oid = "views_posts\\Shellcoding_Series\\Series1_pop_a_calc_part_2\\index.md"
+        var oid_likes = "likes_posts\\Shellcoding_Series\\Series1_pop_a_calc_part_2\\index.md"
+      </script>
+      
+      
+      
+      <script type="text/javascript" src="/js/page.min.b06a29d42a4ed16787978e2eee1e8c797b7698db2bc14ccee78f5c80ac566fc996190a73ad80a5e987558474b20b96fa38f7d85b405f165ff72b7b163c5ad11b.js" integrity="sha512-sGop1CpO0WeHl44u7h6MeXt2mNsrwUzO549cgKxWb8mWGQpzrYCl6YdVhHSyC5b6OPfYW0BfFl/3K3sWPFrRGw=="></script>
+  
+    </section>
+  <footer class="pt-8 max-w-prose print:hidden">
+
+    
+  
+    
+    
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+      <div class="flex justify-between pt-3">
+        <span>
+          
+            <a class="flex group mr-3" href="/posts/shellcoding_series/series1_pop_a_calc_part_1/">
+              <span
+                class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400"
+                >&larr;</span
+              >
+              <span
+                class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400"
+                >&rarr;</span
+              >
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >Popping a calculator - Basic - Part 1/3</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2024-03-27 00:00:00 &#43;0000 UTC">27 March 2024</time>
+                  
+                </span>
+              </span>
+            </a>
+          
+        </span>
+        <span>
+          
+            <a class="flex text-right group ml-3" href="/posts/shellcoding_series/series1_pop_a_calc_part_3/">
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >Popping a calculator - 32 bit - Part 3/3</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2024-03-27 00:00:00 &#43;0000 UTC">27 March 2024</time>
+                  
+                </span>
+              </span>
+              <span
+                class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400"
+                >&rarr;</span
+              >
+              <span
+                class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400"
+                >&larr;</span
+              >
+            </a>
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+    
+  </footer>
+</article>
+
+      <div id="top-scroller" class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0">
+  <a href="#the-top"
+    class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+    aria-label="Scroll to top" title="Scroll to top">
+    &uarr;
+  </a>
+</div>
+    </main><footer id="site-footer" class="py-10 print:hidden">
+  
+  
+    
+    <nav class="flex flex-row pb-4 text-base font-medium text-neutral-500 dark:text-neutral-400">
+      <ul class="flex flex-col list-none sm:flex-row">
+        
+        <li class="flex mb-1 ltr:text-right rtl:text-left sm:mb-0 ltr:sm:mr-7 ltr:sm:last:mr-0 rtl:sm:ml-7 rtl:sm:last:ml-0">
+          <a class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2 flex items-center" href="/tags/"
+            title="">
+            
+            Tags
+          </a>
+        </li>
+        
+        <li class="flex mb-1 ltr:text-right rtl:text-left sm:mb-0 ltr:sm:mr-7 ltr:sm:last:mr-0 rtl:sm:ml-7 rtl:sm:last:ml-0">
+          <a class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2 flex items-center" href="/categories/"
+            title="">
+            
+            Categories
+          </a>
+        </li>
+        
+      </ul>
+    </nav>
+    
+  
+  <div class="flex items-center justify-between">
+
+    
+    
+    <p class="text-sm text-neutral-500 dark:text-neutral-400">
+      &copy;
+      2024
+      Sidharth AKA retr0ds
+    </p>
+    
+
+    
+    
+    <p class="text-xs text-neutral-500 dark:text-neutral-400">
+      
+      
+      Powered by <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> &amp; <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://blowfish.page/" target="_blank" rel="noopener noreferrer">Blowfish</a>
+    </p>
+    
+
+  </div>
+  <script>
+    
+    mediumZoom(document.querySelectorAll("img:not(.nozoom)"), {
+      margin: 24,
+      background: 'rgba(0,0,0,0.5)',
+      scrollOffset: 0,
+    })
+    
+  </script>
+  
+  
+  <script type="text/javascript" src="/js/process.min.62060bb247f4de2b6dde45903668fefb68d792f365587605177b1227c0cf43588701edaca0cb40e2c8e2789bd5ce67c1d2a215b9fb258c3496a7cd25e7cb5fdf.js" integrity="sha512-YgYLskf03itt3kWQNmj&#43;&#43;2jXkvNlWHYFF3sSJ8DPQ1iHAe2soMtA4sjieJvVzmfB0qIVufsljDSWp80l58tf3w=="></script>
+  
+  
+</footer><div
+  id="search-wrapper"
+  class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]"
+  data-url="http://localhost:1313/"
+  style="z-index:500"
+>
+  <div
+    id="search-modal"
+    class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"
+  >
+    <header class="relative z-10 flex items-center justify-between flex-none px-2">
+      <form class="flex items-center flex-auto min-w-0">
+        <div class="flex items-center justify-center w-8 h-8 text-neutral-400">
+          
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="Search"
+          tabindex="0"
+        />
+      </form>
+      <button
+        id="close-search-button"
+        class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="Close (Esc)"
+      >
+        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+
+      </button>
+    </header>
+    <section class="flex-auto px-2 overflow-auto">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+  </div>
+</body>
+
+</html>
