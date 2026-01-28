@@ -104,8 +104,8 @@ Now using these registers and offset we can find our way into the PEB of any giv
 
 As mentioned easlier, the `PEB` structure contains various information about a particular process like the base address, if it is being debugged or not, any inherited flags from other parent processes etc.
 
-![image](https://hackmd.io/_uploads/Bkl9OzFJC.png)
-![image](https://hackmd.io/_uploads/BJcj_GKkR.png)
+![image](images/Bkl9OzFJC.png)
+![image](images/BJcj_GKkR.png)
 [Source](https://www.geoffchappell.com/studies/windows/km/ntoskrnl/inc/api/pebteb/peb/index.htm)
 
 
@@ -154,7 +154,7 @@ To explain them in brief I shall site it from a book -
 
 The offset is at `0x20` for 64 bit
 
-![image](https://hackmd.io/_uploads/S1SK6QKyR.png)
+![image](images/S1SK6QKyR.png)
 
 The first link is pointing to an entry about `Kernelbase.dll`, so at the offset `0x20` we have **LDR_TABLE_ENTRY** structure
 ***Why InMemoryOrderModuleList?*** 
@@ -172,7 +172,7 @@ Now after executing line 5 rcx points to the **[LDR_DATA_TABLE_ENTRY](https://ww
 
 **LDR_TABLE_DATA_STRUCTURE**
 
-![image](https://hackmd.io/_uploads/rJuiBVF1C.png)
+![image](images/rJuiBVF1C.png)
 
 The way it works is as depicted below
 
@@ -221,12 +221,12 @@ Here Initially rcx and r10 hold the base of the kernel32 dll
 **Line 1** - Here we find the `RVA (Relative virtual address from the base of Kernel32)`, to the the PE Header
 The offset of `0x3c` is never changed and remains the same in the PE format, as it is used to get to the `PE header`. 
 
-![image](https://hackmd.io/_uploads/BJSle14gC.png)
+![image](images/BJSle14gC.png)
 
 
 Enough being side tracked, but as you can see in the image, the letter PE show up at the `RVA 0xE8` and `the offset/the RVA` of this can always be found at `0x3C` from the base.
 
-![image](https://hackmd.io/_uploads/S1Ym-k4g0.png)
+![image](images/S1Ym-k4g0.png)
 
 
 **Line 2** - Now we just add this offset (in our case E8) to the base of kernel32 dll to get the pointer to the PE header
@@ -243,7 +243,7 @@ But yes, that being said, the RVA for `kernel32.dll`'s in this particular case i
 
 Well, the way windows has organized is not just a simple` Export Table` rather, it's a well defined `structure` that has general information with regards to exports furthermore it has three important table **pointers** pertaining to the sole purpose of keeping track of what all functions and modules are being exported out of a binary.
 
-![image](https://hackmd.io/_uploads/r1jQng4xR.png)
+![image](images/r1jQng4xR.png)
 source: [Export Address Table (EAT)](https://ferreirasc.github.io/PE-Export-Address-Table/)
 
 - Export Address Table pointer
@@ -353,7 +353,7 @@ Now we need to find the `ordinal number` of the particular `WinExec`. And ordina
 Think of it as a `process ID` but for exported functions. Each exported function has a `unique ID` which windows uses to reference the respective functions.
 And this ordinal number is stored as a `WORD`. Like so,
 
-![image](https://hackmd.io/_uploads/rJG6BG4lR.png)
+![image](images/rJG6BG4lR.png)
 
 The names might look too confusing, but as of now just focus on Name RVA and it's type as shown below in the image, `Name Ordinal` and it's type and `Function RVA` and it's type in the image
 
@@ -396,7 +396,7 @@ For this part we shall refer to the msdn documention on [WinExec](https://learn.
 
 And as we,
 
-![image](https://hackmd.io/_uploads/HyytyQ4gR.png)
+![image](images/HyytyQ4gR.png)
 
 We need to give 
 1) the cmdline string of the program that we want to run

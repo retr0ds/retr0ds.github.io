@@ -31,7 +31,7 @@ The pre-requisite to follow this series of blog posts:
 
 ## The Why?
 
-![image](https://hackmd.io/_uploads/HyhaaubJR.png)
+![image](images/HyhaaubJR.png)
 
 I have always been fascinated by shellcode (especially in windows) and the intricacies it holds.
 
@@ -47,7 +47,7 @@ Well, without further ado, let's jump right into the topic!
 
 ## What is Shellcode?
 
-![image](https://hackmd.io/_uploads/ryR0-9Z1A.png)
+![image](images/ryR0-9Z1A.png)
 
 
 Simply put, a piece of shellcode is a set of bytes(of assembly instructions) that can be loaded in memory and executed like any other piece of assembly code.
@@ -87,14 +87,14 @@ There's a pretty neat interface to get working shellcode for this purpose on win
 
 ### MsfVenom
 
-![image](https://hackmd.io/_uploads/S1bMtF-1R.png)
+![image](images/S1bMtF-1R.png)
 
 
 MsfVenom is a shellcode generator that has templates based upon which we can customize our own payload
  
 Now this series doesn't cover shellcode generation by MsfVenom, Metasploit has a pretty neat [documentation](https://docs.metasploit.com/docs/using-metasploit/basics/how-to-use-msfvenom.html) for that. Feel free to check that out.
 
-![image](https://hackmd.io/_uploads/HkzLW9-y0.png)
+![image](images/HkzLW9-y0.png)
 
 
 

@@ -78,10 +78,10 @@ now it is pretty normal with sections and imports being normal, so we can start 
 
 # Triaging
 Running file on the binary shows it’s a 64 bit PE executable
-![image](https://hackmd.io/_uploads/H11N5K_Tp.png)
+![image](images/H11N5K_Tp.png)
 
 We open the binary in Detect_it_easy,
-![image](https://hackmd.io/_uploads/B1_H5Kda6.png)
+![image](images/B1_H5Kda6.png)
 
 
 And we can clearly see it is a UPX packed binary, meaning we would have to unpack it first
@@ -90,14 +90,14 @@ Can be done using
 
 > upx -d mssetup.exe
 
-![image](https://hackmd.io/_uploads/r1evcYuaa.png)
+![image](images/r1evcYuaa.png)
 
 Now the unpacked binary when put through DIE seems to be normal
-![image](https://hackmd.io/_uploads/Hy2w5FOTp.png)
+![image](images/Hy2w5FOTp.png)
 
 trying strings on it we see a few intersting strings such as 
-![image](https://hackmd.io/_uploads/SJCNnF_T6.png)
-![image](https://hackmd.io/_uploads/rJpY3Ydp6.png)
+![image](images/SJCNnF_T6.png)
+![image](images/rJpY3Ydp6.png)
 
 
 * A ransom note looking text
@@ -114,7 +114,7 @@ trying strings on it we see a few intersting strings such as
 * AppData\Roaming\Notepad++Documents168133:
 
 
-![image](https://hackmd.io/_uploads/r1eA2Kdp6.png)
+![image](images/r1eA2Kdp6.png)
 
 we also see strings pertaining to chacha20, giving us a small idea on what this ransomware might entail
 
@@ -126,7 +126,7 @@ And we find main fairly easily
 
 ### Getting to main
 
-![image](https://hackmd.io/_uploads/SJWN0tupa.png)
+![image](images/SJWN0tupa.png)
 
 In a rust binary unlike the C/C++ binaries, the main is not actually a main, rather it passes the function pointer of main to another function called lang_start
 
@@ -135,12 +135,12 @@ In a rust binary unlike the C/C++ binaries, the main is not actually a main, rat
 Now heading into the actual main we see,
 An IsDebuggerPresent call
 
-![image](https://hackmd.io/_uploads/B1YYH9_aa.png)
+![image](images/B1YYH9_aa.png)
 
 So we can easily either NOP out these bytes or convert the jnz to jz as such
 
-![image](https://hackmd.io/_uploads/rJE5Hqu6T.png)
-![image](https://hackmd.io/_uploads/Sk_cS5OTT.png)
+![image](images/rJE5Hqu6T.png)
+![image](images/Sk_cS5OTT.png)
 
 Now this would help us during our debugging session, if we need to step through this function
 
@@ -149,29 +149,29 @@ Now this would help us during our debugging session, if we need to step through 
 Next we have this block of code between lines 123 - 130
 
 
-![image](https://hackmd.io/_uploads/HySsP9u6a.png)
+![image](images/HySsP9u6a.png)
 
 Googling for the struct LASTINPUTINFO 
  
- ![image](https://hackmd.io/_uploads/BJHnwcdp6.png)
+ ![image](images/BJHnwcdp6.png)
 
 As it says, we get a structure filled with the last input info
 
-![image](https://hackmd.io/_uploads/H1U6w9_6p.png)
+![image](images/H1U6w9_6p.png)
 
 This function fills the dwTime field of the structure with the milliseconds (tick count) of the last input info. The milliseconds here are from the start of system_time
 
 Analysing the next block of code,
-![image](https://hackmd.io/_uploads/r1Pl_iO6T.png)
+![image](images/r1Pl_iO6T.png)
 
 ### GetTickCount()
 
 We see GetTickCount() being called
-![image](https://hackmd.io/_uploads/ry8wusOT6.png)
+![image](images/ry8wusOT6.png)
 
 As mentioned, it returns the number of milliseconds since the system was started,
 And that is being subtracted from the time the last input was taken and compared against 59999, and is evaluated true if greater. Ie it would be false if it is under 60000ms, 60000ms is 60s i.e 1 min. The malware checks if the computer was idle for the last minute, if it was idle, then it exits . This is one of the conditions
-![image](https://hackmd.io/_uploads/rJldOjuTT.png)
+![image](images/rJldOjuTT.png)
 
 
 
@@ -182,7 +182,7 @@ For the next block of code above, in the if condition we see it takes a fills a 
 Once the if condition is cleared,
 
 in the block of code below
-![image](https://hackmd.io/_uploads/BkletoOap.png)
+![image](images/BkletoOap.png)
 
 We see the use of a function “GetAsyncKeyState” 
 
@@ -191,7 +191,7 @@ We see the use of a function “GetAsyncKeyState”
 
 We can look up the MSDN webpage associated to GetAsyncKeyState
 
-![image](https://hackmd.io/_uploads/HJUfKs_p6.png)
+![image](images/HJUfKs_p6.png)
 
 
 As it mentions, it determines which key was pressed during the latest IO operation
@@ -199,11 +199,11 @@ As it mentions, it determines which key was pressed during the latest IO operati
 And we have GetAsyncKeyState(1) and GetAsyncKeyState(2)
 
 Where args 1 and 2 correspond to : 
-![image](https://hackmd.io/_uploads/Hk-EFjua6.png)
+![image](images/Hk-EFjua6.png)
 Under the virtual [key_code](https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes)
 
 We also see, 
-![image](https://hackmd.io/_uploads/r1UtKju66.png)
+![image](images/r1UtKju66.png)
 
 Based on this we can see it keeps track of how many times left click was registered and how many times right click was registered in the variables v1 and v2
 
@@ -219,33 +219,33 @@ After that we notice some basic initialization type code until line 179  (below)
 
 And tracking that particular offset 140002CFF0 leads us to functions which looks like a heapfree and memory allocation, all of this sounds like basic initialization. So not much use for us to actually reverse this part of the code
 
-![image](https://hackmd.io/_uploads/BypBeC_Tp.png)
+![image](images/BypBeC_Tp.png)
 
 ### sub_140023030() AKA Unkn_Func_1
 
-![image](https://hackmd.io/_uploads/BJIOa1ta6.png)
+![image](images/BJIOa1ta6.png)
 has been rechanged to 
-![image](https://hackmd.io/_uploads/ryRUpJtTT.png)
+![image](images/ryRUpJtTT.png)
  going into the function it seems too much to sit and revers statically, I'll come back to this later and look at it dynamically
  
  ### sub_14000C1B0() AKA Get Environment Variable
  
  Next interesting function is  
- ![image](https://hackmd.io/_uploads/SylNMlFpa.png)
+ ![image](images/SylNMlFpa.png)
 
 This function seems to take an arguemnt as "USERNAME " and a hObject to output the value
 
 Going inside the function we see it does make use of the USERNAME argument in calling the windows API
-![image](https://hackmd.io/_uploads/B1taGxt6T.png)
+![image](images/B1taGxt6T.png)
 
 So we go with the understanding that the hObject that goes out of this is the ENV VARIABLE
 
 ### filepath setting
 
-![image](https://hackmd.io/_uploads/SkYHm-F66.png)
+![image](images/SkYHm-F66.png)
 
 this block of code seems like it is reading an existing string(unk_14002D040)
-![image](https://hackmd.io/_uploads/BkMv7-tpp.png)
+![image](images/BkMv7-tpp.png)
 
 at particular offsets and it is appending whatever is read from env_struct to 
 parts of this string
@@ -255,7 +255,7 @@ A hunch we can easily form out of this entire code block is that it is using our
 * C:\Users\%USER%\Downloads\
 * C:\Users\%USER%\Desktop\
 
-**sub_140011F80** mentioned here seems to be taking these![image](https://hackmd.io/_uploads/HkzQtZYpa.png)
+**sub_140011F80** mentioned here seems to be taking these![image](images/HkzQtZYpa.png)
 
 Going inside it, we see it basically has a memcpy inside it
 
@@ -266,7 +266,7 @@ Also, we see the output in one is being used in the other after being put throug
 **sub_140005700** just calls a freeheap within itself, so we can rename that as freehap as well
 
 so now the cleaned up statically analysed block of code looks like 
-![image](https://hackmd.io/_uploads/HychqbFT6.png)
+![image](images/HychqbFT6.png)
 
 And going by the order of the string, I would assume that it is being put to use in the same order that it is stored in 
 
@@ -280,14 +280,14 @@ So we can rename the above image to kind of fit our mental image of what is happ
 ### Ransom_note_file_name
 
 As we can see, first 17 bytes of this offset is read in 
-![image](https://hackmd.io/_uploads/ryBWzzFaT.png)
+![image](images/ryBWzzFaT.png)
 
-![image](https://hackmd.io/_uploads/ryOMMMtpa.png)
+![image](images/ryOMMMtpa.png)
 
 ### Create ransom file
-![image](https://hackmd.io/_uploads/HJ4M7Gtpa.png)
+![image](images/HJ4M7Gtpa.png)
 when went into the highlighted function, we see calls such as 
-![image](https://hackmd.io/_uploads/ryiImft6p.png)
+![image](images/ryiImft6p.png)
 
 which leads us to understand that this now creates a file under the name  
 `Azr43l_README.txt`. 
@@ -296,12 +296,12 @@ And we see this being used to the very last concatednated file_path, which under
 
 ### Write ransom note to desktop
 
-![image](https://hackmd.io/_uploads/B1K-V4Yaa.png)
+![image](images/B1K-V4Yaa.png)
 
 
 In the above image we see **sub_140004550**, we see calls to NtWriteFile
 
-![image](https://hackmd.io/_uploads/HJxoNEFaT.png)
+![image](images/HJxoNEFaT.png)
 
 and this function by itself takes arguments to the ransom_note
 hence it is safe to assume that it does write the ransom_note onto the newly created `Azr43l_README.txt`
@@ -309,24 +309,24 @@ hence it is safe to assume that it does write the ransom_note onto the newly cre
 Then after this block of code it's mostly a bunch of heap_free calls until line 252
 
 ### sub_140017EF0() AKA unkn_func_2
-![image](https://hackmd.io/_uploads/rJ1k-_Fpp.png)
+![image](images/rJ1k-_Fpp.png)
 
 We see the same routine yet again and some file_path\\Azr43l_README.txt being passed as an arg to the above mnetioned func. We don't understand much from looking into this, this is yet another function to be looked at dynamically
 
 
 ### Ransom note drop pt.2
 
-![image](https://hackmd.io/_uploads/rkrZf_KTT.png)
+![image](images/rkrZf_KTT.png)
 
 Starting from line 275 we see a similar routine again of it again wrting the same content to this new file, it's just that it is in a different location (which can be found out dynamically)
 
 ### sub_140001450 AKA Unkn_Func_3
-![image](https://hackmd.io/_uploads/B1eRGdKpa.png)
+![image](images/B1eRGdKpa.png)
 
 Now we get to what seems to be the crux of the ransomware.
 We see a new function which we have named unkn_func_2 take in the earlier unkn_func_1's output and it also takes the user_download_folder path, going into the function, it only confuses us even more, so for now we stick to just renaming it like so
 
-![image](https://hackmd.io/_uploads/BkrJwdY66.png)
+![image](images/BkrJwdY66.png)
 
 
 ### Continuing
@@ -344,7 +344,7 @@ Just for fun I decided to run this binary now, in a controlled environtment ofco
 
 for example
 
-![image](https://hackmd.io/_uploads/BkJgQ-5pT.png)
+![image](images/BkJgQ-5pT.png)
 
 # Dynamic Analysis
 
@@ -363,7 +363,7 @@ we get to the first function we wanted to look at dynamically
 
 
 ### sub_140023030() AKA Unkn_Func_1 AKA random_24_gen
-![image](https://hackmd.io/_uploads/SyWFKOFT6.png)
+![image](images/SyWFKOFT6.png)
 
 Initially we just kept track of the output value of this function
 and func_1_output seems to be generated on runtime
@@ -371,13 +371,13 @@ and func_1_output seems to be generated on runtime
 and when tried to run multiple times, we see different values being generated
 
 1)
-![image](https://hackmd.io/_uploads/BkrPYdFp6.png)
+![image](images/BkrPYdFp6.png)
 
 2)
-![image](https://hackmd.io/_uploads/Hyz9Y_Kap.png)
+![image](images/Hyz9Y_Kap.png)
 
 3)
-![image](https://hackmd.io/_uploads/BJohtuYpa.png)
+![image](images/BJohtuYpa.png)
 
 
 Looking at this we see, it generates 
@@ -386,40 +386,40 @@ Looking at this we see, it generates
 * **24 bytes**
 
 so we can go ahead and change the name of the func to
-![image](https://hackmd.io/_uploads/B1zrcuKaa.png)
+![image](images/B1zrcuKaa.png)
 
 
 ### Get_env_Variable
-![image](https://hackmd.io/_uploads/H1zFqOta6.png)
+![image](images/H1zFqOta6.png)
 
 Can confirm that it does take the given struct adn does return the %USER% value in the struct
 
-![image](https://hackmd.io/_uploads/ryjj5_YTa.png)
+![image](images/ryjj5_YTa.png)
 
 ### Setting Filepath
 we can confirm those particular file_paths now and we do see the actual path and we can name the variables accordingly
 
 1)
-![image](https://hackmd.io/_uploads/Hy-g2dtpa.png)
+![image](images/Hy-g2dtpa.png)
 
 2)
-![image](https://hackmd.io/_uploads/HJyQ3dYpp.png)
+![image](images/HJyQ3dYpp.png)
 
 3)
-![image](https://hackmd.io/_uploads/B1LL3OYTT.png)
+![image](images/B1LL3OYTT.png)
 
 ### Ransom_note_path
 
 The ransom note path can also be found as shown below
 `C:\Users\Ryuzaki\Desktop\Azr43l_README.txt`
-![image](https://hackmd.io/_uploads/ryzchuY66.png)
+![image](images/ryzchuY66.png)
 
 ### Unkn_func_2
-![image](https://hackmd.io/_uploads/BkpfltFpT.png)
+![image](images/BkpfltFpT.png)
 
 Now we come to unkn_func_2
 We see the first arg being some structure, and the second one being the desktop_ransom_note file path
-![image](https://hackmd.io/_uploads/Sydugttap.png)
+![image](images/Sydugttap.png)
 
 We see plii return 1 at the cb.size so it doesn't even enter the block of code under the if condition below
 
@@ -428,7 +428,7 @@ We see plii return 1 at the cb.size so it doesn't even enter the block of code u
 
 Now we come to this part of the code
 
-![image](https://hackmd.io/_uploads/S1lIYiKTT.png)
+![image](images/S1lIYiKTT.png)
 
  as we can see, from renaming the above variables in the "setting filepath" we get an idea as to what all args are being passed into this function
 namely
@@ -444,11 +444,11 @@ namely
 **Statically** looking at unkn_func_3 we see a lot of operations pertaining to an encryption of sorts and we see some variables named randombuffer , we see this string 
 `98238588864125956469313398338937` being xorred with something
 
-![image](https://hackmd.io/_uploads/H1gJfZ9ap.png)
+![image](images/H1gJfZ9ap.png)
 
 and we also see the use of the string .azr43l, as seen above in the second triaging attempt
 
-![image](https://hackmd.io/_uploads/HJmUMbqpT.png)
+![image](images/HJmUMbqpT.png)
 
 So going based off of these hunches, now I name the current function that we are in right now, unkn_func_3 as encrypt()
 
@@ -456,7 +456,7 @@ So going based off of these hunches, now I name the current function that we are
 ## Encrypt() - the heart of the ransomware
 
 Going into encrypt, we come across the first function which takes the file_path and the file_length as arguments, v53 being the output 
-![image](https://hackmd.io/_uploads/HJ6b4bcp6.png)
+![image](images/HJ6b4bcp6.png)
 
 
 
@@ -468,7 +468,7 @@ Currently in our case, the file_path is the download folder and the file_length 
 Going inside the above mentioned function, we see
 
 
-![image](https://hackmd.io/_uploads/SJICVW9a6.png)
+![image](images/SJICVW9a6.png)
 
 > I have renamed some variables as differently variants of "file_path" accordingly again and again ,becuase the pointers were being copied and switched around
 
@@ -481,9 +481,9 @@ path file before that particular function call was just our downloadpath file
 
 But after that call, 
 
-![image](https://hackmd.io/_uploads/BJZnBWc6a.png)
+![image](images/BJZnBWc6a.png)
 
-![image](https://hackmd.io/_uploads/r1Nqr-9ap.png)
+![image](images/r1Nqr-9ap.png)
 
 
 it is appended with a * like so
@@ -494,7 +494,7 @@ It is mostly used to search under a particular directory, a regex the means anyt
 
 so we rename that function `sub_7FF792300B20` like so  
 
-![image](https://hackmd.io/_uploads/rkea8WcTa.png)
+![image](images/rkea8WcTa.png)
 
 and continue ahead.
 
@@ -504,9 +504,9 @@ and continue ahead.
 takes our file_path as arg
 and once it exits, we see this
 when we track our filepath variable
-![image](https://hackmd.io/_uploads/rktfuZc6p.png)
+![image](images/rktfuZc6p.png)
 
-![image](https://hackmd.io/_uploads/Hks0PW56a.png)
+![image](images/Hks0PW56a.png)
 
 
 hence it has been aptly named
@@ -517,7 +517,7 @@ it takes lpfilename and our file_path as argument, and output's the fullpath nam
 
 When we look inside the function we see
 
-![image](https://hackmd.io/_uploads/Skd9O-566.png)
+![image](images/Skd9O-566.png)
 and stepping over this function while debugging also confirms the same. In our case it returns the same `C:\Users\Ryuzaki\Downloads\*`
 
 
@@ -527,12 +527,12 @@ Now coming to next block of code
 
 #### FindFirstFileW
 
-![image](https://hackmd.io/_uploads/BJ6eFb5TT.png)
+![image](images/BJ6eFb5TT.png)
 
 
 We google this on msdn and we [FindFirstFileW](https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-findfirstfilew)
 
-![image](https://hackmd.io/_uploads/r1dWiZ5ap.png)
+![image](images/r1dWiZ5ap.png)
 it returns a handle to the file and an output value under the second arguemnt containing information about the file under the structure of FIND_DATAW
 ```c++
 typedef struct _WIN32_FIND_DATAA {
@@ -556,7 +556,7 @@ The key point to note is this structure contains the filename of the file that i
 
 
 SO now we can rename the args to more understandable names
-![image](https://hackmd.io/_uploads/B1LgkGcpT.png)
+![image](images/B1LgkGcpT.png)
 
 Next as we keep executing, 
 we see our file_info being copied into the a1 ie our arg1 which we initially thought wld be the output of this particular function as well 
@@ -575,21 +575,21 @@ So we name it as as get_file_data
 ### Suspicious xmmword
 Just looking at the assembly side by side
 
-![image](https://hackmd.io/_uploads/SJYa_X566.png)
+![image](images/SJYa_X566.png)
 
 we see a bunch of bytes getting copied over into xmm6 and xmm7 , we just keep that in mind and go ahead
 
 ### sub_7FF7922FC850 
-![image](https://hackmd.io/_uploads/rk4WpmqTa.png)
+![image](images/rk4WpmqTa.png)
 
 Not used.
 
 ### Next
 
-![image](https://hackmd.io/_uploads/S1Hn6m56a.png)
+![image](images/S1Hn6m56a.png)
 While debugging we see the memcpy 2's first argument is populated with the filename from get_file_data pointer
 
-![image](https://hackmd.io/_uploads/HyEPA79Ta.png)
+![image](images/HyEPA79Ta.png)
 
 Now in my case it turned out to be another directory that is stored first
 
@@ -598,7 +598,7 @@ Continuing,
 
 we see now the if condition fails at `sub_7FF792302070`
 and goes onto the else condition only to call encrypt function again recrusively
-![image](https://hackmd.io/_uploads/B1Eyc4cpp.png)
+![image](images/B1Eyc4cpp.png)
 
 
 ### Recursive encrypt - iteration 1
@@ -611,7 +611,7 @@ we go through the same steps of finding the first file handle and it's details a
 
 
 For the purpose of creating this writeup I had made a dummy file under downloads directory 
-![image](https://hackmd.io/_uploads/SyzQjN9a6.png)
+![image](images/SyzQjN9a6.png)
 
 and filled it with loerm ipsum content, and now that this file is taken in it passes throuhgh the above function wih no issues, I can form the hunch that the above function
 `sub_7FF792302070` is to check if a particular path is a directory or not
@@ -621,16 +621,16 @@ we'll go ahead with that
 
 ### sub_7FF7922FC6F0()
 
-![image](https://hackmd.io/_uploads/B1Cv6V9Ta.png)
+![image](images/B1Cv6V9Ta.png)
 
 passing through this function and looking at the value inside `RandomBuffer`, show's us 
 
-![image](https://hackmd.io/_uploads/BJLoa4qTT.png)
+![image](images/BJLoa4qTT.png)
 
 `txt` - meaning the function serves it's purpose to find the extension of the loaded file.
 
 then this extension is compared against `azr43l`
-![image](https://hackmd.io/_uploads/BkAJyS5pa.png)
+![image](images/BkAJyS5pa.png)
 
 
 if the extension is already `azr43l` then it enters the else condition and looks for more files in the same directory
@@ -643,13 +643,13 @@ This throws more light on the ransomware, that once it encrypts it's files it wl
 
 In the next check it makes sure it doesn;t encrypt the ransom_note.txt 
 
-![image](https://hackmd.io/_uploads/Sk8u1H566.png)
+![image](images/Sk8u1H566.png)
 
 if it turns out to be the ransom note then it exits ,looking for the next file in the directory
 
 
 next we see inside this unkn_func_0
-![image](https://hackmd.io/_uploads/S1ApxBcap.png)
+![image](images/S1ApxBcap.png)
 
 we spot it's a CreateFile API
 
@@ -660,19 +660,19 @@ then as we go down, we debug more to spot a particular function
 
 `sub_7FF792301E20`
 
-![image](https://hackmd.io/_uploads/HkpS-S566.png)
+![image](images/HkpS-S566.png)
 
 That seems to return teh filename alone from the huge file path, for example in our case it is - `just_a_test_doc`
 
-![image](https://hackmd.io/_uploads/BkW9bHqpT.png)
+![image](images/BkW9bHqpT.png)
 
 
 Then from further debugging we see function calls such as 
-![image](https://hackmd.io/_uploads/rJb0bB9aa.png)
+![image](images/rJb0bB9aa.png)
 which I have renamed it, because it returns the technical last byte being "\0"
 
 
-![image](https://hackmd.io/_uploads/rkzzfB5pT.png)
+![image](images/rkzzfB5pT.png)
 
 
 Then it takes the file_name and appends to it the .azr43l extention through these two memcpy
@@ -681,9 +681,9 @@ Then it takes the file_name and appends to it the .azr43l extention through thes
 
 Next during further debuggin we notice and rename a particular function call that just returns teh current directory path that the file is in 
 
-![image](https://hackmd.io/_uploads/SyWcMHca6.png)
+![image](images/SyWcMHca6.png)
 
-![image](https://hackmd.io/_uploads/HJ29zB9aa.png)
+![image](images/HJ29zB9aa.png)
 
 
 and that it is getting copied to `Random buffer`
@@ -692,11 +692,11 @@ and that it is getting copied to `Random buffer`
 
 Next in the subsequent lines of code
 
-![image](https://hackmd.io/_uploads/H1v0GH5aa.png)
+![image](images/H1v0GH5aa.png)
 
 we see random buffer being appended to file_directory
 there_by creating this 
-![image](https://hackmd.io/_uploads/S11f7Sqpa.png)
+![image](images/S11f7Sqpa.png)
 
 basically it appends .azr43l to the path of the old filename and it creates a new file_path
 
@@ -707,11 +707,11 @@ Now we notice it creates a new handle and opens it to the new encrypted file und
 
 `C:\Users\Ryuzaki\Downloads\DebugView\just_a_test_doc.txt.azr43l`
 
-![image](https://hackmd.io/_uploads/rJBHmr56a.png)
+![image](images/rJBHmr56a.png)
 
 
 Then it's just doing a few copies of file pointers which is not really necessary for us atm
-![image](https://hackmd.io/_uploads/SkF_PHqap.png)
+![image](images/SkF_PHqap.png)
 
 
 it provies a malloc space for file_contents then we finally come to reading the file
@@ -720,15 +720,15 @@ it provies a malloc space for file_contents then we finally come to reading the 
 
 Opening the open_file function we see 
 
-![image](https://hackmd.io/_uploads/S10ADHca6.png)
+![image](images/S10ADHca6.png)
 
 hence we name it to be open_file
 
-![image](https://hackmd.io/_uploads/HJ5jPH56p.png)
+![image](images/HJ5jPH56p.png)
 
 now we can see the file contents as well
 
-![image](https://hackmd.io/_uploads/rkJowrq66.png)
+![image](images/rkJowrq66.png)
 
 
 ### Random_num_generator
@@ -736,23 +736,22 @@ now we can see the file contents as well
 we come across another function which only seems to take two args
 
 
-![image](https://hackmd.io/_uploads/ryeHOHq6p.png)
+![image](images/ryeHOHq6p.png)
 
 
 opening it we see, 
 
 
-![image](https://hackmd.io/_uploads/r1YVuB96T.png)
+![image](images/r1YVuB96T.png)
     
 
 
 So now we have renamed it as 
-![
-image](https://hackmd.io/_uploads/SJGfuHcp6.png)
+![image](images/SJGfuHcp6.png)
 
 we can see the RandomBuffer is now stored on the stack
 
-![image](https://hackmd.io/_uploads/rkEtur9p6.png)
+![image](images/rkEtur9p6.png)
 
 ### The actual encryption
 
@@ -783,12 +782,12 @@ A major point to note is that this doesn't involve our file_contents at all
 
 Entering inside this function, this is what it looks like
 
-![image](https://hackmd.io/_uploads/rJgbsH5pp.png)
+![image](images/rJgbsH5pp.png)
 
 
 we see strings like chacha20 which certainly do pique an interest here
 
-![image](https://hackmd.io/_uploads/HJxPjB9T6.png)
+![image](images/HJxPjB9T6.png)
 
 
 WE see another function being called internally
@@ -798,12 +797,12 @@ WE see another function being called internally
 which returns the value in v10
 
 and now v10 contains 
-![image](https://hackmd.io/_uploads/r1p9jBcTT.png)
+![image](images/r1p9jBcTT.png)
 `expand 32-byte k`
 
 curious on this we google and a small googling let's us know that this is the initial state of the chacha20 encryption alrogithm
 
-![image](https://hackmd.io/_uploads/By5-3r56T.png)
+![image](images/By5-3r56T.png)
 
 Therefore now we can rename this funtion as init_chacha20
 
@@ -818,7 +817,7 @@ we keep that in mind that it takes only the top 12 bytes of this 24 byte random_
 
 Coming to the second function, we now see
 
-![image](https://hackmd.io/_uploads/BJ05nS9Tp.png)
+![image](images/BJ05nS9Tp.png)
 
 Arg1 : `expand 32-byte k` followed by the random_buffer in memory followed by the first 12 bytes of the 24_byte_val
 Arg2 : file_contents
@@ -828,19 +827,19 @@ Arg 5: unsure
 
 
 This is arg 1:
-![image](https://hackmd.io/_uploads/HJ-MeIqaT.png)
+![image](images/HJ-MeIqaT.png)
  
  followed by 
  
  the 32 byte random value
  
-![image](https://hackmd.io/_uploads/S1ZXxU56T.png)
+![image](images/S1ZXxU56T.png)
 
-![image](https://hackmd.io/_uploads/HJwml85Ta.png)
+![image](images/HJwml85Ta.png)
 
 
 followed by the 12 byte nonce
-![image](https://hackmd.io/_uploads/H1CEx8q6p.png)
+![image](images/H1CEx8q6p.png)
 
 all of this is on the stack and now this aligns with what we saw in the rust documentation and hence, now we are able to get a clear picture on how and what it is encrypting
 
@@ -849,7 +848,7 @@ we basically have the random_val and the nonce that is needed to encrypt and dec
 
 #### Encrypted data
 
-![image](https://hackmd.io/_uploads/HynIZU966.png)
+![image](images/HynIZU966.png)
 
 
 After encryption the location where the 12 byte nonce was stored is where the encrypted data is stored as well, the pointer is being overwritten
@@ -859,7 +858,7 @@ After encryption the location where the 12 byte nonce was stored is where the en
 
 This is pertaining to the earlier suspicious group of bytes that we saw getting pushed into xmm words
 
-![image](https://hackmd.io/_uploads/r1dVXUcTa.png)
+![image](images/r1dVXUcTa.png)
 
 
 rn the very same byts that are storred in xmm8 and xmm7 are getting xorred with the 32 byte random value that we just generated
@@ -868,7 +867,7 @@ rn the very same byts that are storred in xmm8 and xmm7 are getting xorred with 
 
 ### Writing to encrypted file
 
-![image](https://hackmd.io/_uploads/ByIl489pp.png)
+![image](images/ByIl489pp.png)
 
 This xorred value is now being appended to the very end of the file_data that we just encrypted.
 
@@ -880,7 +879,7 @@ And right now finally as everything goes, we take the encrytped bytes and write 
 
 ### Delete old file
 
-![image](https://hackmd.io/_uploads/SJrVNIc6T.png)
+![image](images/SJrVNIc6T.png)
 
 Once the new file has been written now, there is no need to keep the original old file around which is now getting deleted from the system
 
@@ -896,13 +895,13 @@ After getting out of the encrypt function we continue down into the code
 we see it assigning new path now, but because it follows the same routine I don't want to bloat the writeup with redundant info
 
 ### Encrypting desktop
-![image](https://hackmd.io/_uploads/rye1wUcTa.png)
+![image](images/rye1wUcTa.png)
 
 This block of code encrypts the desktop content
 
 ### Encrypting notepad++
 
-![image](https://hackmd.io/_uploads/ByCIP8qTp.png)
+![image](images/ByCIP8qTp.png)
 
 
 Then it goes onto encrypt 
@@ -910,7 +909,7 @@ Then it goes onto encrypt
 
 ### Encrypting Documents
 
-![image](https://hackmd.io/_uploads/rJn2wL5Ta.png)
+![image](images/rJn2wL5Ta.png)
 
 Encrypts documents twice
 
@@ -919,32 +918,32 @@ Encrypts documents twice
 
 Now we get to the intersting part again, different from the few previous code blocks
 
-![image](https://hackmd.io/_uploads/r1Mot8cp6.png)
+![image](images/r1Mot8cp6.png)
 
 We see here what looks like an IP addr
 
 `192.168.1.33`
 
 and right below we seem to have been given the port
-![image](https://hackmd.io/_uploads/r1pUo89Tp.png)
+![image](images/r1pUo89Tp.png)
 
 
 
 Now hObject seems to be initialized with ip and port binding them into a single struct for sockets
 
 as we track hObject we see it is being passed onto
-![image](https://hackmd.io/_uploads/BJpcsI5T6.png)
+![image](images/BJpcsI5T6.png)
 
 which takes the IP , Port and the random_24_byte_val, which we now know to be the nonce
 
-![image](https://hackmd.io/_uploads/S1XasIq6a.png)
+![image](images/S1XasIq6a.png)
 
 
 it sends the nonce to IP 192.168.1.33:6969
 
 ### sub_1400024B0()
 
-![image](https://hackmd.io/_uploads/B1hXnU9ap.png)
+![image](images/B1hXnU9ap.png)
 
 
 And last but not least we come to the final function which is yet to be analysed
@@ -952,14 +951,14 @@ And last but not least we come to the final function which is yet to be analysed
 
 Going into the function we see it has all these strings,
 
-![image](https://hackmd.io/_uploads/Sy8rhIc6a.png)
+![image](images/Sy8rhIc6a.png)
 
 
 
 
 and we see a bunch of function calls of the same function(sub_1400172B0) but with different strings as different args
 
-![image](https://hackmd.io/_uploads/B1j5hIcTa.png)
+![image](images/B1j5hIcTa.png)
 
 Going into the function we see a lot of calls 
 
