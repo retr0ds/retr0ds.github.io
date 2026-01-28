@@ -1,0 +1,15 @@
+# Hugo build output
+public/
+
+# Hugo resources
+resources/_gen/
+
+# macOS
+.DS_Store
+
+# Editor directories
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
