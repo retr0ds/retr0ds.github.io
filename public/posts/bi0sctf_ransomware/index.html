@@ -1,0 +1,4258 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="scroll-smooth" data-default-appearance="dark"
+  data-auto-appearance="true"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8" />
+  
+  <meta http-equiv="content-language" content="en" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  
+  <title>Batman Investigation III - Th3 Sw0rd 0f Azr43l - bi0sCTF 2024 &middot; The Arcade</title>
+  <meta name="title" content="Batman Investigation III - Th3 Sw0rd 0f Azr43l - bi0sCTF 2024 &middot; The Arcade" />
+  
+  <meta name="description" content="Contains the writeup to the Ransomware part of the Batman Investigation III from bi0s CTF 2024" />
+  <meta name="keywords" content="bi0sCTF, RansomWare, Reversing, Forensics, Writeup, " />
+  
+  
+  <link rel="canonical" href="http://localhost:1313/posts/bi0sctf_ransomware/" />
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <link type="text/css" rel="stylesheet" href="/css/main.bundle.min.0f379fefb403c9a4b606dc664fb5a3bacf0952edbdea0fe0c10fffa890b6fcf33442f96f4e5ec81f259a65fe1ad24c07a38c570ca40e3bb8c3e24a89ccb95fc9.css"
+    integrity="sha512-Dzef77QDyaS2BtxmT7Wjus8JUu296g/gwQ//qJC2/PM0QvlvTl7IHyWaZf4a0kwHo4xXDKQOO7jD4kqJzLlfyQ==" />
+  
+  
+  <script type="text/javascript" src="/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js"
+    integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj&#43;e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <script defer type="text/javascript" id="script-bundle" src="/js/main.bundle.min.17ffe617e664d257760ee5f71869a6d9328d3613601c03a2eb7a194bbfb06ddc629a70f7b348e6e9446e81d0789555aebce09d27debd0329fc297601a1ee6a77.js"
+    integrity="sha512-F//mF&#43;Zk0ld2DuX3GGmm2TKNNhNgHAOi63oZS7&#43;wbdximnD3s0jm6URugdB4lVWuvOCdJ969Ayn8KXYBoe5qdw==" data-copy="" data-copied=""></script>
+  
+  
+  <script src="/js/zoom.min.js"></script>
+  
+  
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:title" content="Batman Investigation III - Th3 Sw0rd 0f Azr43l - bi0sCTF 2024" />
+<meta property="og:description" content="tl;dr
+
+Challenge 2 of Batman Investigation series
+Ransomware Investigation
+Rust based Ransomware Analysis with process dump analysis to recover the randomly generated decryption vector and windows malware analysis
+Recovering from a ransomware attack
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/posts/bi0sctf_ransomware/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-03-19T19:31:40+00:00" />
+<meta property="article:modified_time" content="2024-03-19T19:31:40+00:00" />
+
+
+  <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Batman Investigation III - Th3 Sw0rd 0f Azr43l - bi0sCTF 2024"/>
+<meta name="twitter:description" content="tl;dr
+
+Challenge 2 of Batman Investigation series
+Ransomware Investigation
+Rust based Ransomware Analysis with process dump analysis to recover the randomly generated decryption vector and windows malware analysis
+Recovering from a ransomware attack
+"/>
+
+  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Welcome to Posts!",
+    "name": "Batman Investigation III - Th3 Sw0rd 0f Azr43l - bi0sCTF 2024",
+    "headline": "Batman Investigation III - Th3 Sw0rd 0f Azr43l - bi0sCTF 2024",
+    
+    "abstract": "\u003cp\u003e\u003cstrong\u003etl;dr\u003c\/strong\u003e\u003c\/p\u003e\n\u003cul\u003e\n\u003cli\u003eChallenge 2 of Batman Investigation series\u003c\/li\u003e\n\u003cli\u003eRansomware Investigation\u003c\/li\u003e\n\u003cli\u003eRust based Ransomware Analysis with process dump analysis to recover the randomly generated decryption vector and windows malware analysis\u003c\/li\u003e\n\u003cli\u003eRecovering from a ransomware attack\u003c\/li\u003e\n\u003c\/ul\u003e",
+    "inLanguage": "en",
+    "url" : "http:\/\/localhost:1313\/posts\/bi0sctf_ransomware\/",
+    "author" : {
+      "@type": "Person",
+      "name": "Sidharth AKA retr0ds"
+    },
+    "copyrightYear": "2024",
+    "dateCreated": "2024-03-19T19:31:40\u002b00:00",
+    "datePublished": "2024-03-19T19:31:40\u002b00:00",
+    
+    "dateModified": "2024-03-19T19:31:40\u002b00:00",
+    
+    "keywords": ["bi0sCTF","RansomWare","Reversing","Forensics","Writeup"],
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "4077"
+  }]
+  </script>
+
+
+  
+  
+  <meta name="author" content="Sidharth AKA retr0ds" />
+  
+  
+  
+  <link href="mailto:sidharth0x56@gmail.com" rel="me" />
+  
+  
+  <link href="https://discord.gg/retr0ds" rel="me" />
+  
+  
+  <link href="https://github.com/retr0ds" rel="me" />
+  
+  
+  <link href="https://instagram.com/retr0ds" rel="me" />
+  
+  
+  <link href="https://linkedin.com/in/sidharth0x56" rel="me" />
+  
+  
+  <link href="https://twitter.com/_retr0ds_" rel="me" />
+  
+  
+  <link href="https://youtube.com/retr0ds417" rel="me" />
+  
+  
+  
+  
+
+<script src="/lib/jquery/jquery.slim.min.js" integrity=""></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+  
+  
+  <meta name="theme-color"/>
+  
+  
+</head>
+<body
+  class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32">
+  <div id="the-top" class="absolute flex self-center">
+    <a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600"
+      href="#main-content"><span
+        class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>Skip to main content</a>
+  </div>
+  
+  
+  <div class="min-h-[148px]"></div>
+<div class="fixed inset-x-0 pl-[24px] pr-[24px]" style="z-index:100">
+  <div id="menu-blur" class="absolute opacity-0 inset-x-0 top-0 h-full single_hero_background nozoom bg-neutral dark:bg-neutral-800"></div>
+  <div class="relative max-w-[64rem] ml-auto mr-auto">
+    <div style="padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px"
+    class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start space-x-3">
+    
+    
+    
+    <div>
+        <a href="/" class="flex">
+            <span class="sr-only">The Arcade</span>
+
+            <img src="/img/resized_gimp_photos.png" width="543" height="465"
+                class="logo max-h-[5rem] max-w-[5rem] object-scale-down object-left nozoom" alt="The Arcade" />
+
+        </a>
+    </div>
+    
+    <div class="flex flex-1 items-center justify-between">
+        <nav class="flex space-x-3">
+
+            
+            <a href="/" class="text-base font-medium text-gray-500 hover:text-gray-900">The Arcade</a>
+            
+
+        </nav>
+        <nav class="hidden md:flex items-center space-x-5 md:ml-12 h-12">
+
+            
+            
+            
+  <a href="/posts/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="">
+        Posts
+    </p>
+</a>
+
+
+            
+            
+  <a href="/categories/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="">
+        Categories
+    </p>
+</a>
+
+
+            
+            
+  <a href="/tags/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="">
+        Tags
+    </p>
+</a>
+
+
+            
+            
+  <a href="https://twitter/_retr0ds_"  target="_blank"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <span  class="mr-1" >
+        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg>
+  </span>
+
+
+    </span>
+    
+    <p class="text-base font-medium" title="">
+        
+    </p>
+</a>
+
+
+            
+            
+  <a href="https://github.com/retr0ds"  target="_blank"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <span >
+        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+
+  </span>
+
+
+    </span>
+    
+    <p class="text-base font-medium" title="">
+        
+    </p>
+</a>
+
+
+            
+            
+
+            
+
+
+            
+            <button id="search-button" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+
+            
+            
+            <div
+                class="ltr:mr-14 rtl:ml-14 flex items-center">
+                <button id="appearance-switcher" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400">
+                    <div class="flex items-center justify-center dark:hidden">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                    </div>
+                    <div class="items-center justify-center hidden dark:flex">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                    </div>
+                </button>
+            </div>
+            
+
+        </nav>
+        <div class="flex md:hidden items-center space-x-5 md:ml-12 h-12">
+
+            <span></span>
+
+            
+
+
+            
+            <button id="search-button-mobile" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+            
+            
+            <button id="appearance-switcher-mobile" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400" style="margin-right:5px">
+                <div class="flex items-center justify-center dark:hidden">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                </div>
+                <div class="items-center justify-center hidden dark:flex">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                </div>
+            </button>
+            
+
+        </div>
+    </div>
+    <div class="-my-2 -mr-2 md:hidden">
+
+        <label id="menu-button" for="menu-controller" class="block">
+            <input type="checkbox" id="menu-controller" class="hidden" />
+            
+            <div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400">
+                
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+
+  </span>
+
+
+            </div>
+            <div id="menu-wrapper" style="padding-top:5px;"
+                class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50">
+                <ul
+                    class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl">
+
+                    <li>
+                        <span
+                            class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+</span>
+                    </li>
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/posts/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="">
+            Posts
+        </p>
+    </a>
+</li>
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/categories/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="">
+            Categories
+        </p>
+    </a>
+</li>
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/tags/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="">
+            Tags
+        </p>
+    </a>
+</li>
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="https://twitter/_retr0ds_"  target="_blank"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <div  class="mr-2" >
+            
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg>
+  </span>
+
+
+        </div>
+        
+        <p class="text-bg font-bg" title="">
+            
+        </p>
+    </a>
+</li>
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="https://github.com/retr0ds"  target="_blank"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <div >
+            
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+
+  </span>
+
+
+        </div>
+        
+        <p class="text-bg font-bg" title="">
+            
+        </p>
+    </a>
+</li>
+
+
+
+                    
+
+                </ul>
+                
+                
+
+            </div>
+        </label>
+    </div>
+</div>
+
+
+
+
+<script>
+    (function () {
+        var $mainmenu = $('.main-menu');
+        var path = window.location.pathname;
+        $mainmenu.find('a[href="' + path + '"]').each(function (i, e) {
+            $(e).children('p').addClass('active');
+        });
+    })();
+</script>
+
+
+  </div>
+</div>
+<script>
+  window.addEventListener('scroll', function (e) {
+    var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    var background_blur = document.getElementById('menu-blur');
+    background_blur.style.opacity = (scroll / 300);
+  });
+</script>
+
+  
+  <div class="relative flex flex-col grow">
+    <main id="main-content" class="grow">
+      
+
+
+<article>
+  
+  
+  
+  
+  
+  
+ 
+  
+   
+  
+ 
+
+
+
+
+
+    
+    <div class="fixed inset-x-0 top-0 h-[800px] single_hero_background nozoom"
+    style="background-image:url(/img/background.svg);">
+    
+
+
+    <div class="absolute inset-0 bg-gradient-to-t from-neutral dark:from-neutral-800 to-transparent mix-blend-normal">
+    </div>
+    <div
+        class="absolute inset-0 opacity-60 bg-gradient-to-t from-neutral dark:from-neutral-800 to-neutral-100 dark:to-neutral-800 mix-blend-normal">
+    </div>
+</div>
+
+<div id="background-blur" class="fixed opacity-0 inset-x-0 top-0 h-full single_hero_background nozoom backdrop-blur-2xl"></div>
+<script>
+    window.addEventListener('scroll', function (e) {
+        var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        var background_blur = document.getElementById('background-blur');
+        background_blur.style.opacity = (scroll / 300)
+    });
+</script>
+
+  
+  
+
+  <header id="single_header" class="mt-5 max-w-prose">
+    
+    <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+      Batman Investigation III - Th3 Sw0rd 0f Azr43l - bi0sCTF 2024
+    </h1>
+    <div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
+      
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  <time datetime="2024-03-19 19:31:40 &#43;0000 UTC">19 March 2024</time><span class="px-2 text-primary-500">&middot;</span><span>4077 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">20 mins</span><span class="px-2 text-primary-500">&middot;</span>
+
+
+<script type="text/javascript" src="/js/zen-mode.min.ccc8b2a0c4505216444ca25530c7328aa0bef94f43dabaf3e598e1b4271de9eec76c1cb35917471a4f7ccb8d84051b3acef42baa30724ac3a667fcf1fec4432a.js" integrity="sha512-zMiyoMRQUhZETKJVMMcyiqC&#43;&#43;U9D2rrz5ZjhtCcd6e7HbByzWRdHGk98y42EBRs6zvQrqjBySsOmZ/zx/sRDKg=="></script>
+
+<span class="mb-[2px]">
+    <span id="zen-mode-button"
+          class="text-lg hover:text-primary-500"
+          title="Enable zen mode"
+          data-title-i18n-disable="Enable zen mode"
+          data-title-i18n-enable="Disable zen mode">
+        <span class="inline-block align-text-bottom">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="50px" height="50px">
+    <path fill="currentColor" d="M 12.980469 4 C 9.1204688 4 5.9804688 7.14 5.9804688 11 L 6 26 L 9.9804688 26 L 9.9804688 11 C 9.9804688 9.35 11.320469 8 12.980469 8 L 40.019531 8 C 41.679531 8 43.019531 9.35 43.019531 11 L 43.019531 39 C 43.019531 40.65 41.679531 42 40.019531 42 L 29 42 C 29 43.54 28.420938 44.94 27.460938 46 L 40.019531 46 C 43.879531 46 47.019531 42.86 47.019531 39 L 47.019531 11 C 47.019531 7.14 43.879531 4 40.019531 4 L 12.980469 4 z M 7 28 C 4.794 28 3 29.794 3 32 L 3 42 C 3 44.206 4.794 46 7 46 L 23 46 C 25.206 46 27 44.206 27 42 L 27 32 C 27 29.794 25.206 28 23 28 L 7 28 z M 7 32 L 23 32 L 23.001953 42 L 7 42 L 7 32 z"/>
+</svg>
+  </span>
+
+</span>
+    </span>
+</span>
+  
+
+  
+  
+</div>
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/categories/reversing/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Reversing
+  </span>
+</span>
+  </span>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/bi0sctf/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Bi0sCTF
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/ransomware/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    RansomWare
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/reversing/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Reversing
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/forensics/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Forensics
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/writeup/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Writeup
+  </span>
+</span>
+  </span>
+  
+  
+  
+  
+</div>
+
+
+
+    </div>
+
+    
+    
+    
+    
+    
+
+    
+      
+      
+<div class="flex author">
+  
+    
+    
+      
+    
+    
+      
+        
+      
+      <img class="!mt-0 !mb-0 h-24 w-24 rounded-full ltr:mr-4 rtl:ml-4" width="96" height="96"
+      alt="Sidharth AKA retr0ds" src="/img/avatar_hu3d74ebcabbd9ef870c91c6755caacf1c_288894_192x192_fill_q75_box_center.jpg" />
+    
+  
+  <div class="place-self-center">
+    
+    <div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">
+      Author
+    </div>
+    <div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">
+      Sidharth AKA retr0ds
+    </div>
+    
+    
+    <div class="text-sm text-neutral-700 dark:text-neutral-400">Malware analyst</div>
+    
+    <div class="text-2xl sm:text-lg">
+  <div class="flex flex-wrap text-neutral-400 dark:text-neutral-500">
+    
+      
+        <a
+          class="px-1 hover:text-primary-700 dark:hover:text-primary-400"
+          href="mailto:sidharth0x56@gmail.com"
+          target="_blank"
+          aria-label="Email"
+          rel="me noopener noreferrer"
+          ><span class="inline-block align-text-bottom">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M207.8 20.73c-93.45 18.32-168.7 93.66-187 187.1c-27.64 140.9 68.65 266.2 199.1 285.1c19.01 2.888 36.17-12.26 36.17-31.49l.0001-.6631c0-15.74-11.44-28.88-26.84-31.24c-84.35-12.98-149.2-86.13-149.2-174.2c0-102.9 88.61-185.5 193.4-175.4c91.54 8.869 158.6 91.25 158.6 183.2l0 16.16c0 22.09-17.94 40.05-40 40.05s-40.01-17.96-40.01-40.05v-120.1c0-8.847-7.161-16.02-16.01-16.02l-31.98 .0036c-7.299 0-13.2 4.992-15.12 11.68c-24.85-12.15-54.24-16.38-86.06-5.106c-38.75 13.73-68.12 48.91-73.72 89.64c-9.483 69.01 43.81 128 110.9 128c26.44 0 50.43-9.544 69.59-24.88c24 31.3 65.23 48.69 109.4 37.49C465.2 369.3 496 324.1 495.1 277.2V256.3C495.1 107.1 361.2-9.332 207.8 20.73zM239.1 304.3c-26.47 0-48-21.56-48-48.05s21.53-48.05 48-48.05s48 21.56 48 48.05S266.5 304.3 239.1 304.3z"/></svg>
+
+  </span>
+
+</span></a
+        >
+      
+    
+      
+        <a
+          class="px-1 hover:text-primary-700 dark:hover:text-primary-400"
+          href="https://discord.gg/retr0ds"
+          target="_blank"
+          aria-label="Discord"
+          rel="me noopener noreferrer"
+          ><span class="inline-block align-text-bottom">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path fill="currentColor" d="M524.531,69.836a1.5,1.5,0,0,0-.764-.7A485.065,485.065,0,0,0,404.081,32.03a1.816,1.816,0,0,0-1.923.91,337.461,337.461,0,0,0-14.9,30.6,447.848,447.848,0,0,0-134.426,0,309.541,309.541,0,0,0-15.135-30.6,1.89,1.89,0,0,0-1.924-.91A483.689,483.689,0,0,0,116.085,69.137a1.712,1.712,0,0,0-.788.676C39.068,183.651,18.186,294.69,28.43,404.354a2.016,2.016,0,0,0,.765,1.375A487.666,487.666,0,0,0,176.02,479.918a1.9,1.9,0,0,0,2.063-.676A348.2,348.2,0,0,0,208.12,430.4a1.86,1.86,0,0,0-1.019-2.588,321.173,321.173,0,0,1-45.868-21.853,1.885,1.885,0,0,1-.185-3.126c3.082-2.309,6.166-4.711,9.109-7.137a1.819,1.819,0,0,1,1.9-.256c96.229,43.917,200.41,43.917,295.5,0a1.812,1.812,0,0,1,1.924.233c2.944,2.426,6.027,4.851,9.132,7.16a1.884,1.884,0,0,1-.162,3.126,301.407,301.407,0,0,1-45.89,21.83,1.875,1.875,0,0,0-1,2.611,391.055,391.055,0,0,0,30.014,48.815,1.864,1.864,0,0,0,2.063.7A486.048,486.048,0,0,0,610.7,405.729a1.882,1.882,0,0,0,.765-1.352C623.729,277.594,590.933,167.465,524.531,69.836ZM222.491,337.58c-28.972,0-52.844-26.587-52.844-59.239S193.056,219.1,222.491,219.1c29.665,0,53.306,26.82,52.843,59.239C275.334,310.993,251.924,337.58,222.491,337.58Zm195.38,0c-28.971,0-52.843-26.587-52.843-59.239S388.437,219.1,417.871,219.1c29.667,0,53.307,26.82,52.844,59.239C470.715,310.993,447.538,337.58,417.871,337.58Z"/></svg>
+
+  </span>
+
+</span></a
+        >
+      
+    
+      
+        <a
+          class="px-1 hover:text-primary-700 dark:hover:text-primary-400"
+          href="https://github.com/retr0ds"
+          target="_blank"
+          aria-label="Github"
+          rel="me noopener noreferrer"
+          ><span class="inline-block align-text-bottom">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+
+  </span>
+
+</span></a
+        >
+      
+    
+      
+        <a
+          class="px-1 hover:text-primary-700 dark:hover:text-primary-400"
+          href="https://instagram.com/retr0ds"
+          target="_blank"
+          aria-label="Instagram"
+          rel="me noopener noreferrer"
+          ><span class="inline-block align-text-bottom">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
+
+  </span>
+
+</span></a
+        >
+      
+    
+      
+        <a
+          class="px-1 hover:text-primary-700 dark:hover:text-primary-400"
+          href="https://linkedin.com/in/sidharth0x56"
+          target="_blank"
+          aria-label="Linkedin"
+          rel="me noopener noreferrer"
+          ><span class="inline-block align-text-bottom">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+
+  </span>
+
+</span></a
+        >
+      
+    
+      
+        <a
+          class="px-1 hover:text-primary-700 dark:hover:text-primary-400"
+          href="https://twitter.com/_retr0ds_"
+          target="_blank"
+          aria-label="X-Twitter"
+          rel="me noopener noreferrer"
+          ><span class="inline-block align-text-bottom">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg>
+  </span>
+
+</span></a
+        >
+      
+    
+      
+        <a
+          class="px-1 hover:text-primary-700 dark:hover:text-primary-400"
+          href="https://youtube.com/retr0ds417"
+          target="_blank"
+          aria-label="Youtube"
+          rel="me noopener noreferrer"
+          ><span class="inline-block align-text-bottom">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z"/></svg>
+
+  </span>
+
+</span></a
+        >
+      
+    
+  </div>
+
+</div>
+  </div>
+</div>
+
+    
+
+    
+
+    
+
+    
+    <div class="mb-5"></div>
+    
+  
+  </header>
+  
+  <section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row">
+    
+     <div
+      class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8">
+      <div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-[140px]">
+
+         <details open class="toc-right mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block">
+  <summary
+    class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    Table of Contents
+  </summary>
+  <div
+    class="min-w-[220px] py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#challenge-description">Challenge Description:</a></li>
+          </ul>
+        </li>
+        <li><a href="#flag-format-bi0sctf"><code>Flag format: bi0sctf{...}</code></a>
+          <ul>
+            <li>
+              <ul>
+                <li><a href="#question-5">Question 5</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#triaging">Triaging</a></li>
+    <li><a href="#static-analysis">Static Analysis</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#getting-to-main">Getting to main</a></li>
+            <li><a href="#anti-debug-check">Anti Debug Check</a></li>
+            <li><a href="#lastinputinfo">Lastinputinfo</a></li>
+            <li><a href="#gettickcount">GetTickCount()</a></li>
+            <li><a href="#getasynckeystate">GetAsyncKeyState()</a></li>
+            <li><a href="#sub_140023030-aka-unkn_func_1">sub_140023030() AKA Unkn_Func_1</a></li>
+            <li><a href="#sub_14000c1b0-aka-get-environment-variable">sub_14000C1B0() AKA Get Environment Variable</a></li>
+            <li><a href="#filepath-setting">filepath setting</a></li>
+            <li><a href="#ransom_note_file_name">Ransom_note_file_name</a></li>
+            <li><a href="#create-ransom-file">Create ransom file</a></li>
+            <li><a href="#write-ransom-note-to-desktop">Write ransom note to desktop</a></li>
+            <li><a href="#sub_140017ef0-aka-unkn_func_2">sub_140017EF0() AKA unkn_func_2</a></li>
+            <li><a href="#ransom-note-drop-pt2">Ransom note drop pt.2</a></li>
+            <li><a href="#sub_140001450-aka-unkn_func_3">sub_140001450 AKA Unkn_Func_3</a></li>
+            <li><a href="#continuing">Continuing</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#traiging-pt2">Traiging pt.2</a></li>
+    <li><a href="#dynamic-analysis">Dynamic Analysis</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#sub_140023030-aka-unkn_func_1-aka-random_24_gen">sub_140023030() AKA Unkn_Func_1 AKA random_24_gen</a></li>
+            <li><a href="#get_env_variable">Get_env_Variable</a></li>
+            <li><a href="#setting-filepath">Setting Filepath</a></li>
+            <li><a href="#ransom_note_path">Ransom_note_path</a></li>
+            <li><a href="#unkn_func_2">Unkn_func_2</a></li>
+            <li><a href="#unkn_func_3">Unkn_func_3</a></li>
+          </ul>
+        </li>
+        <li><a href="#encrypt---the-heart-of-the-ransomware">Encrypt() - the heart of the ransomware</a>
+          <ul>
+            <li><a href="#sub_140016d10">sub_140016D10</a></li>
+            <li><a href="#sub_14001a640-aka-convert_to_widechar">sub_14001A640 AKA convert_to_widechar</a></li>
+            <li><a href="#sub_1400194e0-aka-get_full_path_name">sub_1400194E0 AKA get_full_path_name</a>
+              <ul>
+                <li><a href="#findfirstfilew">FindFirstFileW</a></li>
+              </ul>
+            </li>
+            <li><a href="#suspicious-xmmword">Suspicious xmmword</a></li>
+            <li><a href="#sub_7ff7922fc850">sub_7FF7922FC850</a></li>
+            <li><a href="#next">Next</a></li>
+            <li><a href="#recursive-encrypt---iteration-1">Recursive encrypt - iteration 1</a></li>
+            <li><a href="#sub_7ff7922fc6f0">sub_7FF7922FC6F0()</a></li>
+            <li><a href="#creating-encrypted-file">Creating Encrypted File</a></li>
+            <li><a href="#openfile">Openfile</a></li>
+            <li><a href="#random_num_generator">Random_num_generator</a></li>
+            <li><a href="#the-actual-encryption">The actual encryption</a></li>
+            <li><a href="#sub_7ff7922f8600">sub_7FF7922F8600()</a></li>
+            <li><a href="#sub_7ff7922f88b0">sub_7FF7922F88B0()</a>
+              <ul>
+                <li><a href="#encrypted-data">Encrypted data</a></li>
+                <li><a href="#suspicious-xorring">Suspicious xorring</a></li>
+              </ul>
+            </li>
+            <li><a href="#writing-to-encrypted-file">Writing to encrypted file</a></li>
+            <li><a href="#delete-old-file">Delete old file</a></li>
+            <li><a href="#out-of-encrypt">Out of Encrypt</a></li>
+            <li><a href="#encrypting-desktop">Encrypting desktop</a></li>
+            <li><a href="#encrypting-notepad">Encrypting notepad++</a></li>
+            <li><a href="#encrypting-documents">Encrypting Documents</a></li>
+            <li><a href="#socketconnection">SocketConnection</a></li>
+            <li><a href="#sub_1400024b0">sub_1400024B0()</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#c2-server-ip">C2 server IP</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+<details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden">
+  <summary
+    class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    Table of Contents
+  </summary>
+  <div
+    class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#challenge-description">Challenge Description:</a></li>
+          </ul>
+        </li>
+        <li><a href="#flag-format-bi0sctf"><code>Flag format: bi0sctf{...}</code></a>
+          <ul>
+            <li>
+              <ul>
+                <li><a href="#question-5">Question 5</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#triaging">Triaging</a></li>
+    <li><a href="#static-analysis">Static Analysis</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#getting-to-main">Getting to main</a></li>
+            <li><a href="#anti-debug-check">Anti Debug Check</a></li>
+            <li><a href="#lastinputinfo">Lastinputinfo</a></li>
+            <li><a href="#gettickcount">GetTickCount()</a></li>
+            <li><a href="#getasynckeystate">GetAsyncKeyState()</a></li>
+            <li><a href="#sub_140023030-aka-unkn_func_1">sub_140023030() AKA Unkn_Func_1</a></li>
+            <li><a href="#sub_14000c1b0-aka-get-environment-variable">sub_14000C1B0() AKA Get Environment Variable</a></li>
+            <li><a href="#filepath-setting">filepath setting</a></li>
+            <li><a href="#ransom_note_file_name">Ransom_note_file_name</a></li>
+            <li><a href="#create-ransom-file">Create ransom file</a></li>
+            <li><a href="#write-ransom-note-to-desktop">Write ransom note to desktop</a></li>
+            <li><a href="#sub_140017ef0-aka-unkn_func_2">sub_140017EF0() AKA unkn_func_2</a></li>
+            <li><a href="#ransom-note-drop-pt2">Ransom note drop pt.2</a></li>
+            <li><a href="#sub_140001450-aka-unkn_func_3">sub_140001450 AKA Unkn_Func_3</a></li>
+            <li><a href="#continuing">Continuing</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#traiging-pt2">Traiging pt.2</a></li>
+    <li><a href="#dynamic-analysis">Dynamic Analysis</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#sub_140023030-aka-unkn_func_1-aka-random_24_gen">sub_140023030() AKA Unkn_Func_1 AKA random_24_gen</a></li>
+            <li><a href="#get_env_variable">Get_env_Variable</a></li>
+            <li><a href="#setting-filepath">Setting Filepath</a></li>
+            <li><a href="#ransom_note_path">Ransom_note_path</a></li>
+            <li><a href="#unkn_func_2">Unkn_func_2</a></li>
+            <li><a href="#unkn_func_3">Unkn_func_3</a></li>
+          </ul>
+        </li>
+        <li><a href="#encrypt---the-heart-of-the-ransomware">Encrypt() - the heart of the ransomware</a>
+          <ul>
+            <li><a href="#sub_140016d10">sub_140016D10</a></li>
+            <li><a href="#sub_14001a640-aka-convert_to_widechar">sub_14001A640 AKA convert_to_widechar</a></li>
+            <li><a href="#sub_1400194e0-aka-get_full_path_name">sub_1400194E0 AKA get_full_path_name</a>
+              <ul>
+                <li><a href="#findfirstfilew">FindFirstFileW</a></li>
+              </ul>
+            </li>
+            <li><a href="#suspicious-xmmword">Suspicious xmmword</a></li>
+            <li><a href="#sub_7ff7922fc850">sub_7FF7922FC850</a></li>
+            <li><a href="#next">Next</a></li>
+            <li><a href="#recursive-encrypt---iteration-1">Recursive encrypt - iteration 1</a></li>
+            <li><a href="#sub_7ff7922fc6f0">sub_7FF7922FC6F0()</a></li>
+            <li><a href="#creating-encrypted-file">Creating Encrypted File</a></li>
+            <li><a href="#openfile">Openfile</a></li>
+            <li><a href="#random_num_generator">Random_num_generator</a></li>
+            <li><a href="#the-actual-encryption">The actual encryption</a></li>
+            <li><a href="#sub_7ff7922f8600">sub_7FF7922F8600()</a></li>
+            <li><a href="#sub_7ff7922f88b0">sub_7FF7922F88B0()</a>
+              <ul>
+                <li><a href="#encrypted-data">Encrypted data</a></li>
+                <li><a href="#suspicious-xorring">Suspicious xorring</a></li>
+              </ul>
+            </li>
+            <li><a href="#writing-to-encrypted-file">Writing to encrypted file</a></li>
+            <li><a href="#delete-old-file">Delete old file</a></li>
+            <li><a href="#out-of-encrypt">Out of Encrypt</a></li>
+            <li><a href="#encrypting-desktop">Encrypting desktop</a></li>
+            <li><a href="#encrypting-notepad">Encrypting notepad++</a></li>
+            <li><a href="#encrypting-documents">Encrypting Documents</a></li>
+            <li><a href="#socketconnection">SocketConnection</a></li>
+            <li><a href="#sub_1400024b0">sub_1400024B0()</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#c2-server-ip">C2 server IP</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+ 
+<script>
+  (function () {
+    var $toc = $('#TableOfContents');
+    if ($toc.length > 0) {
+      var $window = $(window);
+
+      function onScroll() {
+        var currentScroll = $window.scrollTop();
+        var h = $('.anchor');
+        var id = "";
+        h.each(function (i, e) {
+          e = $(e);
+          if (e.offset().top - $(window).height()/3 <= currentScroll) {
+            id = e.attr('id');
+          }
+        });
+        var active = $toc.find('a.active');      
+        if (active.length == 1 && active.eq(0).attr('href') == '#' + id) return true;
+
+        active.each(function (i, e) {
+           
+            $(e).removeClass('active').siblings('ul').hide();
+          
+        });
+        $toc.find('a[href="#' + id + '"]').addClass('active')
+        $toc.find('a[href="#' + id + '"]').parentsUntil('#TableOfContents').each(function (i, e) {
+          $(e).children('a').parents('ul').show();          
+        });
+      }
+
+      $window.on('scroll', onScroll);
+      $(document).ready(function () {
+         
+          $toc.find('a').parent('li').find('ul').hide();
+        
+        onScroll();
+      });
+    }
+  })();
+</script>
+   </div>
+      </div>
+      
+
+      <div class="min-w-0 min-h-0 max-w-fit">
+        
+        
+
+
+        <div class="article-content max-w-prose mb-20">
+          <p><strong>tl;dr</strong></p>
+<ul>
+<li>Challenge 2 of Batman Investigation series</li>
+<li>Ransomware Investigation</li>
+<li>Rust based Ransomware Analysis with process dump analysis to recover the randomly generated decryption vector and windows malware analysis</li>
+<li>Recovering from a ransomware attack</li>
+</ul>
+<p><strong>Challenge Points</strong>: 1000
+<strong>No. of solves</strong>: 1
+<strong>Challenge Author</strong>: <a href="https://twitter.com/Azr43lKn1ght"   target="_blank">
+    Azr43lKn1ght</a></p>
+
+
+<h3 class="relative group">Challenge Description: 
+    <div id="challenge-description" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#challenge-description" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>Azrael the Archangel of Vengeance has joined the batfamily after destroying the machine of St Dumas defeating face to face against his most startling foe, the undying heirophant, the first son of St Dumas. The Dumas is not completely destroyed and the heirarchy out somewhere out, Jean Paul, our Azrael has a shared workspace with Duke Thomas, The signal. St Dumas got them now by sending the weapon of azrael but we got the attack process captured by signal as he was the one who let it in unknowingly. Azrael and Signal are trying to fix things to get back whatever is lost as well not get in the clutches of the order. They should now have to safegaurd batman&rsquo;s files as well as their own important ones. if they get it back before Dumas knowing they are getting close to finding them to stop the order as well the birth and training of new Azraels when they are waiting for negotiation or some plan to take our protagonists with hold of the recovery shard. Can you help them to recover from the loses and find the weapon of Azrael ,so they can take down the order of the St Dumas?</p>
+<p>File Password : <strong>E6qK~$9pUIk0kT'3&amp;N/Okt</strong></p>
+<p><strong>Challenge Files</strong>:</p>
+<ul>
+<li><a href="https://amritauniv-my.sharepoint.com/:u:/g/personal/inctfj_am_amrita_edu/ER1nPhaT_UZCsg1DxHupEVcBbng6-vCeUZ9ptj06aDbUJg?e=HB2RZY"   target="_blank">
+    Primary Link</a></li>
+<li><a href="https://www.dropbox.com/scl/fi/owrkj3du3zy8btbizm2tv/Chall_Images.zip?rlkey=dm7lbpeabc6jtdat58mt07ze9&amp;dl=0"   target="_blank">
+    Mirror Link</a></li>
+<li>nc link</li>
+</ul>
+
+
+<h2 class="relative group"><code>Flag format: bi0sctf{...}</code> 
+    <div id="flag-format-bi0sctf" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#flag-format-bi0sctf" aria-label="Anchor">#</a>
+    </span>        
+    
+</h2>
+<p>We&rsquo;ll be starting with question 5 of the challenge cuz that&rsquo;s where the real reversing comes in, so the quesiton 5 is as follows</p>
+
+
+<h4 class="relative group">Question 5 
+    <div id="question-5" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#question-5" aria-label="Anchor">#</a>
+    </span>        
+    
+</h4>
+<p>Q5) What is the ip and port the malware is sending the decryption essential to?
+Format: ip:port</p>
+<p>so first let&rsquo;s start analysing the mssetup.exe file.</p>
+<p>
+
+
+
+
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="image-9.png" alt="alt text" />
+      
+    </figure>
+  
+
+</p>
+<p>
+
+
+
+
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="image-12.png" alt="alt text" />
+      
+    </figure>
+  
+
+</p>
+<p>
+
+
+
+
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="image-10.png" alt="alt text" />
+      
+    </figure>
+  
+
+</p>
+<p>using detect it easy we can see that it is packed with upx, let&rsquo;s unpack it</p>
+<p>
+
+
+
+
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="image-11.png" alt="alt text" />
+      
+    </figure>
+  
+
+</p>
+<p>now let&rsquo;s check again</p>
+<p>
+
+
+
+
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="image-13.png" alt="alt text" />
+      
+    </figure>
+  
+
+</p>
+<p>
+
+
+
+
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="image-14.png" alt="alt text" />
+      
+    </figure>
+  
+
+</p>
+<p>now it is pretty normal with sections and imports being normal, so we can start static analysis.</p>
+
+
+<h1 class="relative group">Triaging 
+    <div id="triaging" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#triaging" aria-label="Anchor">#</a>
+    </span>        
+    
+</h1>
+<p>Running file on the binary shows it’s a 64 bit PE executable
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/H11N5K_Tp.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>We open the binary in Detect_it_easy,
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/B1_H5Kda6.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>And we can clearly see it is a UPX packed binary, meaning we would have to unpack it first</p>
+<p>Can be done using</p>
+<blockquote>
+<p>upx -d mssetup.exe</p>
+</blockquote>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/r1evcYuaa.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>Now the unpacked binary when put through DIE seems to be normal
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/Hy2w5FOTp.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>trying strings on it we see a few intersting strings such as
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/SJCNnF_T6.png" alt="image" />
+    
+  </figure>
+
+
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rJpY3Ydp6.png" alt="image" />
+    
+  </figure>
+
+</p>
+<ul>
+<li>A ransom note looking text</li>
+<li>98238588864125956469313398338937</li>
+<li>Azr43l_README.txt</li>
+<li>C:\Windows\System32\winevt\Logs</li>
+<li>C:\Windows\PrefetchC:\Windows\Temp</li>
+<li>C:\Users\Public\Documents\Recent</li>
+<li>C:$Recycle.BinC:\Windows\Logs</li>
+<li>C:\Windows\System32\config</li>
+<li>C:\Windows\SoftwareDistribution</li>
+<li>USERNAME</li>
+<li>C:\UsersDownloadsDesktop0_o</li>
+<li>AppData\Roaming\Notepad++Documents168133:</li>
+</ul>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/r1eA2Kdp6.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>we also see strings pertaining to chacha20, giving us a small idea on what this ransomware might entail</p>
+
+
+<h1 class="relative group">Static Analysis 
+    <div id="static-analysis" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#static-analysis" aria-label="Anchor">#</a>
+    </span>        
+    
+</h1>
+<p>Now we can load the binary into <strong>IDA 8.3 Freeware</strong></p>
+<p>And we find main fairly easily</p>
+
+
+<h3 class="relative group">Getting to main 
+    <div id="getting-to-main" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#getting-to-main" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/SJWN0tupa.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>In a rust binary unlike the C/C++ binaries, the main is not actually a main, rather it passes the function pointer of main to another function called lang_start</p>
+
+
+<h3 class="relative group">Anti Debug Check 
+    <div id="anti-debug-check" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#anti-debug-check" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>Now heading into the actual main we see,
+An IsDebuggerPresent call</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/B1YYH9_aa.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>So we can easily either NOP out these bytes or convert the jnz to jz as such</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rJE5Hqu6T.png" alt="image" />
+    
+  </figure>
+
+
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/Sk_cS5OTT.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>Now this would help us during our debugging session, if we need to step through this function</p>
+
+
+<h3 class="relative group">Lastinputinfo 
+    <div id="lastinputinfo" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#lastinputinfo" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>Next we have this block of code between lines 123 - 130</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HySsP9u6a.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>Googling for the struct LASTINPUTINFO</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BJHnwcdp6.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>As it says, we get a structure filled with the last input info</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/H1U6w9_6p.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>This function fills the dwTime field of the structure with the milliseconds (tick count) of the last input info. The milliseconds here are from the start of system_time</p>
+<p>Analysing the next block of code,
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/r1Pl_iO6T.png" alt="image" />
+    
+  </figure>
+
+</p>
+
+
+<h3 class="relative group">GetTickCount() 
+    <div id="gettickcount" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#gettickcount" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>We see GetTickCount() being called
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/ry8wusOT6.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>As mentioned, it returns the number of milliseconds since the system was started,
+And that is being subtracted from the time the last input was taken and compared against 59999, and is evaluated true if greater. Ie it would be false if it is under 60000ms, 60000ms is 60s i.e 1 min. The malware checks if the computer was idle for the last minute, if it was idle, then it exits . This is one of the conditions
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rJldOjuTT.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>For the next block of code above, in the if condition we see it takes a fills a structure plii with the current cursor position and and then sleeps for 5 seconds, then measures the next cursor position and we can see a ‘mm_cmepeq_epi132’ , indicating a compare, thus these two measured cursor positions are compared and if it is the same then it is marked as True, at which point the malware exits and stops running as well.</p>
+<p>Once the if condition is cleared,</p>
+<p>in the block of code below
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BkletoOap.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>We see the use of a function “GetAsyncKeyState”</p>
+
+
+<h3 class="relative group">GetAsyncKeyState() 
+    <div id="getasynckeystate" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#getasynckeystate" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>We can look up the MSDN webpage associated to GetAsyncKeyState</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HJUfKs_p6.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>As it mentions, it determines which key was pressed during the latest IO operation</p>
+<p>And we have GetAsyncKeyState(1) and GetAsyncKeyState(2)</p>
+<p>Where args 1 and 2 correspond to :
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/Hk-EFjua6.png" alt="image" />
+    
+  </figure>
+
+
+Under the virtual <a href="https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes"   target="_blank">
+    key_code</a></p>
+<p>We also see,
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/r1UtKju66.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>Based on this we can see it keeps track of how many times left click was registered and how many times right click was registered in the variables v1 and v2</p>
+<p>Now we understand that the malware won’t run or proceed further until and unless a particular amount of left and right clicks have been registered which in our case in
+6 and 5 respectively</p>
+<p>This clears out the doubt on why the malware wouldn&rsquo;t run under normal circumstances, and it requires a specific set of actions to be done in a certain number for it to proceed executing the malicious payload</p>
+<p>After that we notice some basic initialization type code until line 179  (below)</p>
+<p>And tracking that particular offset 140002CFF0 leads us to functions which looks like a heapfree and memory allocation, all of this sounds like basic initialization. So not much use for us to actually reverse this part of the code</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BypBeC_Tp.png" alt="image" />
+    
+  </figure>
+
+</p>
+
+
+<h3 class="relative group">sub_140023030() AKA Unkn_Func_1 
+    <div id="sub_140023030-aka-unkn_func_1" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#sub_140023030-aka-unkn_func_1" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BJIOa1ta6.png" alt="image" />
+    
+  </figure>
+
+
+has been rechanged to
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/ryRUpJtTT.png" alt="image" />
+    
+  </figure>
+
+
+going into the function it seems too much to sit and revers statically, I&rsquo;ll come back to this later and look at it dynamically</p>
+
+
+<h3 class="relative group">sub_14000C1B0() AKA Get Environment Variable 
+    <div id="sub_14000c1b0-aka-get-environment-variable" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#sub_14000c1b0-aka-get-environment-variable" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>Next interesting function is<br>
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/SylNMlFpa.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>This function seems to take an arguemnt as &ldquo;USERNAME &quot; and a hObject to output the value</p>
+<p>Going inside the function we see it does make use of the USERNAME argument in calling the windows API
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/B1taGxt6T.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>So we go with the understanding that the hObject that goes out of this is the ENV VARIABLE</p>
+
+
+<h3 class="relative group">filepath setting 
+    <div id="filepath-setting" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#filepath-setting" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/SkYHm-F66.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>this block of code seems like it is reading an existing string(unk_14002D040)
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BkMv7-tpp.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>at particular offsets and it is appending whatever is read from env_struct to
+parts of this string</p>
+<p>A hunch we can easily form out of this entire code block is that it is using our system USERNAME to get the correct full path of these directorys</p>
+<ul>
+<li>C:\Users%USER%\Downloads\</li>
+<li>C:\Users%USER%\Desktop\</li>
+</ul>
+<p><strong>sub_140011F80</strong> mentioned here seems to be taking these
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HkzQtZYpa.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>Going inside it, we see it basically has a memcpy inside it</p>
+<p>so we aptly can rename sub_140011F80 -&gt;concat</p>
+<p>Also, we see the output in one is being used in the other after being put through another function sub 140018D50, which just returns the string as is, this can be hunched of as <code>unrwap()</code> in rust</p>
+<p><strong>sub_140005700</strong> just calls a freeheap within itself, so we can rename that as freehap as well</p>
+<p>so now the cleaned up statically analysed block of code looks like
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HychqbFT6.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>And going by the order of the string, I would assume that it is being put to use in the same order that it is stored in</p>
+<ul>
+<li>C:\Users%USER%\Downloads\</li>
+<li>C:\Users%USER%\Desktop\</li>
+</ul>
+<p>So we can rename the above image to kind of fit our mental image of what is happening</p>
+
+
+<h3 class="relative group">Ransom_note_file_name 
+    <div id="ransom_note_file_name" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#ransom_note_file_name" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>As we can see, first 17 bytes of this offset is read in
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/ryBWzzFaT.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/ryOMMMtpa.png" alt="image" />
+    
+  </figure>
+
+</p>
+
+
+<h3 class="relative group">Create ransom file 
+    <div id="create-ransom-file" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#create-ransom-file" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HJ4M7Gtpa.png" alt="image" />
+    
+  </figure>
+
+
+when went into the highlighted function, we see calls such as
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/ryiImft6p.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>which leads us to understand that this now creates a file under the name<br>
+<code>Azr43l_README.txt</code>.</p>
+<p>And we see this being used to the very last concatednated file_path, which under our assumption is <code>Desktop</code></p>
+
+
+<h3 class="relative group">Write ransom note to desktop 
+    <div id="write-ransom-note-to-desktop" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#write-ransom-note-to-desktop" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/B1K-V4Yaa.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>In the above image we see <strong>sub_140004550</strong>, we see calls to NtWriteFile</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HJxoNEFaT.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>and this function by itself takes arguments to the ransom_note
+hence it is safe to assume that it does write the ransom_note onto the newly created <code>Azr43l_README.txt</code></p>
+<p>Then after this block of code it&rsquo;s mostly a bunch of heap_free calls until line 252</p>
+
+
+<h3 class="relative group">sub_140017EF0() AKA unkn_func_2 
+    <div id="sub_140017ef0-aka-unkn_func_2" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#sub_140017ef0-aka-unkn_func_2" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rJ1k-_Fpp.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>We see the same routine yet again and some file_path\Azr43l_README.txt being passed as an arg to the above mnetioned func. We don&rsquo;t understand much from looking into this, this is yet another function to be looked at dynamically</p>
+
+
+<h3 class="relative group">Ransom note drop pt.2 
+    <div id="ransom-note-drop-pt2" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#ransom-note-drop-pt2" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rkrZf_KTT.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>Starting from line 275 we see a similar routine again of it again wrting the same content to this new file, it&rsquo;s just that it is in a different location (which can be found out dynamically)</p>
+
+
+<h3 class="relative group">sub_140001450 AKA Unkn_Func_3 
+    <div id="sub_140001450-aka-unkn_func_3" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#sub_140001450-aka-unkn_func_3" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/B1eRGdKpa.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>Now we get to what seems to be the crux of the ransomware.
+We see a new function which we have named unkn_func_2 take in the earlier unkn_func_1&rsquo;s output and it also takes the user_download_folder path, going into the function, it only confuses us even more, so for now we stick to just renaming it like so</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BkrJwdY66.png" alt="image" />
+    
+  </figure>
+
+</p>
+
+
+<h3 class="relative group">Continuing 
+    <div id="continuing" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#continuing" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>As I continued to scroll down more, I saw a similar routine of unwrapping a string and unkn_func_3 being called on them at which point I thought, static analysis is gonna get us only so far, and that we can start looking at the file dynamically</p>
+
+
+<h1 class="relative group">Traiging pt.2 
+    <div id="traiging-pt2" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#traiging-pt2" aria-label="Anchor">#</a>
+    </span>        
+    
+</h1>
+<p>Before we start with the dynamic analysis of the ransomware, it would be helpful to debug and get to code faster if we patch out these three key areas</p>
+<ul>
+<li>The anti debug check as mentioned above</li>
+<li>The cmp for the number of clicks both 5 and 6</li>
+</ul>
+<p>Just for fun I decided to run this binary now, in a controlled environtment ofcourse to see what this does, and as expected so far, we see a ransom note in Desktop and we also see certain files gettting encrypted and being renamed as .azr43l files</p>
+<p>for example</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BkJgQ-5pT.png" alt="image" />
+    
+  </figure>
+
+</p>
+
+
+<h1 class="relative group">Dynamic Analysis 
+    <div id="dynamic-analysis" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#dynamic-analysis" aria-label="Anchor">#</a>
+    </span>        
+    
+</h1>
+<p>NOTE:</p>
+<blockquote>
+<p>All the debugging that is being shown in this writeup has been purely done inside and isolted VM. And under no condition, should you try to replicate it on the HOST.</p>
+</blockquote>
+<p>Now we can start with the dynamic analysis of the ransomware</p>
+<p>Becuase we patched out the above mentioned areas of jnb to respect jb and jz to jnz, debugging is a smooth sail</p>
+<p>we get to the first function we wanted to look at dynamically</p>
+
+
+<h3 class="relative group">sub_140023030() AKA Unkn_Func_1 AKA random_24_gen 
+    <div id="sub_140023030-aka-unkn_func_1-aka-random_24_gen" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#sub_140023030-aka-unkn_func_1-aka-random_24_gen" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/SyWFKOFT6.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>Initially we just kept track of the output value of this function
+and func_1_output seems to be generated on runtime</p>
+<p>and when tried to run multiple times, we see different values being generated</p>
+<p>1)
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BkrPYdFp6.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>2)
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/Hyz9Y_Kap.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>3)
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BJohtuYpa.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>Looking at this we see, it generates</p>
+<ul>
+<li>Random value</li>
+<li><strong>24 bytes</strong></li>
+</ul>
+<p>so we can go ahead and change the name of the func to
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/B1zrcuKaa.png" alt="image" />
+    
+  </figure>
+
+</p>
+
+
+<h3 class="relative group">Get_env_Variable 
+    <div id="get_env_variable" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#get_env_variable" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/H1zFqOta6.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>Can confirm that it does take the given struct adn does return the %USER% value in the struct</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/ryjj5_YTa.png" alt="image" />
+    
+  </figure>
+
+</p>
+
+
+<h3 class="relative group">Setting Filepath 
+    <div id="setting-filepath" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#setting-filepath" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>we can confirm those particular file_paths now and we do see the actual path and we can name the variables accordingly</p>
+<p>1)
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/Hy-g2dtpa.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>2)
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HJyQ3dYpp.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>3)
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/B1LL3OYTT.png" alt="image" />
+    
+  </figure>
+
+</p>
+
+
+<h3 class="relative group">Ransom_note_path 
+    <div id="ransom_note_path" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#ransom_note_path" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>The ransom note path can also be found as shown below
+<code>C:\Users\Ryuzaki\Desktop\Azr43l_README.txt</code>
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/ryzchuY66.png" alt="image" />
+    
+  </figure>
+
+</p>
+
+
+<h3 class="relative group">Unkn_func_2 
+    <div id="unkn_func_2" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#unkn_func_2" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BkpfltFpT.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>Now we come to unkn_func_2
+We see the first arg being some structure, and the second one being the desktop_ransom_note file path
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/Sydugttap.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>We see plii return 1 at the cb.size so it doesn&rsquo;t even enter the block of code under the if condition below</p>
+
+
+<h3 class="relative group">Unkn_func_3 
+    <div id="unkn_func_3" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#unkn_func_3" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>Now we come to this part of the code</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/S1lIYiKTT.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>as we can see, from renaming the above variables in the &ldquo;setting filepath&rdquo; we get an idea as to what all args are being passed into this function
+namely</p>
+<ul>
+<li>file_directory_path (download folder in this case)</li>
+<li>file_directory_path_len (confirm from debugging)</li>
+<li>random_generated_val (24 bytes)</li>
+</ul>
+<p><strong>Statically</strong> looking at unkn_func_3 we see a lot of operations pertaining to an encryption of sorts and we see some variables named randombuffer , we see this string
+<code>98238588864125956469313398338937</code> being xorred with something</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/H1gJfZ9ap.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>and we also see the use of the string .azr43l, as seen above in the second triaging attempt</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HJmUMbqpT.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>So going based off of these hunches, now I name the current function that we are in right now, unkn_func_3 as encrypt()</p>
+
+
+<h2 class="relative group">Encrypt() - the heart of the ransomware 
+    <div id="encrypt---the-heart-of-the-ransomware" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#encrypt---the-heart-of-the-ransomware" aria-label="Anchor">#</a>
+    </span>        
+    
+</h2>
+<p>Going into encrypt, we come across the first function which takes the file_path and the file_length as arguments, v53 being the output
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HJ6b4bcp6.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>Currently in our case, the file_path is the download folder and the file_length is accordingly set.</p>
+
+
+<h3 class="relative group">sub_140016D10 
+    <div id="sub_140016d10" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#sub_140016d10" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>Going inside the above mentioned function, we see</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/SJICVW9a6.png" alt="image" />
+    
+  </figure>
+
+</p>
+<blockquote>
+<p>I have renamed some variables as differently variants of &ldquo;file_path&rdquo; accordingly again and again ,becuase the pointers were being copied and switched around</p>
+</blockquote>
+<p>As we keep scrolling down, most of it seem pretty basic and normal assigning operations with nothing much being operated upon.
+Until this part,</p>
+<p>path file before that particular function call was just our downloadpath file
+<code>C:\Users\%USER%\Downloads\</code></p>
+<p>But after that call,</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BJZnBWc6a.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/r1Nqr-9ap.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>it is appended with a * like so</p>
+<p>And in windows * is reserved and is not allowed to be used as an actual file name.</p>
+<p>It is mostly used to search under a particular directory, a regex the means anything meatching that particular pattern of string. So rn it seems as if that function was supposed to append a * depending on whether or not the pathfile ended in a &ldquo;&quot; character.</p>
+<p>so we rename that function <code>sub_7FF792300B20</code> like so</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rkea8WcTa.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>and continue ahead.</p>
+
+
+<h3 class="relative group">sub_14001A640 AKA convert_to_widechar 
+    <div id="sub_14001a640-aka-convert_to_widechar" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#sub_14001a640-aka-convert_to_widechar" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>takes our file_path as arg
+and once it exits, we see this
+when we track our filepath variable
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rktfuZc6p.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/Hks0PW56a.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>hence it has been aptly named</p>
+
+
+<h3 class="relative group">sub_1400194E0 AKA get_full_path_name 
+    <div id="sub_1400194e0-aka-get_full_path_name" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#sub_1400194e0-aka-get_full_path_name" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>it takes lpfilename and our file_path as argument, and output&rsquo;s the fullpath name under lpfilename</p>
+<p>When we look inside the function we see</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/Skd9O-566.png" alt="image" />
+    
+  </figure>
+
+
+and stepping over this function while debugging also confirms the same. In our case it returns the same <code>C:\Users\Ryuzaki\Downloads\*</code></p>
+<p>Now coming to next block of code</p>
+
+
+<h4 class="relative group">FindFirstFileW 
+    <div id="findfirstfilew" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#findfirstfilew" aria-label="Anchor">#</a>
+    </span>        
+    
+</h4>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BJ6eFb5TT.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>We google this on msdn and we <a href="https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-findfirstfilew"   target="_blank">
+    FindFirstFileW</a></p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/r1dWiZ5ap.png" alt="image" />
+    
+  </figure>
+
+
+it returns a handle to the file and an output value under the second arguemnt containing information about the file under the structure of FIND_DATAW</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="nc">_WIN32_FIND_DATAA</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">DWORD</span>    <span class="n">dwFileAttributes</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">FILETIME</span> <span class="n">ftCreationTime</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">FILETIME</span> <span class="n">ftLastAccessTime</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">FILETIME</span> <span class="n">ftLastWriteTime</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">DWORD</span>    <span class="n">nFileSizeHigh</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">DWORD</span>    <span class="n">nFileSizeLow</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">DWORD</span>    <span class="n">dwReserved0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">DWORD</span>    <span class="n">dwReserved1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">CHAR</span>     <span class="n">cFileName</span><span class="p">[</span><span class="n">MAX_PATH</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">  <span class="n">CHAR</span>     <span class="n">cAlternateFileName</span><span class="p">[</span><span class="mi">14</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">  <span class="n">DWORD</span>    <span class="n">dwFileType</span><span class="p">;</span> <span class="c1">// Obsolete. Do not use.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">DWORD</span>    <span class="n">dwCreatorType</span><span class="p">;</span> <span class="c1">// Obsolete. Do not use
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">WORD</span>     <span class="n">wFinderFlags</span><span class="p">;</span> <span class="c1">// Obsolete. Do not use
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span> <span class="n">WIN32_FIND_DATAA</span><span class="p">,</span> <span class="o">*</span><span class="n">PWIN32_FIND_DATAA</span><span class="p">,</span> <span class="o">*</span><span class="n">LPWIN32_FIND_DATAA</span><span class="p">;</span>
+</span></span></code></pre></div><p>The key point to note is this structure contains the filename of the file that it has an info on, so our program is trying to leverage this method of finding every filename inside a given directory</p>
+<p>SO now we can rename the args to more understandable names
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/B1LgkGcpT.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>Next as we keep executing,
+we see our file_info being copied into the a1 ie our arg1 which we initially thought wld be the output of this particular function as well</p>
+<p>And then it returns</p>
+<p>so to summarize,</p>
+<p>basically this function takes a particular argument, checks if it is a directory, if it is , it would add the &quot; * &quot; operator at the end of the directory and calls FindFirstFileW and gets the file info based on that particular file and returns that in a struct</p>
+<p>So we name it as as get_file_data</p>
+
+
+<h3 class="relative group">Suspicious xmmword 
+    <div id="suspicious-xmmword" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#suspicious-xmmword" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>Just looking at the assembly side by side</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/SJYa_X566.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>we see a bunch of bytes getting copied over into xmm6 and xmm7 , we just keep that in mind and go ahead</p>
+
+
+<h3 class="relative group">sub_7FF7922FC850 
+    <div id="sub_7ff7922fc850" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#sub_7ff7922fc850" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rk4WpmqTa.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>Not used.</p>
+
+
+<h3 class="relative group">Next 
+    <div id="next" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#next" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/S1Hn6m56a.png" alt="image" />
+    
+  </figure>
+
+
+While debugging we see the memcpy 2&rsquo;s first argument is populated with the filename from get_file_data pointer</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HyEPA79Ta.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>Now in my case it turned out to be another directory that is stored first</p>
+<p>Continuing,</p>
+<p>we see now the if condition fails at <code>sub_7FF792302070</code>
+and goes onto the else condition only to call encrypt function again recrusively
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/B1Eyc4cpp.png" alt="image" />
+    
+  </figure>
+
+</p>
+
+
+<h3 class="relative group">Recursive encrypt - iteration 1 
+    <div id="recursive-encrypt---iteration-1" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#recursive-encrypt---iteration-1" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>Now are are recrusively inside the encrypt function with the argument as
+<code>C:\Users\Ryuzaki\Downloads\DebugView</code></p>
+<p>we go through the same steps of finding the first file handle and it&rsquo;s details and names</p>
+<p>For the purpose of creating this writeup I had made a dummy file under downloads directory
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/SyzQjN9a6.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>and filled it with loerm ipsum content, and now that this file is taken in it passes throuhgh the above function wih no issues, I can form the hunch that the above function
+<code>sub_7FF792302070</code> is to check if a particular path is a directory or not</p>
+<p>we&rsquo;ll go ahead with that</p>
+
+
+<h3 class="relative group">sub_7FF7922FC6F0() 
+    <div id="sub_7ff7922fc6f0" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#sub_7ff7922fc6f0" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/B1Cv6V9Ta.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>passing through this function and looking at the value inside <code>RandomBuffer</code>, show&rsquo;s us</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BJLoa4qTT.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p><code>txt</code> - meaning the function serves it&rsquo;s purpose to find the extension of the loaded file.</p>
+<p>then this extension is compared against <code>azr43l</code>
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BkAJyS5pa.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>if the extension is already <code>azr43l</code> then it enters the else condition and looks for more files in the same directory</p>
+<p>and if the extension is not the same then it enters into the if condition</p>
+<p>This throws more light on the ransomware, that once it encrypts it&rsquo;s files it wld extend it with azr43l</p>
+<p>In the next check it makes sure it doesn;t encrypt the ransom_note.txt</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/Sk8u1H566.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>if it turns out to be the ransom note then it exits ,looking for the next file in the directory</p>
+<p>next we see inside this unkn_func_0
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/S1ApxBcap.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>we spot it&rsquo;s a CreateFile API</p>
+<p>hence we name this function as create_file</p>
+<p>then as we go down, we debug more to spot a particular function</p>
+<p><code>sub_7FF792301E20</code></p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HkpS-S566.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>That seems to return teh filename alone from the huge file path, for example in our case it is - <code>just_a_test_doc</code></p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BkW9bHqpT.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>Then from further debugging we see function calls such as
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rJb0bB9aa.png" alt="image" />
+    
+  </figure>
+
+
+which I have renamed it, because it returns the technical last byte being &ldquo;\0&rdquo;</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rkzzfB5pT.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>Then it takes the file_name and appends to it the .azr43l extention through these two memcpy</p>
+<p>Next during further debuggin we notice and rename a particular function call that just returns teh current directory path that the file is in</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/SyWcMHca6.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HJ29zB9aa.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>and that it is getting copied to <code>Random buffer</code></p>
+<p>Next in the subsequent lines of code</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/H1v0GH5aa.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>we see random buffer being appended to file_directory
+there_by creating this
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/S11f7Sqpa.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>basically it appends .azr43l to the path of the old filename and it creates a new file_path</p>
+
+
+<h3 class="relative group">Creating Encrypted File 
+    <div id="creating-encrypted-file" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#creating-encrypted-file" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>Now we notice it creates a new handle and opens it to the new encrypted file under the new name of</p>
+<p><code>C:\Users\Ryuzaki\Downloads\DebugView\just_a_test_doc.txt.azr43l</code></p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rJBHmr56a.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>Then it&rsquo;s just doing a few copies of file pointers which is not really necessary for us atm
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/SkF_PHqap.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>it provies a malloc space for file_contents then we finally come to reading the file</p>
+
+
+<h3 class="relative group">Openfile 
+    <div id="openfile" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#openfile" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>Opening the open_file function we see</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/S10ADHca6.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>hence we name it to be open_file</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HJ5jPH56p.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>now we can see the file contents as well</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rkJowrq66.png" alt="image" />
+    
+  </figure>
+
+</p>
+
+
+<h3 class="relative group">Random_num_generator 
+    <div id="random_num_generator" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#random_num_generator" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>we come across another function which only seems to take two args</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/ryeHOHq6p.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>opening it we see,</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/r1YVuB96T.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>So now we have renamed it as
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/SJGfuHcp6.png" alt="
+image" />
+    
+  </figure>
+
+</p>
+<p>we can see the RandomBuffer is now stored on the stack</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rkEtur9p6.png" alt="image" />
+    
+  </figure>
+
+</p>
+
+
+<h3 class="relative group">The actual encryption 
+    <div id="the-actual-encryption" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#the-actual-encryption" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>We see two function calls here</p>
+<ul>
+<li>sub_7FF7922F8600()
+and</li>
+<li>sub_7FF7922F88B0()</li>
+</ul>
+<p>Coming to the first one</p>
+
+
+<h3 class="relative group">sub_7FF7922F8600() 
+    <div id="sub_7ff7922f8600" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#sub_7ff7922f8600" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">sub_7FF7922F8600</span><span class="p">(</span><span class="o">&amp;</span><span class="n">RandomBuffer</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">random_buffer</span><span class="p">,</span> <span class="mi">32LL</span><span class="p">,</span> <span class="n">random_24_bytes_val</span><span class="p">,</span> <span class="mi">12LL</span><span class="p">)</span>
+</span></span></code></pre></div><p>The arguments it takes are :
+Arg 1 and 2 RandomBuffer that we just generated right now</p>
+<p>Arg 3 : 32
+Arg4: previously generated 24 bytes random value
+Arg 5 :12</p>
+<p>A major point to note is that this doesn&rsquo;t involve our file_contents at all</p>
+<p>Entering inside this function, this is what it looks like</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rJgbsH5pp.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>we see strings like chacha20 which certainly do pique an interest here</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HJxPjB9T6.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>WE see another function being called internally</p>
+<p><code>sub_7FF7922F86C0()</code></p>
+<p>which returns the value in v10</p>
+<p>and now v10 contains
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/r1p9jBcTT.png" alt="image" />
+    
+  </figure>
+
+
+<code>expand 32-byte k</code></p>
+<p>curious on this we google and a small googling let&rsquo;s us know that this is the initial state of the chacha20 encryption alrogithm</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/By5-3r56T.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>Therefore now we can rename this funtion as init_chacha20</p>
+<p>And googling more about chacha20 in rust gives us <a href="https://docs.rs/chacha20/latest/chacha20/"   target="_blank">
+    this page</a></p>
+<p>in this we can clearly see that chacha makes use of a 32 byte key(which in our case is random_buffer)
+and a 12 byte nonce(which in our case is the 24 byte random_val)</p>
+<p>we keep that in mind that it takes only the top 12 bytes of this 24 byte random_val</p>
+
+
+<h3 class="relative group">sub_7FF7922F88B0() 
+    <div id="sub_7ff7922f88b0" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#sub_7ff7922f88b0" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>Coming to the second function, we now see</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BJ05nS9Tp.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>Arg1 : <code>expand 32-byte k</code> followed by the random_buffer in memory followed by the first 12 bytes of the 24_byte_val
+Arg2 : file_contents
+Arg3 : A number(assuming it&rsquo;s the size of the file)
+Arg4 : unsure
+Arg 5: unsure</p>
+<p>This is arg 1:
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HJ-MeIqaT.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>followed by</p>
+<p>the 32 byte random value</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/S1ZXxU56T.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HJwml85Ta.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>followed by the 12 byte nonce
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/H1CEx8q6p.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>all of this is on the stack and now this aligns with what we saw in the rust documentation and hence, now we are able to get a clear picture on how and what it is encrypting</p>
+<p>we basically have the random_val and the nonce that is needed to encrypt and decrypt in chacha20</p>
+
+
+<h4 class="relative group">Encrypted data 
+    <div id="encrypted-data" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#encrypted-data" aria-label="Anchor">#</a>
+    </span>        
+    
+</h4>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HynIZU966.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>After encryption the location where the 12 byte nonce was stored is where the encrypted data is stored as well, the pointer is being overwritten</p>
+
+
+<h4 class="relative group">Suspicious xorring 
+    <div id="suspicious-xorring" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#suspicious-xorring" aria-label="Anchor">#</a>
+    </span>        
+    
+</h4>
+<p>This is pertaining to the earlier suspicious group of bytes that we saw getting pushed into xmm words</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/r1dVXUcTa.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>rn the very same byts that are storred in xmm8 and xmm7 are getting xorred with the 32 byte random value that we just generated</p>
+
+
+<h3 class="relative group">Writing to encrypted file 
+    <div id="writing-to-encrypted-file" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#writing-to-encrypted-file" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/ByIl489pp.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>This xorred value is now being appended to the very end of the file_data that we just encrypted.</p>
+<p>This helps us recover the randomvalues that were generated for each file</p>
+<p>Meaning, to decrypt now we have got the random_32_byte key we would only require a 12 byte nonce that needs to be used in decrypting</p>
+<p>And right now finally as everything goes, we take the encrytped bytes and write it into the new file that we just generated with the .azr43l extension</p>
+
+
+<h3 class="relative group">Delete old file 
+    <div id="delete-old-file" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#delete-old-file" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/SJrVNIc6T.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>Once the new file has been written now, there is no need to keep the original old file around which is now getting deleted from the system</p>
+<p>And the rest of this function is just clearing memory spaces and freeing the heap</p>
+<p>And thus that brings us to the end of the encrypt function</p>
+
+
+<h3 class="relative group">Out of Encrypt 
+    <div id="out-of-encrypt" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#out-of-encrypt" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>After getting out of the encrypt function we continue down into the code</p>
+<p>we see it assigning new path now, but because it follows the same routine I don&rsquo;t want to bloat the writeup with redundant info</p>
+
+
+<h3 class="relative group">Encrypting desktop 
+    <div id="encrypting-desktop" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#encrypting-desktop" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rye1wUcTa.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>This block of code encrypts the desktop content</p>
+
+
+<h3 class="relative group">Encrypting notepad++ 
+    <div id="encrypting-notepad" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#encrypting-notepad" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/ByCIP8qTp.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>Then it goes onto encrypt
+<code>C:\Users\Ryuzaki\AppData\Roaming\Notepad++</code></p>
+
+
+<h3 class="relative group">Encrypting Documents 
+    <div id="encrypting-documents" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#encrypting-documents" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rJn2wL5Ta.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>Encrypts documents twice</p>
+
+
+<h3 class="relative group">SocketConnection 
+    <div id="socketconnection" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#socketconnection" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>Now we get to the intersting part again, different from the few previous code blocks</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/r1Mot8cp6.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>We see here what looks like an IP addr</p>
+<p><code>192.168.1.33</code></p>
+<p>and right below we seem to have been given the port
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/r1pUo89Tp.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>Now hObject seems to be initialized with ip and port binding them into a single struct for sockets</p>
+<p>as we track hObject we see it is being passed onto
+
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BJpcsI5T6.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>which takes the IP , Port and the random_24_byte_val, which we now know to be the nonce</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/S1XasIq6a.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>it sends the nonce to IP 192.168.1.33:6969</p>
+
+
+<h3 class="relative group">sub_1400024B0() 
+    <div id="sub_1400024b0" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#sub_1400024b0" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/B1hXnU9ap.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>And last but not least we come to the final function which is yet to be analysed</p>
+<p>Going into the function we see it has all these strings,</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/Sy8rhIc6a.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>and we see a bunch of function calls of the same function(sub_1400172B0) but with different strings as different args</p>
+<p>
+
+
+
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/B1j5hIcTa.png" alt="image" />
+    
+  </figure>
+
+</p>
+<p>Going into the function we see a lot of calls</p>
+<p>NtCreateFile
+GetFileInformationByHandleEx
+DuplicateHandle
+GetCurrentProcess</p>
+<p>We cld have sit and analysed all this, but to save us some time, we cld step over all this functions and go in search for those particular directoris mentioned there such as</p>
+<ul>
+<li>C:\Windows\System32\winevt\Logs</li>
+<li>C:\Windows\Prefetch</li>
+<li>C:\Windows\Temp</li>
+<li>C:\Users\Public\Documents\Recent</li>
+<li>C:$Recycle.Bin</li>
+<li>C:\Windows\Logs</li>
+<li>C:\Windows\System32\config</li>
+<li>C:\Windows\SoftwareDistribution</li>
+</ul>
+<p>And after analysis, it&rsquo;s easy to understand and to formulate a hunch that this particular funtion was meant to remove all the files inside these directories of valuable DFIR artefacts as well for anti-forensic purposes.</p>
+<p>now as the anlysis is over , we will go ahead and answer the questions</p>
+
+
+<h1 class="relative group">C2 server IP 
+    <div id="c2-server-ip" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#c2-server-ip" aria-label="Anchor">#</a>
+    </span>        
+    
+</h1>
+<pre tabindex="0"><code>192.168.1.33:6969
+</code></pre>
+        </div>
+                
+        
+        
+  
+  <section class="flex flex-row flex-wrap justify-center pt-4 text-xl">
+    
+      
+      <a
+      target="_blank"
+      class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+      href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http://localhost:1313/posts/bi0sctf_ransomware/&amp;title=Batman%20Investigation%20III%20-%20Th3%20Sw0rd%200f%20Azr43l%20-%20bi0sCTF%202024"
+      title="Share on LinkedIn"
+      aria-label="Share on LinkedIn"
+      >
+      
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+
+  </span>
+
+
+    </a>
+      
+    
+      
+      <a
+      target="_blank"
+      class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+      href="https://twitter.com/intent/tweet/?url=http://localhost:1313/posts/bi0sctf_ransomware/&amp;text=Batman%20Investigation%20III%20-%20Th3%20Sw0rd%200f%20Azr43l%20-%20bi0sCTF%202024"
+      title="Tweet on Twitter"
+      aria-label="Tweet on Twitter"
+      >
+      
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg>
+  </span>
+
+
+    </a>
+      
+    
+      
+      <a
+      target="_blank"
+      class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+      href="https://reddit.com/submit/?url=http://localhost:1313/posts/bi0sctf_ransomware/&amp;resubmit=true&amp;title=Batman%20Investigation%20III%20-%20Th3%20Sw0rd%200f%20Azr43l%20-%20bi0sCTF%202024"
+      title="Submit to Reddit"
+      aria-label="Submit to Reddit"
+      >
+      
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M201.5 305.5c-13.8 0-24.9-11.1-24.9-24.6 0-13.8 11.1-24.9 24.9-24.9 13.6 0 24.6 11.1 24.6 24.9 0 13.6-11.1 24.6-24.6 24.6zM504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-132.3-41.2c-9.4 0-17.7 3.9-23.8 10-22.4-15.5-52.6-25.5-86.1-26.6l17.4-78.3 55.4 12.5c0 13.6 11.1 24.6 24.6 24.6 13.8 0 24.9-11.3 24.9-24.9s-11.1-24.9-24.9-24.9c-9.7 0-18 5.8-22.1 13.8l-61.2-13.6c-3-.8-6.1 1.4-6.9 4.4l-19.1 86.4c-33.2 1.4-63.1 11.3-85.5 26.8-6.1-6.4-14.7-10.2-24.1-10.2-34.9 0-46.3 46.9-14.4 62.8-1.1 5-1.7 10.2-1.7 15.5 0 52.6 59.2 95.2 132 95.2 73.1 0 132.3-42.6 132.3-95.2 0-5.3-.6-10.8-1.9-15.8 31.3-16 19.8-62.5-14.9-62.5zM302.8 331c-18.2 18.2-76.1 17.9-93.6 0-2.2-2.2-6.1-2.2-8.3 0-2.5 2.5-2.5 6.4 0 8.6 22.8 22.8 87.3 22.8 110.2 0 2.5-2.2 2.5-6.1 0-8.6-2.2-2.2-6.1-2.2-8.3 0zm7.7-75c-13.6 0-24.6 11.1-24.6 24.9 0 13.6 11.1 24.6 24.6 24.6 13.8 0 24.9-11.1 24.9-24.6 0-13.8-11-24.9-24.9-24.9z"/></svg>
+
+  </span>
+
+
+    </a>
+      
+    
+      
+      <a
+      target="_blank"
+      class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+      href="https://pinterest.com/pin/create/bookmarklet/?url=http://localhost:1313/posts/bi0sctf_ransomware/&amp;description=Batman%20Investigation%20III%20-%20Th3%20Sw0rd%200f%20Azr43l%20-%20bi0sCTF%202024"
+      title="Pin on Pinterest"
+      aria-label="Pin on Pinterest"
+      >
+      
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M496 256c0 137-111 248-248 248-25.6 0-50.2-3.9-73.4-11.1 10.1-16.5 25.2-43.5 30.8-65 3-11.6 15.4-59 15.4-59 8.1 15.4 31.7 28.5 56.8 28.5 74.8 0 128.7-68.8 128.7-154.3 0-81.9-66.9-143.2-152.9-143.2-107 0-163.9 71.8-163.9 150.1 0 36.4 19.4 81.7 50.3 96.1 4.7 2.2 7.2 1.2 8.3-3.3.8-3.4 5-20.3 6.9-28.1.6-2.5.3-4.7-1.7-7.1-10.1-12.5-18.3-35.3-18.3-56.6 0-54.7 41.4-107.6 112-107.6 60.9 0 103.6 41.5 103.6 100.9 0 67.1-33.9 113.6-78 113.6-24.3 0-42.6-20.1-36.7-44.8 7-29.5 20.5-61.3 20.5-82.6 0-19-10.2-34.9-31.4-34.9-24.9 0-44.9 25.7-44.9 60.2 0 22 7.4 36.8 7.4 36.8s-24.5 103.8-29 123.2c-5 21.4-3 51.6-.9 71.2C65.4 450.9 0 361.1 0 256 0 119 111 8 248 8s248 111 248 248z"/></svg>
+
+  </span>
+
+
+    </a>
+      
+    
+      
+      <a
+      target="_blank"
+      class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+      href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:1313/posts/bi0sctf_ransomware/&amp;quote=Batman%20Investigation%20III%20-%20Th3%20Sw0rd%200f%20Azr43l%20-%20bi0sCTF%202024"
+      title="Share on Facebook"
+      aria-label="Share on Facebook"
+      >
+      
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z"/></svg>
+
+  </span>
+
+
+    </a>
+      
+    
+      
+      <a
+      target="_blank"
+      class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+      href="mailto:?body=http://localhost:1313/posts/bi0sctf_ransomware/&amp;subject=Batman%20Investigation%20III%20-%20Th3%20Sw0rd%200f%20Azr43l%20-%20bi0sCTF%202024"
+      title="Send via email"
+      aria-label="Send via email"
+      >
+      
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M207.8 20.73c-93.45 18.32-168.7 93.66-187 187.1c-27.64 140.9 68.65 266.2 199.1 285.1c19.01 2.888 36.17-12.26 36.17-31.49l.0001-.6631c0-15.74-11.44-28.88-26.84-31.24c-84.35-12.98-149.2-86.13-149.2-174.2c0-102.9 88.61-185.5 193.4-175.4c91.54 8.869 158.6 91.25 158.6 183.2l0 16.16c0 22.09-17.94 40.05-40 40.05s-40.01-17.96-40.01-40.05v-120.1c0-8.847-7.161-16.02-16.01-16.02l-31.98 .0036c-7.299 0-13.2 4.992-15.12 11.68c-24.85-12.15-54.24-16.38-86.06-5.106c-38.75 13.73-68.12 48.91-73.72 89.64c-9.483 69.01 43.81 128 110.9 128c26.44 0 50.43-9.544 69.59-24.88c24 31.3 65.23 48.69 109.4 37.49C465.2 369.3 496 324.1 495.1 277.2V256.3C495.1 107.1 361.2-9.332 207.8 20.73zM239.1 304.3c-26.47 0-48-21.56-48-48.05s21.53-48.05 48-48.05s48 21.56 48 48.05S266.5 304.3 239.1 304.3z"/></svg>
+
+  </span>
+
+
+    </a>
+      
+    
+      
+      <a
+      target="_blank"
+      class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+      href="https://api.whatsapp.com/send?text=http://localhost:1313/posts/bi0sctf_ransomware/&amp;resubmit=true&amp;title=Batman%20Investigation%20III%20-%20Th3%20Sw0rd%200f%20Azr43l%20-%20bi0sCTF%202024"
+      title=""
+      aria-label=""
+      >
+      
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+
+  </span>
+
+
+    </a>
+      
+    
+      
+      <a
+      target="_blank"
+      class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+      href="https://t.me/share/url?url=http://localhost:1313/posts/bi0sctf_ransomware/&amp;resubmit=true&amp;title=Batman%20Investigation%20III%20-%20Th3%20Sw0rd%200f%20Azr43l%20-%20bi0sCTF%202024"
+      title=""
+      aria-label=""
+      >
+      
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M248,8C111.033,8,0,119.033,0,256S111.033,504,248,504,496,392.967,496,256,384.967,8,248,8ZM362.952,176.66c-3.732,39.215-19.881,134.378-28.1,178.3-3.476,18.584-10.322,24.816-16.948,25.425-14.4,1.326-25.338-9.517-39.287-18.661-21.827-14.308-34.158-23.215-55.346-37.177-24.485-16.135-8.612-25,5.342-39.5,3.652-3.793,67.107-61.51,68.335-66.746.153-.655.3-3.1-1.154-4.384s-3.59-.849-5.135-.5q-3.283.746-104.608,69.142-14.845,10.194-26.894,9.934c-8.855-.191-25.888-5.006-38.551-9.123-15.531-5.048-27.875-7.717-26.8-16.291q.84-6.7,18.45-13.7,108.446-47.248,144.628-62.3c68.872-28.647,83.183-33.623,92.511-33.789,2.052-.034,6.639.474,9.61,2.885a10.452,10.452,0,0,1,3.53,6.716A43.765,43.765,0,0,1,362.952,176.66Z"/></svg>
+
+  </span>
+
+
+    </a>
+      
+    
+  </section>
+
+
+        
+
+
+<h2 class="mt-8 text-2xl font-extrabold mb-10">Related</h2>
+<section class="w-full grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+  
+  
+
+  <a href="/posts/vessel_cartographer_htb2023/" class="min-w-full">
+    
+    <div class="min-h-full border border-neutral-200 dark:border-neutral-700 border-2 rounded overflow-hidden shadow-2xl relative">
+        
+        <div class="w-full thumbnail_card_related nozoom" style="background-image:url(/img/featured.svg);"></div>
+        
+      
+
+      <div class="px-6 py-4">
+
+        
+        <div class="font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral"
+          href="/posts/vessel_cartographer_htb2023/">Vessel Cartographer HTBCTF23</div>
+        
+
+        <div class="text-sm text-neutral-500 dark:text-neutral-400">
+          
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  <time datetime="2023-03-24 22:00:00 &#43;0000 UTC">24 March 2023</time><span class="px-2 text-primary-500">&middot;</span><span>1483 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">7 mins</span>
+  
+
+  
+  
+</div>
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/categories/reversing/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Reversing
+  </span>
+</span>
+  </span>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/htbca23/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    HTBCA23
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/writeup/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Writeup
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/reversing/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Reversing
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/aes_cbc/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    AES_CBC
+  </span>
+</span>
+  </span>
+  
+  
+  
+  
+</div>
+
+
+
+        </div>
+
+        
+      </div>
+      <div class="px-6 pt-4 pb-2">
+
+      </div>
+    </div>
+  </a>
+  
+  
+
+  <a href="/posts/android_reversing_basic/" class="min-w-full">
+    
+    <div class="min-h-full border border-neutral-200 dark:border-neutral-700 border-2 rounded overflow-hidden shadow-2xl relative">
+        
+        <div class="w-full thumbnail_card_related nozoom" style="background-image:url(/img/featured.svg);"></div>
+        
+      
+
+      <div class="px-6 py-4">
+
+        
+        <div class="font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral"
+          href="/posts/android_reversing_basic/">Android Reversing - Basic Setup</div>
+        
+
+        <div class="text-sm text-neutral-500 dark:text-neutral-400">
+          
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  <time datetime="2022-02-19 22:00:00 &#43;0000 UTC">19 February 2022</time><span class="px-2 text-primary-500">&middot;</span><span>256 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">2 mins</span>
+  
+
+  
+  
+</div>
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/writeup/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Writeup
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/android/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Android
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/picoctf/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    PicoCTF
+  </span>
+</span>
+  </span>
+  
+  
+  
+  
+</div>
+
+
+
+        </div>
+
+        
+      </div>
+      <div class="px-6 pt-4 pb-2">
+
+      </div>
+    </div>
+  </a>
+  
+</section>
+
+  
+      </div>
+     
+      
+      
+        
+        
+          
+          
+        
+      <script>
+        var oid = "views_posts\\bi0sCTF_Ransomware\\index.md"
+        var oid_likes = "likes_posts\\bi0sCTF_Ransomware\\index.md"
+      </script>
+      
+      
+      
+      <script type="text/javascript" src="/js/page.min.b06a29d42a4ed16787978e2eee1e8c797b7698db2bc14ccee78f5c80ac566fc996190a73ad80a5e987558474b20b96fa38f7d85b405f165ff72b7b163c5ad11b.js" integrity="sha512-sGop1CpO0WeHl44u7h6MeXt2mNsrwUzO549cgKxWb8mWGQpzrYCl6YdVhHSyC5b6OPfYW0BfFl/3K3sWPFrRGw=="></script>
+  
+    </section>
+  <footer class="pt-8 max-w-prose print:hidden">
+
+    
+  
+    
+    
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+      <div class="flex justify-between pt-3">
+        <span>
+          
+            <a class="flex group mr-3" href="/posts/vessel_cartographer_htb2023/">
+              <span
+                class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400"
+                >&larr;</span
+              >
+              <span
+                class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400"
+                >&rarr;</span
+              >
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >Vessel Cartographer HTBCTF23</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2023-03-24 22:00:00 &#43;0000 UTC">24 March 2023</time>
+                  
+                </span>
+              </span>
+            </a>
+          
+        </span>
+        <span>
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+    
+  </footer>
+</article>
+
+      <div id="top-scroller" class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0">
+  <a href="#the-top"
+    class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+    aria-label="Scroll to top" title="Scroll to top">
+    &uarr;
+  </a>
+</div>
+    </main><footer id="site-footer" class="py-10 print:hidden">
+  
+  
+    
+    <nav class="flex flex-row pb-4 text-base font-medium text-neutral-500 dark:text-neutral-400">
+      <ul class="flex flex-col list-none sm:flex-row">
+        
+        <li class="flex mb-1 ltr:text-right rtl:text-left sm:mb-0 ltr:sm:mr-7 ltr:sm:last:mr-0 rtl:sm:ml-7 rtl:sm:last:ml-0">
+          <a class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2 flex items-center" href="/tags/"
+            title="">
+            
+            Tags
+          </a>
+        </li>
+        
+        <li class="flex mb-1 ltr:text-right rtl:text-left sm:mb-0 ltr:sm:mr-7 ltr:sm:last:mr-0 rtl:sm:ml-7 rtl:sm:last:ml-0">
+          <a class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2 flex items-center" href="/categories/"
+            title="">
+            
+            Categories
+          </a>
+        </li>
+        
+      </ul>
+    </nav>
+    
+  
+  <div class="flex items-center justify-between">
+
+    
+    
+    <p class="text-sm text-neutral-500 dark:text-neutral-400">
+      &copy;
+      2026
+      Sidharth AKA retr0ds
+    </p>
+    
+
+    
+    
+    <p class="text-xs text-neutral-500 dark:text-neutral-400">
+      
+      
+      Powered by <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> &amp; <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://blowfish.page/" target="_blank" rel="noopener noreferrer">Blowfish</a>
+    </p>
+    
+
+  </div>
+  <script>
+    
+    mediumZoom(document.querySelectorAll("img:not(.nozoom)"), {
+      margin: 24,
+      background: 'rgba(0,0,0,0.5)',
+      scrollOffset: 0,
+    })
+    
+  </script>
+  
+  
+  <script type="text/javascript" src="/js/process.min.62060bb247f4de2b6dde45903668fefb68d792f365587605177b1227c0cf43588701edaca0cb40e2c8e2789bd5ce67c1d2a215b9fb258c3496a7cd25e7cb5fdf.js" integrity="sha512-YgYLskf03itt3kWQNmj&#43;&#43;2jXkvNlWHYFF3sSJ8DPQ1iHAe2soMtA4sjieJvVzmfB0qIVufsljDSWp80l58tf3w=="></script>
+  
+  
+</footer><div
+  id="search-wrapper"
+  class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]"
+  data-url="http://localhost:1313/"
+  style="z-index:500"
+>
+  <div
+    id="search-modal"
+    class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"
+  >
+    <header class="relative z-10 flex items-center justify-between flex-none px-2">
+      <form class="flex items-center flex-auto min-w-0">
+        <div class="flex items-center justify-center w-8 h-8 text-neutral-400">
+          
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="Search"
+          tabindex="0"
+        />
+      </form>
+      <button
+        id="close-search-button"
+        class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="Close (Esc)"
+      >
+        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+
+      </button>
+    </header>
+    <section class="flex-auto px-2 overflow-auto">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+  </div>
+</body>
+
+</html>

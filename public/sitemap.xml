@@ -45,6 +45,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>http://localhost:1313/posts/bi0sctf_ransomware/</loc>
+    <lastmod>2024-03-19T19:31:40+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>http://localhost:1313/posts/vessel_cartographer_htb2023/</loc>
     <lastmod>2023-03-24T22:00:00+00:00</lastmod>
     <changefreq>daily</changefreq>

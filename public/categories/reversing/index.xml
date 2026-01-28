@@ -6,7 +6,7 @@
     <description>Recent content in Reversing on The Arcade</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <copyright>© 2024 Sidharth AKA retr0ds</copyright>
+    <copyright>© 2026 Sidharth AKA retr0ds</copyright>
     <lastBuildDate>Wed, 27 Mar 2024 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/categories/reversing/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Popping a calculator - 32 bit - Part 3/3</title>
@@ -45,6 +45,22 @@
       
       <guid>http://localhost:1313/posts/shellcoding_series/series0_basic/</guid>
       <description>Windows Shellcoding Series 0 # Init() # Welcome to the prequel blogpost of my Shellcoding Series With this I intend to start of a series of Shellcoding based blogposts aiming to develop and post interesting shellcodes</description>
+      
+    </item>
+    
+    <item>
+      <title>Batman Investigation III - Th3 Sw0rd 0f Azr43l - bi0sCTF 2024</title>
+      <link>http://localhost:1313/posts/bi0sctf_ransomware/</link>
+      <pubDate>Tue, 19 Mar 2024 19:31:40 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/bi0sctf_ransomware/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;tl;dr&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Challenge 2 of Batman Investigation series&lt;/li&gt;
+&lt;li&gt;Ransomware Investigation&lt;/li&gt;
+&lt;li&gt;Rust based Ransomware Analysis with process dump analysis to recover the randomly generated decryption vector and windows malware analysis&lt;/li&gt;
+&lt;li&gt;Recovering from a ransomware attack&lt;/li&gt;
+&lt;/ul&gt;</description>
       
     </item>
     
