@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>HTBCA23 on The Arcade</title>
-    <link>http://localhost:1313/tags/htbca23/</link>
+    <link>https://retr0ds.github.io/tags/htbca23/</link>
     <description>Recent content in HTBCA23 on The Arcade</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>© 2026 Sidharth AKA retr0ds</copyright>
-    <lastBuildDate>Fri, 24 Mar 2023 22:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/htbca23/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 24 Mar 2023 22:00:00 +0000</lastBuildDate><atom:link href="https://retr0ds.github.io/tags/htbca23/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Vessel Cartographer HTBCTF23</title>
-      <link>http://localhost:1313/posts/vessel_cartographer_htb2023/</link>
+      <link>https://retr0ds.github.io/posts/vessel_cartographer_htb2023/</link>
       <pubDate>Fri, 24 Mar 2023 22:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/posts/vessel_cartographer_htb2023/</guid>
+      <guid>https://retr0ds.github.io/posts/vessel_cartographer_htb2023/</guid>
       <description>&lt;p&gt;&lt;strong&gt;tl;dr&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Dynamically resolved hashed API&lt;/li&gt;
@@ -21,7 +21,7 @@
 &lt;li&gt;AntiDebugFlag check implemented using ProcessInformationClass&lt;/li&gt;
 &lt;li&gt;AES_CBC decryption of image  to find flag&lt;/li&gt;
 &lt;/ul&gt;</description>
-      
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://retr0ds.github.io/posts/vessel_cartographer_htb2023/featured.jpeg" />
     </item>
     
   </channel>

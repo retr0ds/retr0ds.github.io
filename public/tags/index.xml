@@ -2,148 +2,198 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on The Arcade</title>
-    <link>http://localhost:1313/tags/</link>
+    <link>https://retr0ds.github.io/tags/</link>
     <description>Recent content in Tags on The Arcade</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>© 2026 Sidharth AKA retr0ds</copyright>
-    <lastBuildDate>Wed, 27 Mar 2024 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 25 Nov 2025 19:31:40 +0000</lastBuildDate><atom:link href="https://retr0ds.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Analysis</title>
+      <link>https://retr0ds.github.io/tags/analysis/</link>
+      <pubDate>Tue, 25 Nov 2025 19:31:40 +0000</pubDate>
+      
+      <guid>https://retr0ds.github.io/tags/analysis/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Malware</title>
+      <link>https://retr0ds.github.io/tags/malware/</link>
+      <pubDate>Tue, 25 Nov 2025 19:31:40 +0000</pubDate>
+      
+      <guid>https://retr0ds.github.io/tags/malware/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>RAT</title>
+      <link>https://retr0ds.github.io/tags/rat/</link>
+      <pubDate>Tue, 25 Nov 2025 19:31:40 +0000</pubDate>
+      
+      <guid>https://retr0ds.github.io/tags/rat/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Remcos</title>
+      <link>https://retr0ds.github.io/tags/remcos/</link>
+      <pubDate>Tue, 25 Nov 2025 19:31:40 +0000</pubDate>
+      
+      <guid>https://retr0ds.github.io/tags/remcos/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Reverse Engineering</title>
+      <link>https://retr0ds.github.io/tags/reverse-engineering/</link>
+      <pubDate>Tue, 25 Nov 2025 19:31:40 +0000</pubDate>
+      
+      <guid>https://retr0ds.github.io/tags/reverse-engineering/</guid>
+      <description></description>
+      
+    </item>
+    
     <item>
       <title>Blog</title>
-      <link>http://localhost:1313/tags/blog/</link>
+      <link>https://retr0ds.github.io/tags/blog/</link>
       <pubDate>Wed, 27 Mar 2024 00:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/tags/blog/</guid>
+      <guid>https://retr0ds.github.io/tags/blog/</guid>
       <description></description>
       
     </item>
     
     <item>
       <title>Pop_a_calc</title>
-      <link>http://localhost:1313/tags/pop_a_calc/</link>
+      <link>https://retr0ds.github.io/tags/pop_a_calc/</link>
       <pubDate>Wed, 27 Mar 2024 00:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/tags/pop_a_calc/</guid>
+      <guid>https://retr0ds.github.io/tags/pop_a_calc/</guid>
       <description></description>
       
     </item>
     
     <item>
       <title>Series</title>
-      <link>http://localhost:1313/tags/series/</link>
+      <link>https://retr0ds.github.io/tags/series/</link>
       <pubDate>Wed, 27 Mar 2024 00:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/tags/series/</guid>
+      <guid>https://retr0ds.github.io/tags/series/</guid>
       <description></description>
       
     </item>
     
     <item>
       <title>Shellcode</title>
-      <link>http://localhost:1313/tags/shellcode/</link>
+      <link>https://retr0ds.github.io/tags/shellcode/</link>
       <pubDate>Wed, 27 Mar 2024 00:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/tags/shellcode/</guid>
+      <guid>https://retr0ds.github.io/tags/shellcode/</guid>
       <description></description>
       
     </item>
     
     <item>
       <title>Windows</title>
-      <link>http://localhost:1313/tags/windows/</link>
+      <link>https://retr0ds.github.io/tags/windows/</link>
       <pubDate>Wed, 27 Mar 2024 00:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/tags/windows/</guid>
+      <guid>https://retr0ds.github.io/tags/windows/</guid>
       <description></description>
       
     </item>
     
     <item>
       <title>Bi0sCTF</title>
-      <link>http://localhost:1313/tags/bi0sctf/</link>
+      <link>https://retr0ds.github.io/tags/bi0sctf/</link>
       <pubDate>Tue, 19 Mar 2024 19:31:40 +0000</pubDate>
       
-      <guid>http://localhost:1313/tags/bi0sctf/</guid>
+      <guid>https://retr0ds.github.io/tags/bi0sctf/</guid>
       <description></description>
       
     </item>
     
     <item>
       <title>Forensics</title>
-      <link>http://localhost:1313/tags/forensics/</link>
+      <link>https://retr0ds.github.io/tags/forensics/</link>
       <pubDate>Tue, 19 Mar 2024 19:31:40 +0000</pubDate>
       
-      <guid>http://localhost:1313/tags/forensics/</guid>
+      <guid>https://retr0ds.github.io/tags/forensics/</guid>
       <description></description>
       
     </item>
     
     <item>
       <title>RansomWare</title>
-      <link>http://localhost:1313/tags/ransomware/</link>
+      <link>https://retr0ds.github.io/tags/ransomware/</link>
       <pubDate>Tue, 19 Mar 2024 19:31:40 +0000</pubDate>
       
-      <guid>http://localhost:1313/tags/ransomware/</guid>
+      <guid>https://retr0ds.github.io/tags/ransomware/</guid>
       <description></description>
       
     </item>
     
     <item>
       <title>Reversing</title>
-      <link>http://localhost:1313/tags/reversing/</link>
+      <link>https://retr0ds.github.io/tags/reversing/</link>
       <pubDate>Tue, 19 Mar 2024 19:31:40 +0000</pubDate>
       
-      <guid>http://localhost:1313/tags/reversing/</guid>
+      <guid>https://retr0ds.github.io/tags/reversing/</guid>
       <description></description>
       
     </item>
     
     <item>
       <title>Writeup</title>
-      <link>http://localhost:1313/tags/writeup/</link>
+      <link>https://retr0ds.github.io/tags/writeup/</link>
       <pubDate>Tue, 19 Mar 2024 19:31:40 +0000</pubDate>
       
-      <guid>http://localhost:1313/tags/writeup/</guid>
+      <guid>https://retr0ds.github.io/tags/writeup/</guid>
       <description></description>
       
     </item>
     
     <item>
       <title>AES_CBC</title>
-      <link>http://localhost:1313/tags/aes_cbc/</link>
+      <link>https://retr0ds.github.io/tags/aes_cbc/</link>
       <pubDate>Fri, 24 Mar 2023 22:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/tags/aes_cbc/</guid>
+      <guid>https://retr0ds.github.io/tags/aes_cbc/</guid>
       <description></description>
       
     </item>
     
     <item>
       <title>HTBCA23</title>
-      <link>http://localhost:1313/tags/htbca23/</link>
+      <link>https://retr0ds.github.io/tags/htbca23/</link>
       <pubDate>Fri, 24 Mar 2023 22:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/tags/htbca23/</guid>
+      <guid>https://retr0ds.github.io/tags/htbca23/</guid>
       <description></description>
       
     </item>
     
     <item>
       <title>Android</title>
-      <link>http://localhost:1313/tags/android/</link>
+      <link>https://retr0ds.github.io/tags/android/</link>
       <pubDate>Sat, 19 Feb 2022 22:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/tags/android/</guid>
+      <guid>https://retr0ds.github.io/tags/android/</guid>
       <description></description>
       
     </item>
     
     <item>
       <title>PicoCTF</title>
-      <link>http://localhost:1313/tags/picoctf/</link>
+      <link>https://retr0ds.github.io/tags/picoctf/</link>
       <pubDate>Sat, 19 Feb 2022 22:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/tags/picoctf/</guid>
+      <guid>https://retr0ds.github.io/tags/picoctf/</guid>
       <description></description>
       
     </item>

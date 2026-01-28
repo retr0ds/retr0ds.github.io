@@ -2,18 +2,28 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on The Arcade</title>
-    <link>http://localhost:1313/categories/</link>
+    <link>https://retr0ds.github.io/categories/</link>
     <description>Recent content in Categories on The Arcade</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>© 2026 Sidharth AKA retr0ds</copyright>
-    <lastBuildDate>Wed, 27 Mar 2024 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 25 Nov 2025 19:31:40 +0000</lastBuildDate><atom:link href="https://retr0ds.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Malware</title>
+      <link>https://retr0ds.github.io/categories/malware/</link>
+      <pubDate>Tue, 25 Nov 2025 19:31:40 +0000</pubDate>
+      
+      <guid>https://retr0ds.github.io/categories/malware/</guid>
+      <description></description>
+      
+    </item>
+    
     <item>
       <title>Reversing</title>
-      <link>http://localhost:1313/categories/reversing/</link>
-      <pubDate>Wed, 27 Mar 2024 00:00:00 +0000</pubDate>
+      <link>https://retr0ds.github.io/categories/reversing/</link>
+      <pubDate>Tue, 25 Nov 2025 19:31:40 +0000</pubDate>
       
-      <guid>http://localhost:1313/categories/reversing/</guid>
+      <guid>https://retr0ds.github.io/categories/reversing/</guid>
       <description></description>
       
     </item>

@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Writeup on The Arcade</title>
-    <link>http://localhost:1313/tags/writeup/</link>
+    <link>https://retr0ds.github.io/tags/writeup/</link>
     <description>Recent content in Writeup on The Arcade</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>© 2026 Sidharth AKA retr0ds</copyright>
-    <lastBuildDate>Tue, 19 Mar 2024 19:31:40 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/writeup/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 19 Mar 2024 19:31:40 +0000</lastBuildDate><atom:link href="https://retr0ds.github.io/tags/writeup/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Batman Investigation III - Th3 Sw0rd 0f Azr43l - bi0sCTF 2024</title>
-      <link>http://localhost:1313/posts/bi0sctf_ransomware/</link>
+      <title>Rust Ransomware Analysis</title>
+      <link>https://retr0ds.github.io/posts/bi0sctf_ransomware/</link>
       <pubDate>Tue, 19 Mar 2024 19:31:40 +0000</pubDate>
       
-      <guid>http://localhost:1313/posts/bi0sctf_ransomware/</guid>
+      <guid>https://retr0ds.github.io/posts/bi0sctf_ransomware/</guid>
       <description>&lt;p&gt;&lt;strong&gt;tl;dr&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Challenge 2 of Batman Investigation series&lt;/li&gt;
@@ -21,15 +21,15 @@
 &lt;li&gt;Rust based Ransomware Analysis with process dump analysis to recover the randomly generated decryption vector and windows malware analysis&lt;/li&gt;
 &lt;li&gt;Recovering from a ransomware attack&lt;/li&gt;
 &lt;/ul&gt;</description>
-      
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://retr0ds.github.io/posts/bi0sctf_ransomware/featured.jpeg" />
     </item>
     
     <item>
       <title>Vessel Cartographer HTBCTF23</title>
-      <link>http://localhost:1313/posts/vessel_cartographer_htb2023/</link>
+      <link>https://retr0ds.github.io/posts/vessel_cartographer_htb2023/</link>
       <pubDate>Fri, 24 Mar 2023 22:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/posts/vessel_cartographer_htb2023/</guid>
+      <guid>https://retr0ds.github.io/posts/vessel_cartographer_htb2023/</guid>
       <description>&lt;p&gt;&lt;strong&gt;tl;dr&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Dynamically resolved hashed API&lt;/li&gt;
@@ -37,17 +37,17 @@
 &lt;li&gt;AntiDebugFlag check implemented using ProcessInformationClass&lt;/li&gt;
 &lt;li&gt;AES_CBC decryption of image  to find flag&lt;/li&gt;
 &lt;/ul&gt;</description>
-      
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://retr0ds.github.io/posts/vessel_cartographer_htb2023/featured.jpeg" />
     </item>
     
     <item>
       <title>Android Reversing - Basic Setup</title>
-      <link>http://localhost:1313/posts/android_reversing_basic/</link>
+      <link>https://retr0ds.github.io/posts/android_reversing_basic/</link>
       <pubDate>Sat, 19 Feb 2022 22:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/posts/android_reversing_basic/</guid>
+      <guid>https://retr0ds.github.io/posts/android_reversing_basic/</guid>
       <description>This covers basic android reversing that I did in my freshman year</description>
-      
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://retr0ds.github.io/posts/android_reversing_basic/featured.jpeg" />
     </item>
     
   </channel>

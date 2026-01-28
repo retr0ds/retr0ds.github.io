@@ -3,61 +3,73 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
   <url>
-    <loc>http://localhost:1313/posts/shellcoding_series/series1_pop_a_calc_part_3/</loc>
-    <lastmod>2024-03-27T00:00:00+00:00</lastmod>
+    <loc>https://retr0ds.github.io/posts/remcosrat_first_stage/</loc>
+    <lastmod>2025-11-25T19:31:40+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://localhost:1313/posts/shellcoding_series/series1_pop_a_calc_part_2/</loc>
-    <lastmod>2024-03-27T00:00:00+00:00</lastmod>
+    <loc>https://retr0ds.github.io/posts/mal_generated30/</loc>
+    <lastmod>2025-09-25T19:31:40+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://localhost:1313/posts/shellcoding_series/series1_pop_a_calc_part_1/</loc>
-    <lastmod>2024-03-27T00:00:00+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>http://localhost:1313/</loc>
-    <lastmod>2024-03-27T00:00:00+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>http://localhost:1313/posts/shellcoding_series/</loc>
-    <lastmod>2024-03-27T00:00:00+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>http://localhost:1313/posts/</loc>
-    <lastmod>2024-03-27T00:00:00+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>http://localhost:1313/posts/shellcoding_series/series0_basic/</loc>
-    <lastmod>2024-03-27T00:00:00+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>http://localhost:1313/posts/bi0sctf_ransomware/</loc>
+    <loc>https://retr0ds.github.io/posts/bi0sctf_ransomware/</loc>
     <lastmod>2024-03-19T19:31:40+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://localhost:1313/posts/vessel_cartographer_htb2023/</loc>
+    <loc>https://retr0ds.github.io/posts/vessel_cartographer_htb2023/</loc>
     <lastmod>2023-03-24T22:00:00+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://localhost:1313/posts/android_reversing_basic/</loc>
+    <loc>https://retr0ds.github.io/</loc>
+    <lastmod>2025-11-25T19:31:40+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://retr0ds.github.io/posts/</loc>
+    <lastmod>2025-11-25T19:31:40+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://retr0ds.github.io/posts/shellcoding_series/series1_pop_a_calc_part_3/</loc>
+    <lastmod>2024-03-27T00:00:00+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://retr0ds.github.io/posts/shellcoding_series/series1_pop_a_calc_part_2/</loc>
+    <lastmod>2024-03-27T00:00:00+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://retr0ds.github.io/posts/shellcoding_series/series1_pop_a_calc_part_1/</loc>
+    <lastmod>2024-03-27T00:00:00+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://retr0ds.github.io/posts/shellcoding_series/</loc>
+    <lastmod>2024-03-27T00:00:00+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://retr0ds.github.io/posts/shellcoding_series/series0_basic/</loc>
+    <lastmod>2024-03-27T00:00:00+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://retr0ds.github.io/posts/android_reversing_basic/</loc>
     <lastmod>2022-02-19T22:00:00+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>

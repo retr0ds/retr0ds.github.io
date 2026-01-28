@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Android on The Arcade</title>
-    <link>http://localhost:1313/tags/android/</link>
+    <link>https://retr0ds.github.io/tags/android/</link>
     <description>Recent content in Android on The Arcade</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>© 2026 Sidharth AKA retr0ds</copyright>
-    <lastBuildDate>Sat, 19 Feb 2022 22:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/android/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 19 Feb 2022 22:00:00 +0000</lastBuildDate><atom:link href="https://retr0ds.github.io/tags/android/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Android Reversing - Basic Setup</title>
-      <link>http://localhost:1313/posts/android_reversing_basic/</link>
+      <link>https://retr0ds.github.io/posts/android_reversing_basic/</link>
       <pubDate>Sat, 19 Feb 2022 22:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/posts/android_reversing_basic/</guid>
+      <guid>https://retr0ds.github.io/posts/android_reversing_basic/</guid>
       <description>This covers basic android reversing that I did in my freshman year</description>
-      
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://retr0ds.github.io/posts/android_reversing_basic/featured.jpeg" />
     </item>
     
   </channel>

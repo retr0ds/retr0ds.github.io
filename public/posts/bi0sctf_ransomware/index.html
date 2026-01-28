@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr" class="scroll-smooth" data-default-appearance="dark"
-  data-auto-appearance="true"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  data-auto-appearance="true"><head>
   <meta charset="utf-8" />
   
   <meta http-equiv="content-language" content="en" />
@@ -8,14 +8,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   
-  <title>Batman Investigation III - Th3 Sw0rd 0f Azr43l - bi0sCTF 2024 &middot; The Arcade</title>
-  <meta name="title" content="Batman Investigation III - Th3 Sw0rd 0f Azr43l - bi0sCTF 2024 &middot; The Arcade" />
+  <title>Rust Ransomware Analysis &middot; The Arcade</title>
+  <meta name="title" content="Rust Ransomware Analysis &middot; The Arcade" />
   
   <meta name="description" content="Contains the writeup to the Ransomware part of the Batman Investigation III from bi0s CTF 2024" />
   <meta name="keywords" content="bi0sCTF, RansomWare, Reversing, Forensics, Writeup, " />
   
   
-  <link rel="canonical" href="http://localhost:1313/posts/bi0sctf_ransomware/" />
+  <link rel="canonical" href="https://retr0ds.github.io/posts/bi0sctf_ransomware/" />
   
   
   
@@ -65,7 +65,7 @@
   
   
   
-  <meta property="og:title" content="Batman Investigation III - Th3 Sw0rd 0f Azr43l - bi0sCTF 2024" />
+  <meta property="og:title" content="Rust Ransomware Analysis" />
 <meta property="og:description" content="tl;dr
 
 Challenge 2 of Batman Investigation series
@@ -74,12 +74,13 @@ Rust based Ransomware Analysis with process dump analysis to recover the randoml
 Recovering from a ransomware attack
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://localhost:1313/posts/bi0sctf_ransomware/" /><meta property="article:section" content="posts" />
+<meta property="og:url" content="https://retr0ds.github.io/posts/bi0sctf_ransomware/" /><meta property="og:image" content="https://retr0ds.github.io/posts/bi0sctf_ransomware/featured.jpeg" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2024-03-19T19:31:40+00:00" />
 <meta property="article:modified_time" content="2024-03-19T19:31:40+00:00" />
 
 
-  <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Batman Investigation III - Th3 Sw0rd 0f Azr43l - bi0sCTF 2024"/>
+  <meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://retr0ds.github.io/posts/bi0sctf_ransomware/featured.jpeg" /><meta name="twitter:title" content="Rust Ransomware Analysis"/>
 <meta name="twitter:description" content="tl;dr
 
 Challenge 2 of Batman Investigation series
@@ -94,12 +95,12 @@ Recovering from a ransomware attack
     "@context": "https://schema.org",
     "@type": "Article",
     "articleSection": "Welcome to Posts!",
-    "name": "Batman Investigation III - Th3 Sw0rd 0f Azr43l - bi0sCTF 2024",
-    "headline": "Batman Investigation III - Th3 Sw0rd 0f Azr43l - bi0sCTF 2024",
+    "name": "Rust Ransomware Analysis",
+    "headline": "Rust Ransomware Analysis",
     
     "abstract": "\u003cp\u003e\u003cstrong\u003etl;dr\u003c\/strong\u003e\u003c\/p\u003e\n\u003cul\u003e\n\u003cli\u003eChallenge 2 of Batman Investigation series\u003c\/li\u003e\n\u003cli\u003eRansomware Investigation\u003c\/li\u003e\n\u003cli\u003eRust based Ransomware Analysis with process dump analysis to recover the randomly generated decryption vector and windows malware analysis\u003c\/li\u003e\n\u003cli\u003eRecovering from a ransomware attack\u003c\/li\u003e\n\u003c\/ul\u003e",
     "inLanguage": "en",
-    "url" : "http:\/\/localhost:1313\/posts\/bi0sctf_ransomware\/",
+    "url" : "https:\/\/retr0ds.github.io\/posts\/bi0sctf_ransomware\/",
     "author" : {
       "@type": "Person",
       "name": "Sidharth AKA retr0ds"
@@ -113,7 +114,7 @@ Recovering from a ransomware attack
     "keywords": ["bi0sCTF","RansomWare","Reversing","Forensics","Writeup"],
     
     "mainEntityOfPage": "true",
-    "wordCount": "4077"
+    "wordCount": "4068"
   }]
   </script>
 
@@ -561,19 +562,13 @@ Recovering from a ransomware attack
   
   
   
- 
-  
-   
-  
- 
-
 
 
 
 
     
     <div class="fixed inset-x-0 top-0 h-[800px] single_hero_background nozoom"
-    style="background-image:url(/img/background.svg);">
+    style="background-image:url(/posts/bi0sctf_ransomware/featured_hu40fea7d3ebf0218abc1af3e2176cfa40_181367_1200x0_resize_q75_box.jpeg);">
     
 
 
@@ -599,7 +594,7 @@ Recovering from a ransomware attack
   <header id="single_header" class="mt-5 max-w-prose">
     
     <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
-      Batman Investigation III - Th3 Sw0rd 0f Azr43l - bi0sCTF 2024
+      Rust Ransomware Analysis
     </h1>
     <div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
       
@@ -646,7 +641,7 @@ Recovering from a ransomware attack
 <div class="flex flex-row flex-wrap items-center">
   
   
-  <time datetime="2024-03-19 19:31:40 &#43;0000 UTC">19 March 2024</time><span class="px-2 text-primary-500">&middot;</span><span>4077 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">20 mins</span><span class="px-2 text-primary-500">&middot;</span>
+  <time datetime="2024-03-19 19:31:40 &#43;0000 UTC">19 March 2024</time><span class="px-2 text-primary-500">&middot;</span><span>4068 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">20 mins</span><span class="px-2 text-primary-500">&middot;</span>
 
 
 <script type="text/javascript" src="/js/zen-mode.min.ccc8b2a0c4505216444ca25530c7328aa0bef94f43dabaf3e598e1b4271de9eec76c1cb35917471a4f7ccb8d84051b3acef42baa30724ac3a667fcf1fec4432a.js" integrity="sha512-zMiyoMRQUhZETKJVMMcyiqC&#43;&#43;U9D2rrz5ZjhtCcd6e7HbByzWRdHGk98y42EBRs6zvQrqjBySsOmZ/zx/sRDKg=="></script>
@@ -950,14 +945,9 @@ Recovering from a ransomware attack
     class="min-w-[220px] py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#challenge-description">Challenge Description:</a>
       <ul>
         <li>
-          <ul>
-            <li><a href="#challenge-description">Challenge Description:</a></li>
-          </ul>
-        </li>
-        <li><a href="#flag-format-bi0sctf"><code>Flag format: bi0sctf{...}</code></a>
           <ul>
             <li>
               <ul>
@@ -1056,14 +1046,9 @@ Recovering from a ransomware attack
     class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#challenge-description">Challenge Description:</a>
       <ul>
         <li>
-          <ul>
-            <li><a href="#challenge-description">Challenge Description:</a></li>
-          </ul>
-        </li>
-        <li><a href="#flag-format-bi0sctf"><code>Flag format: bi0sctf{...}</code></a>
           <ul>
             <li>
               <ul>
@@ -1218,7 +1203,7 @@ Recovering from a ransomware attack
     Azr43lKn1ght</a></p>
 
 
-<h3 class="relative group">Challenge Description: 
+<h1 class="relative group">Challenge Description: 
     <div id="challenge-description" class="anchor"></div>
     
     <span
@@ -1227,29 +1212,18 @@ Recovering from a ransomware attack
             style="text-decoration-line: none !important;" href="#challenge-description" aria-label="Anchor">#</a>
     </span>        
     
-</h3>
+</h1>
 <p>Azrael the Archangel of Vengeance has joined the batfamily after destroying the machine of St Dumas defeating face to face against his most startling foe, the undying heirophant, the first son of St Dumas. The Dumas is not completely destroyed and the heirarchy out somewhere out, Jean Paul, our Azrael has a shared workspace with Duke Thomas, The signal. St Dumas got them now by sending the weapon of azrael but we got the attack process captured by signal as he was the one who let it in unknowingly. Azrael and Signal are trying to fix things to get back whatever is lost as well not get in the clutches of the order. They should now have to safegaurd batman&rsquo;s files as well as their own important ones. if they get it back before Dumas knowing they are getting close to finding them to stop the order as well the birth and training of new Azraels when they are waiting for negotiation or some plan to take our protagonists with hold of the recovery shard. Can you help them to recover from the loses and find the weapon of Azrael ,so they can take down the order of the St Dumas?</p>
 <p>File Password : <strong>E6qK~$9pUIk0kT'3&amp;N/Okt</strong></p>
 <p><strong>Challenge Files</strong>:</p>
 <ul>
 <li><a href="https://amritauniv-my.sharepoint.com/:u:/g/personal/inctfj_am_amrita_edu/ER1nPhaT_UZCsg1DxHupEVcBbng6-vCeUZ9ptj06aDbUJg?e=HB2RZY"   target="_blank">
     Primary Link</a></li>
-<li><a href="https://www.dropbox.com/scl/fi/owrkj3du3zy8btbizm2tv/Chall_Images.zip?rlkey=dm7lbpeabc6jtdat58mt07ze9&amp;dl=0"   target="_blank">
+<li><a href="https://www.dropbox.com/scl/fi/owrkj3du3zy8btbizm2tv/Chall_images/images.zip?rlkey=dm7lbpeabc6jtdat58mt07ze9&amp;dl=0"   target="_blank">
     Mirror Link</a></li>
-<li>nc link</li>
 </ul>
-
-
-<h2 class="relative group"><code>Flag format: bi0sctf{...}</code> 
-    <div id="flag-format-bi0sctf" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
-        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
-            style="text-decoration-line: none !important;" href="#flag-format-bi0sctf" aria-label="Anchor">#</a>
-    </span>        
-    
-</h2>
+<hr>
+<p><code>Flag format: bi0sctf{...}</code></p>
 <p>We&rsquo;ll be starting with question 5 of the challenge cuz that&rsquo;s where the real reversing comes in, so the quesiton 5 is as follows</p>
 
 
@@ -1273,9 +1247,23 @@ Format: ip:port</p>
 
   
   
+    
+  
   
     <figure>
-      <img class="my-0 rounded-md" loading="lazy" src="image-9.png" alt="alt text" />
+      
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        /posts/bi0sctf_ransomware/images/image-12_hu282e71f105b90488db83c23fd2adc77d_256965_330x0_resize_box_3.png 330w,
+        /posts/bi0sctf_ransomware/images/image-12_hu282e71f105b90488db83c23fd2adc77d_256965_660x0_resize_box_3.png 660w,
+        /posts/bi0sctf_ransomware/images/image-12_hu282e71f105b90488db83c23fd2adc77d_256965_1024x0_resize_box_3.png 1024w,
+        /posts/bi0sctf_ransomware/images/image-12_hu282e71f105b90488db83c23fd2adc77d_256965_1320x0_resize_box_3.png 2x"
+        src="/posts/bi0sctf_ransomware/images/image-12_hu282e71f105b90488db83c23fd2adc77d_256965_660x0_resize_box_3.png"
+        alt="alt text"
+      />
+      
       
     </figure>
   
@@ -1288,24 +1276,23 @@ Format: ip:port</p>
 
   
   
+    
+  
   
     <figure>
-      <img class="my-0 rounded-md" loading="lazy" src="image-12.png" alt="alt text" />
       
-    </figure>
-  
-
-</p>
-<p>
-
-
-
-
-  
-  
-  
-    <figure>
-      <img class="my-0 rounded-md" loading="lazy" src="image-10.png" alt="alt text" />
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        /posts/bi0sctf_ransomware/images/image-10_hu86109304a896bce486c306d2e4aca027_174395_330x0_resize_box_3.png 330w,
+        /posts/bi0sctf_ransomware/images/image-10_hu86109304a896bce486c306d2e4aca027_174395_660x0_resize_box_3.png 660w,
+        /posts/bi0sctf_ransomware/images/image-10_hu86109304a896bce486c306d2e4aca027_174395_1024x0_resize_box_3.png 1024w,
+        /posts/bi0sctf_ransomware/images/image-10_hu86109304a896bce486c306d2e4aca027_174395_1320x0_resize_box_3.png 2x"
+        src="/posts/bi0sctf_ransomware/images/image-10_hu86109304a896bce486c306d2e4aca027_174395_660x0_resize_box_3.png"
+        alt="alt text"
+      />
+      
       
     </figure>
   
@@ -1319,9 +1306,23 @@ Format: ip:port</p>
 
   
   
+    
+  
   
     <figure>
-      <img class="my-0 rounded-md" loading="lazy" src="image-11.png" alt="alt text" />
+      
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        /posts/bi0sctf_ransomware/images/image-11_hued826386559ab86402883b58dcb27fda_35561_330x0_resize_box_3.png 330w,
+        /posts/bi0sctf_ransomware/images/image-11_hued826386559ab86402883b58dcb27fda_35561_660x0_resize_box_3.png 660w,
+        /posts/bi0sctf_ransomware/images/image-11_hued826386559ab86402883b58dcb27fda_35561_1024x0_resize_box_3.png 1024w,
+        /posts/bi0sctf_ransomware/images/image-11_hued826386559ab86402883b58dcb27fda_35561_1320x0_resize_box_3.png 2x"
+        src="/posts/bi0sctf_ransomware/images/image-11_hued826386559ab86402883b58dcb27fda_35561_660x0_resize_box_3.png"
+        alt="alt text"
+      />
+      
       
     </figure>
   
@@ -1335,9 +1336,23 @@ Format: ip:port</p>
 
   
   
+    
+  
   
     <figure>
-      <img class="my-0 rounded-md" loading="lazy" src="image-13.png" alt="alt text" />
+      
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        /posts/bi0sctf_ransomware/images/image-13_hu0b6d5fe9d135fbed7f0f522b1e85db02_259804_330x0_resize_box_3.png 330w,
+        /posts/bi0sctf_ransomware/images/image-13_hu0b6d5fe9d135fbed7f0f522b1e85db02_259804_660x0_resize_box_3.png 660w,
+        /posts/bi0sctf_ransomware/images/image-13_hu0b6d5fe9d135fbed7f0f522b1e85db02_259804_1024x0_resize_box_3.png 1024w,
+        /posts/bi0sctf_ransomware/images/image-13_hu0b6d5fe9d135fbed7f0f522b1e85db02_259804_1320x0_resize_box_3.png 2x"
+        src="/posts/bi0sctf_ransomware/images/image-13_hu0b6d5fe9d135fbed7f0f522b1e85db02_259804_660x0_resize_box_3.png"
+        alt="alt text"
+      />
+      
       
     </figure>
   
@@ -1350,9 +1365,23 @@ Format: ip:port</p>
 
   
   
+    
+  
   
     <figure>
-      <img class="my-0 rounded-md" loading="lazy" src="image-14.png" alt="alt text" />
+      
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        /posts/bi0sctf_ransomware/images/image-14_hu4a81475038036ac2d08fd7e09595fcf9_486591_330x0_resize_box_3.png 330w,
+        /posts/bi0sctf_ransomware/images/image-14_hu4a81475038036ac2d08fd7e09595fcf9_486591_660x0_resize_box_3.png 660w,
+        /posts/bi0sctf_ransomware/images/image-14_hu4a81475038036ac2d08fd7e09595fcf9_486591_1024x0_resize_box_3.png 1024w,
+        /posts/bi0sctf_ransomware/images/image-14_hu4a81475038036ac2d08fd7e09595fcf9_486591_1320x0_resize_box_3.png 2x"
+        src="/posts/bi0sctf_ransomware/images/image-14_hu4a81475038036ac2d08fd7e09595fcf9_486591_660x0_resize_box_3.png"
+        alt="alt text"
+      />
+      
       
     </figure>
   
@@ -1377,10 +1406,14 @@ Format: ip:port</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/H11N5K_Tp.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/H11N5K_Tp.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>We open the binary in Detect_it_easy,
@@ -1389,10 +1422,14 @@ Format: ip:port</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/B1_H5Kda6.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/B1_H5Kda6.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>And we can clearly see it is a UPX packed binary, meaning we would have to unpack it first</p>
@@ -1405,10 +1442,14 @@ Format: ip:port</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/r1evcYuaa.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/r1evcYuaa.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>Now the unpacked binary when put through DIE seems to be normal
@@ -1417,10 +1458,14 @@ Format: ip:port</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/Hy2w5FOTp.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/Hy2w5FOTp.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>trying strings on it we see a few intersting strings such as
@@ -1429,10 +1474,14 @@ Format: ip:port</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/SJCNnF_T6.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/SJCNnF_T6.png" alt="images/image" />
+      
+    </figure>
+  
 
 
 
@@ -1440,10 +1489,14 @@ Format: ip:port</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rJpY3Ydp6.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/rJpY3Ydp6.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <ul>
@@ -1465,10 +1518,14 @@ Format: ip:port</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/r1eA2Kdp6.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/r1eA2Kdp6.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>we also see strings pertaining to chacha20, giving us a small idea on what this ransomware might entail</p>
@@ -1503,10 +1560,14 @@ Format: ip:port</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/SJWN0tupa.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/SJWN0tupa.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>In a rust binary unlike the C/C++ binaries, the main is not actually a main, rather it passes the function pointer of main to another function called lang_start</p>
@@ -1529,10 +1590,14 @@ An IsDebuggerPresent call</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/B1YYH9_aa.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/B1YYH9_aa.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>So we can easily either NOP out these bytes or convert the jnz to jz as such</p>
@@ -1541,10 +1606,14 @@ An IsDebuggerPresent call</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rJE5Hqu6T.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/rJE5Hqu6T.png" alt="images/image" />
+      
+    </figure>
+  
 
 
 
@@ -1552,10 +1621,14 @@ An IsDebuggerPresent call</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/Sk_cS5OTT.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/Sk_cS5OTT.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>Now this would help us during our debugging session, if we need to step through this function</p>
@@ -1577,10 +1650,14 @@ An IsDebuggerPresent call</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HySsP9u6a.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/HySsP9u6a.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>Googling for the struct LASTINPUTINFO</p>
@@ -1589,10 +1666,14 @@ An IsDebuggerPresent call</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BJHnwcdp6.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/BJHnwcdp6.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>As it says, we get a structure filled with the last input info</p>
@@ -1601,10 +1682,14 @@ An IsDebuggerPresent call</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/H1U6w9_6p.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/H1U6w9_6p.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>This function fills the dwTime field of the structure with the milliseconds (tick count) of the last input info. The milliseconds here are from the start of system_time</p>
@@ -1614,10 +1699,14 @@ An IsDebuggerPresent call</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/r1Pl_iO6T.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/r1Pl_iO6T.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 
@@ -1638,10 +1727,14 @@ An IsDebuggerPresent call</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/ry8wusOT6.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/ry8wusOT6.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>As mentioned, it returns the number of milliseconds since the system was started,
@@ -1651,10 +1744,14 @@ And that is being subtracted from the time the last input was taken and compared
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rJldOjuTT.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/rJldOjuTT.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>For the next block of code above, in the if condition we see it takes a fills a structure plii with the current cursor position and and then sleeps for 5 seconds, then measures the next cursor position and we can see a ‘mm_cmepeq_epi132’ , indicating a compare, thus these two measured cursor positions are compared and if it is the same then it is marked as True, at which point the malware exits and stops running as well.</p>
@@ -1665,10 +1762,14 @@ And that is being subtracted from the time the last input was taken and compared
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BkletoOap.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/BkletoOap.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>We see the use of a function “GetAsyncKeyState”</p>
@@ -1690,10 +1791,14 @@ And that is being subtracted from the time the last input was taken and compared
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HJUfKs_p6.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/HJUfKs_p6.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>As it mentions, it determines which key was pressed during the latest IO operation</p>
@@ -1704,10 +1809,14 @@ And that is being subtracted from the time the last input was taken and compared
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/Hk-EFjua6.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/Hk-EFjua6.png" alt="images/image" />
+      
+    </figure>
+  
 
 
 Under the virtual <a href="https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes"   target="_blank">
@@ -1718,10 +1827,14 @@ Under the virtual <a href="https://learn.microsoft.com/en-us/windows/win32/input
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/r1UtKju66.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/r1UtKju66.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>Based on this we can see it keeps track of how many times left click was registered and how many times right click was registered in the variables v1 and v2</p>
@@ -1735,10 +1848,14 @@ Under the virtual <a href="https://learn.microsoft.com/en-us/windows/win32/input
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BypBeC_Tp.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/BypBeC_Tp.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 
@@ -1758,10 +1875,14 @@ Under the virtual <a href="https://learn.microsoft.com/en-us/windows/win32/input
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BJIOa1ta6.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/BJIOa1ta6.png" alt="images/image" />
+      
+    </figure>
+  
 
 
 has been rechanged to
@@ -1770,10 +1891,14 @@ has been rechanged to
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/ryRUpJtTT.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/ryRUpJtTT.png" alt="images/image" />
+      
+    </figure>
+  
 
 
 going into the function it seems too much to sit and revers statically, I&rsquo;ll come back to this later and look at it dynamically</p>
@@ -1795,10 +1920,14 @@ going into the function it seems too much to sit and revers statically, I&rsquo;
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/SylNMlFpa.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/SylNMlFpa.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>This function seems to take an arguemnt as &ldquo;USERNAME &quot; and a hObject to output the value</p>
@@ -1808,10 +1937,14 @@ going into the function it seems too much to sit and revers statically, I&rsquo;
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/B1taGxt6T.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/B1taGxt6T.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>So we go with the understanding that the hObject that goes out of this is the ENV VARIABLE</p>
@@ -1832,10 +1965,14 @@ going into the function it seems too much to sit and revers statically, I&rsquo;
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/SkYHm-F66.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/SkYHm-F66.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>this block of code seems like it is reading an existing string(unk_14002D040)
@@ -1844,10 +1981,14 @@ going into the function it seems too much to sit and revers statically, I&rsquo;
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BkMv7-tpp.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/BkMv7-tpp.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>at particular offsets and it is appending whatever is read from env_struct to
@@ -1862,10 +2003,14 @@ parts of this string</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HkzQtZYpa.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/HkzQtZYpa.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>Going inside it, we see it basically has a memcpy inside it</p>
@@ -1878,10 +2023,14 @@ parts of this string</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HychqbFT6.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/HychqbFT6.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>And going by the order of the string, I would assume that it is being put to use in the same order that it is stored in</p>
@@ -1889,7 +2038,7 @@ parts of this string</p>
 <li>C:\Users%USER%\Downloads\</li>
 <li>C:\Users%USER%\Desktop\</li>
 </ul>
-<p>So we can rename the above image to kind of fit our mental image of what is happening</p>
+<p>So we can rename the above images/image to kind of fit our mental images/image of what is happening</p>
 
 
 <h3 class="relative group">Ransom_note_file_name 
@@ -1908,10 +2057,14 @@ parts of this string</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/ryBWzzFaT.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/ryBWzzFaT.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>
@@ -1919,10 +2072,14 @@ parts of this string</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/ryOMMMtpa.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/ryOMMMtpa.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 
@@ -1942,10 +2099,14 @@ parts of this string</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HJ4M7Gtpa.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/HJ4M7Gtpa.png" alt="images/image" />
+      
+    </figure>
+  
 
 
 when went into the highlighted function, we see calls such as
@@ -1954,10 +2115,14 @@ when went into the highlighted function, we see calls such as
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/ryiImft6p.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/ryiImft6p.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>which leads us to understand that this now creates a file under the name<br>
@@ -1980,22 +2145,30 @@ when went into the highlighted function, we see calls such as
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/B1K-V4Yaa.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/B1K-V4Yaa.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
-<p>In the above image we see <strong>sub_140004550</strong>, we see calls to NtWriteFile</p>
+<p>In the above images/image we see <strong>sub_140004550</strong>, we see calls to NtWriteFile</p>
 <p>
 
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HJxoNEFaT.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/HJxoNEFaT.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>and this function by itself takes arguments to the ransom_note
@@ -2018,10 +2191,14 @@ hence it is safe to assume that it does write the ransom_note onto the newly cre
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rJ1k-_Fpp.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/rJ1k-_Fpp.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>We see the same routine yet again and some file_path\Azr43l_README.txt being passed as an arg to the above mnetioned func. We don&rsquo;t understand much from looking into this, this is yet another function to be looked at dynamically</p>
@@ -2042,10 +2219,14 @@ hence it is safe to assume that it does write the ransom_note onto the newly cre
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rkrZf_KTT.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/rkrZf_KTT.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>Starting from line 275 we see a similar routine again of it again wrting the same content to this new file, it&rsquo;s just that it is in a different location (which can be found out dynamically)</p>
@@ -2066,10 +2247,14 @@ hence it is safe to assume that it does write the ransom_note onto the newly cre
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/B1eRGdKpa.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/B1eRGdKpa.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>Now we get to what seems to be the crux of the ransomware.
@@ -2079,10 +2264,14 @@ We see a new function which we have named unkn_func_2 take in the earlier unkn_f
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BkrJwdY66.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/BkrJwdY66.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 
@@ -2122,10 +2311,14 @@ We see a new function which we have named unkn_func_2 take in the earlier unkn_f
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BkJgQ-5pT.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/BkJgQ-5pT.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 
@@ -2164,49 +2357,71 @@ We see a new function which we have named unkn_func_2 take in the earlier unkn_f
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/SyWFKOFT6.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/SyWFKOFT6.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>Initially we just kept track of the output value of this function
 and func_1_output seems to be generated on runtime</p>
 <p>and when tried to run multiple times, we see different values being generated</p>
-<p>1)
+<ol>
+<li></li>
+</ol>
+<p>
 
 
 
 
-
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BkrPYdFp6.png" alt="image" />
-    
-  </figure>
-
-</p>
-<p>2)
-
-
-
-
-
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/Hyz9Y_Kap.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/BkrPYdFp6.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
-<p>3)
+<ol start="2">
+<li></li>
+</ol>
+<p>
 
 
 
 
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/Hyz9Y_Kap.png" alt="images/image" />
+      
+    </figure>
+  
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BJohtuYpa.png" alt="image" />
-    
-  </figure>
+</p>
+<ol start="3">
+<li></li>
+</ol>
+<p>
+
+
+
+
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/BJohtuYpa.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>Looking at this we see, it generates</p>
@@ -2220,10 +2435,14 @@ and func_1_output seems to be generated on runtime</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/B1zrcuKaa.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/B1zrcuKaa.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 
@@ -2243,10 +2462,14 @@ and func_1_output seems to be generated on runtime</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/H1zFqOta6.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/H1zFqOta6.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>Can confirm that it does take the given struct adn does return the %USER% value in the struct</p>
@@ -2255,10 +2478,14 @@ and func_1_output seems to be generated on runtime</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/ryjj5_YTa.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/ryjj5_YTa.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 
@@ -2274,40 +2501,58 @@ and func_1_output seems to be generated on runtime</p>
     
 </h3>
 <p>we can confirm those particular file_paths now and we do see the actual path and we can name the variables accordingly</p>
-<p>1)
+<ol>
+<li></li>
+</ol>
+<p>
 
 
 
 
-
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/Hy-g2dtpa.png" alt="image" />
-    
-  </figure>
-
-</p>
-<p>2)
-
-
-
-
-
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HJyQ3dYpp.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/Hy-g2dtpa.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
-<p>3)
+<ol start="2">
+<li></li>
+</ol>
+<p>
 
 
 
 
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/HJyQ3dYpp.png" alt="images/image" />
+      
+    </figure>
+  
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/B1LL3OYTT.png" alt="image" />
-    
-  </figure>
+</p>
+<ol start="3">
+<li></li>
+</ol>
+<p>
+
+
+
+
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/B1LL3OYTT.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 
@@ -2329,10 +2574,14 @@ and func_1_output seems to be generated on runtime</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/ryzchuY66.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/ryzchuY66.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 
@@ -2352,10 +2601,14 @@ and func_1_output seems to be generated on runtime</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BkpfltFpT.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/BkpfltFpT.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>Now we come to unkn_func_2
@@ -2365,10 +2618,14 @@ We see the first arg being some structure, and the second one being the desktop_
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/Sydugttap.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/Sydugttap.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>We see plii return 1 at the cb.size so it doesn&rsquo;t even enter the block of code under the if condition below</p>
@@ -2390,10 +2647,14 @@ We see the first arg being some structure, and the second one being the desktop_
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/S1lIYiKTT.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/S1lIYiKTT.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>as we can see, from renaming the above variables in the &ldquo;setting filepath&rdquo; we get an idea as to what all args are being passed into this function
@@ -2410,10 +2671,14 @@ namely</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/H1gJfZ9ap.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/H1gJfZ9ap.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>and we also see the use of the string .azr43l, as seen above in the second triaging attempt</p>
@@ -2422,10 +2687,14 @@ namely</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HJmUMbqpT.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/HJmUMbqpT.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>So going based off of these hunches, now I name the current function that we are in right now, unkn_func_3 as encrypt()</p>
@@ -2447,10 +2716,14 @@ namely</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HJ6b4bcp6.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/HJ6b4bcp6.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>Currently in our case, the file_path is the download folder and the file_length is accordingly set.</p>
@@ -2472,10 +2745,14 @@ namely</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/SJICVW9a6.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/SJICVW9a6.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <blockquote>
@@ -2491,10 +2768,14 @@ Until this part,</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BJZnBWc6a.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/BJZnBWc6a.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>
@@ -2502,10 +2783,14 @@ Until this part,</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/r1Nqr-9ap.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/r1Nqr-9ap.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>it is appended with a * like so</p>
@@ -2517,10 +2802,14 @@ Until this part,</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rkea8WcTa.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/rkea8WcTa.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>and continue ahead.</p>
@@ -2544,10 +2833,14 @@ when we track our filepath variable
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rktfuZc6p.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/rktfuZc6p.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>
@@ -2555,10 +2848,14 @@ when we track our filepath variable
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/Hks0PW56a.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/Hks0PW56a.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>hence it has been aptly named</p>
@@ -2581,10 +2878,14 @@ when we track our filepath variable
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/Skd9O-566.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/Skd9O-566.png" alt="images/image" />
+      
+    </figure>
+  
 
 
 and stepping over this function while debugging also confirms the same. In our case it returns the same <code>C:\Users\Ryuzaki\Downloads\*</code></p>
@@ -2606,10 +2907,14 @@ and stepping over this function while debugging also confirms the same. In our c
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BJ6eFb5TT.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/BJ6eFb5TT.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>We google this on msdn and we <a href="https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-findfirstfilew"   target="_blank">
@@ -2619,10 +2924,14 @@ and stepping over this function while debugging also confirms the same. In our c
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/r1dWiZ5ap.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/r1dWiZ5ap.png" alt="images/image" />
+      
+    </figure>
+  
 
 
 it returns a handle to the file and an output value under the second arguemnt containing information about the file under the structure of FIND_DATAW</p>
@@ -2648,10 +2957,14 @@ it returns a handle to the file and an output value under the second arguemnt co
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/B1LgkGcpT.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/B1LgkGcpT.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>Next as we keep executing,
@@ -2678,10 +2991,14 @@ we see our file_info being copied into the a1 ie our arg1 which we initially tho
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/SJYa_X566.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/SJYa_X566.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>we see a bunch of bytes getting copied over into xmm6 and xmm7 , we just keep that in mind and go ahead</p>
@@ -2702,10 +3019,14 @@ we see our file_info being copied into the a1 ie our arg1 which we initially tho
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rk4WpmqTa.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/rk4WpmqTa.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>Not used.</p>
@@ -2726,10 +3047,14 @@ we see our file_info being copied into the a1 ie our arg1 which we initially tho
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/S1Hn6m56a.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/S1Hn6m56a.png" alt="images/image" />
+      
+    </figure>
+  
 
 
 While debugging we see the memcpy 2&rsquo;s first argument is populated with the filename from get_file_data pointer</p>
@@ -2738,10 +3063,14 @@ While debugging we see the memcpy 2&rsquo;s first argument is populated with the
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HyEPA79Ta.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/HyEPA79Ta.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>Now in my case it turned out to be another directory that is stored first</p>
@@ -2753,10 +3082,14 @@ and goes onto the else condition only to call encrypt function again recrusively
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/B1Eyc4cpp.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/B1Eyc4cpp.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 
@@ -2780,10 +3113,14 @@ and goes onto the else condition only to call encrypt function again recrusively
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/SyzQjN9a6.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/SyzQjN9a6.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>and filled it with loerm ipsum content, and now that this file is taken in it passes throuhgh the above function wih no issues, I can form the hunch that the above function
@@ -2806,10 +3143,14 @@ and goes onto the else condition only to call encrypt function again recrusively
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/B1Cv6V9Ta.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/B1Cv6V9Ta.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>passing through this function and looking at the value inside <code>RandomBuffer</code>, show&rsquo;s us</p>
@@ -2818,10 +3159,14 @@ and goes onto the else condition only to call encrypt function again recrusively
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BJLoa4qTT.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/BJLoa4qTT.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p><code>txt</code> - meaning the function serves it&rsquo;s purpose to find the extension of the loaded file.</p>
@@ -2831,10 +3176,14 @@ and goes onto the else condition only to call encrypt function again recrusively
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BkAJyS5pa.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/BkAJyS5pa.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>if the extension is already <code>azr43l</code> then it enters the else condition and looks for more files in the same directory</p>
@@ -2846,10 +3195,14 @@ and goes onto the else condition only to call encrypt function again recrusively
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/Sk8u1H566.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/Sk8u1H566.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>if it turns out to be the ransom note then it exits ,looking for the next file in the directory</p>
@@ -2859,10 +3212,14 @@ and goes onto the else condition only to call encrypt function again recrusively
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/S1ApxBcap.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/S1ApxBcap.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>we spot it&rsquo;s a CreateFile API</p>
@@ -2874,10 +3231,14 @@ and goes onto the else condition only to call encrypt function again recrusively
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HkpS-S566.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/HkpS-S566.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>That seems to return teh filename alone from the huge file path, for example in our case it is - <code>just_a_test_doc</code></p>
@@ -2886,10 +3247,14 @@ and goes onto the else condition only to call encrypt function again recrusively
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BkW9bHqpT.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/BkW9bHqpT.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>Then from further debugging we see function calls such as
@@ -2898,10 +3263,14 @@ and goes onto the else condition only to call encrypt function again recrusively
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rJb0bB9aa.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/rJb0bB9aa.png" alt="images/image" />
+      
+    </figure>
+  
 
 
 which I have renamed it, because it returns the technical last byte being &ldquo;\0&rdquo;</p>
@@ -2910,10 +3279,14 @@ which I have renamed it, because it returns the technical last byte being &ldquo
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rkzzfB5pT.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/rkzzfB5pT.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>Then it takes the file_name and appends to it the .azr43l extention through these two memcpy</p>
@@ -2923,10 +3296,14 @@ which I have renamed it, because it returns the technical last byte being &ldquo
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/SyWcMHca6.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/SyWcMHca6.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>
@@ -2934,10 +3311,14 @@ which I have renamed it, because it returns the technical last byte being &ldquo
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HJ29zB9aa.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/HJ29zB9aa.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>and that it is getting copied to <code>Random buffer</code></p>
@@ -2947,10 +3328,14 @@ which I have renamed it, because it returns the technical last byte being &ldquo
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/H1v0GH5aa.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/H1v0GH5aa.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>we see random buffer being appended to file_directory
@@ -2960,10 +3345,14 @@ there_by creating this
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/S11f7Sqpa.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/S11f7Sqpa.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>basically it appends .azr43l to the path of the old filename and it creates a new file_path</p>
@@ -2986,10 +3375,14 @@ there_by creating this
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rJBHmr56a.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/rJBHmr56a.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>Then it&rsquo;s just doing a few copies of file pointers which is not really necessary for us atm
@@ -2998,10 +3391,14 @@ there_by creating this
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/SkF_PHqap.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/SkF_PHqap.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>it provies a malloc space for file_contents then we finally come to reading the file</p>
@@ -3023,10 +3420,14 @@ there_by creating this
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/S10ADHca6.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/S10ADHca6.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>hence we name it to be open_file</p>
@@ -3035,10 +3436,14 @@ there_by creating this
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HJ5jPH56p.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/HJ5jPH56p.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>now we can see the file contents as well</p>
@@ -3047,10 +3452,14 @@ there_by creating this
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rkJowrq66.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/rkJowrq66.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 
@@ -3071,10 +3480,14 @@ there_by creating this
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/ryeHOHq6p.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/ryeHOHq6p.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>opening it we see,</p>
@@ -3083,10 +3496,14 @@ there_by creating this
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/r1YVuB96T.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/r1YVuB96T.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>So now we have renamed it as
@@ -3095,11 +3512,14 @@ there_by creating this
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/SJGfuHcp6.png" alt="
-image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/SJGfuHcp6.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>we can see the RandomBuffer is now stored on the stack</p>
@@ -3108,10 +3528,14 @@ image" />
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rkEtur9p6.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/rkEtur9p6.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 
@@ -3158,10 +3582,14 @@ Arg 5 :12</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rJgbsH5pp.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/rJgbsH5pp.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>we see strings like chacha20 which certainly do pique an interest here</p>
@@ -3170,10 +3598,14 @@ Arg 5 :12</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HJxPjB9T6.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/HJxPjB9T6.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>WE see another function being called internally</p>
@@ -3185,10 +3617,14 @@ Arg 5 :12</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/r1p9jBcTT.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/r1p9jBcTT.png" alt="images/image" />
+      
+    </figure>
+  
 
 
 <code>expand 32-byte k</code></p>
@@ -3198,10 +3634,14 @@ Arg 5 :12</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/By5-3r56T.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/By5-3r56T.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>Therefore now we can rename this funtion as init_chacha20</p>
@@ -3228,10 +3668,14 @@ and a 12 byte nonce(which in our case is the 24 byte random_val)</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BJ05nS9Tp.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/BJ05nS9Tp.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>Arg1 : <code>expand 32-byte k</code> followed by the random_buffer in memory followed by the first 12 bytes of the 24_byte_val
@@ -3245,10 +3689,14 @@ Arg 5: unsure</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HJ-MeIqaT.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/HJ-MeIqaT.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>followed by</p>
@@ -3258,10 +3706,14 @@ Arg 5: unsure</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/S1ZXxU56T.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/S1ZXxU56T.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>
@@ -3269,10 +3721,14 @@ Arg 5: unsure</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HJwml85Ta.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/HJwml85Ta.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>followed by the 12 byte nonce
@@ -3281,10 +3737,14 @@ Arg 5: unsure</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/H1CEx8q6p.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/H1CEx8q6p.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>all of this is on the stack and now this aligns with what we saw in the rust documentation and hence, now we are able to get a clear picture on how and what it is encrypting</p>
@@ -3306,10 +3766,14 @@ Arg 5: unsure</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/HynIZU966.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/HynIZU966.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>After encryption the location where the 12 byte nonce was stored is where the encrypted data is stored as well, the pointer is being overwritten</p>
@@ -3331,10 +3795,14 @@ Arg 5: unsure</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/r1dVXUcTa.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/r1dVXUcTa.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>rn the very same byts that are storred in xmm8 and xmm7 are getting xorred with the 32 byte random value that we just generated</p>
@@ -3355,10 +3823,14 @@ Arg 5: unsure</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/ByIl489pp.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/ByIl489pp.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>This xorred value is now being appended to the very end of the file_data that we just encrypted.</p>
@@ -3382,10 +3854,14 @@ Arg 5: unsure</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/SJrVNIc6T.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/SJrVNIc6T.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>Once the new file has been written now, there is no need to keep the original old file around which is now getting deleted from the system</p>
@@ -3422,10 +3898,14 @@ Arg 5: unsure</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rye1wUcTa.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/rye1wUcTa.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>This block of code encrypts the desktop content</p>
@@ -3446,10 +3926,14 @@ Arg 5: unsure</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/ByCIP8qTp.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/ByCIP8qTp.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>Then it goes onto encrypt
@@ -3471,10 +3955,14 @@ Arg 5: unsure</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/rJn2wL5Ta.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/rJn2wL5Ta.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>Encrypts documents twice</p>
@@ -3496,10 +3984,14 @@ Arg 5: unsure</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/r1Mot8cp6.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/r1Mot8cp6.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>We see here what looks like an IP addr</p>
@@ -3510,10 +4002,14 @@ Arg 5: unsure</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/r1pUo89Tp.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/r1pUo89Tp.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>Now hObject seems to be initialized with ip and port binding them into a single struct for sockets</p>
@@ -3523,10 +4019,14 @@ Arg 5: unsure</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/BJpcsI5T6.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/BJpcsI5T6.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>which takes the IP , Port and the random_24_byte_val, which we now know to be the nonce</p>
@@ -3535,10 +4035,14 @@ Arg 5: unsure</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/S1XasIq6a.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/S1XasIq6a.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>it sends the nonce to IP 192.168.1.33:6969</p>
@@ -3559,10 +4063,14 @@ Arg 5: unsure</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/B1hXnU9ap.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/B1hXnU9ap.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>And last but not least we come to the final function which is yet to be analysed</p>
@@ -3572,10 +4080,14 @@ Arg 5: unsure</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/Sy8rhIc6a.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/Sy8rhIc6a.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>and we see a bunch of function calls of the same function(sub_1400172B0) but with different strings as different args</p>
@@ -3584,10 +4096,14 @@ Arg 5: unsure</p>
 
 
 
-  <figure>
-    <img class="my-0 rounded-md" loading="lazy" src="https://hackmd.io/_uploads/B1j5hIcTa.png" alt="image" />
-    
-  </figure>
+  
+  
+  
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="images/images/B1j5hIcTa.png" alt="images/image" />
+      
+    </figure>
+  
 
 </p>
 <p>Going into the function we see a lot of calls</p>
@@ -3633,7 +4149,7 @@ GetCurrentProcess</p>
       <a
       target="_blank"
       class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
-      href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http://localhost:1313/posts/bi0sctf_ransomware/&amp;title=Batman%20Investigation%20III%20-%20Th3%20Sw0rd%200f%20Azr43l%20-%20bi0sCTF%202024"
+      href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://retr0ds.github.io/posts/bi0sctf_ransomware/&amp;title=Rust%20Ransomware%20Analysis"
       title="Share on LinkedIn"
       aria-label="Share on LinkedIn"
       >
@@ -3652,7 +4168,7 @@ GetCurrentProcess</p>
       <a
       target="_blank"
       class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
-      href="https://twitter.com/intent/tweet/?url=http://localhost:1313/posts/bi0sctf_ransomware/&amp;text=Batman%20Investigation%20III%20-%20Th3%20Sw0rd%200f%20Azr43l%20-%20bi0sCTF%202024"
+      href="https://twitter.com/intent/tweet/?url=https://retr0ds.github.io/posts/bi0sctf_ransomware/&amp;text=Rust%20Ransomware%20Analysis"
       title="Tweet on Twitter"
       aria-label="Tweet on Twitter"
       >
@@ -3670,7 +4186,7 @@ GetCurrentProcess</p>
       <a
       target="_blank"
       class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
-      href="https://reddit.com/submit/?url=http://localhost:1313/posts/bi0sctf_ransomware/&amp;resubmit=true&amp;title=Batman%20Investigation%20III%20-%20Th3%20Sw0rd%200f%20Azr43l%20-%20bi0sCTF%202024"
+      href="https://reddit.com/submit/?url=https://retr0ds.github.io/posts/bi0sctf_ransomware/&amp;resubmit=true&amp;title=Rust%20Ransomware%20Analysis"
       title="Submit to Reddit"
       aria-label="Submit to Reddit"
       >
@@ -3689,7 +4205,7 @@ GetCurrentProcess</p>
       <a
       target="_blank"
       class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
-      href="https://pinterest.com/pin/create/bookmarklet/?url=http://localhost:1313/posts/bi0sctf_ransomware/&amp;description=Batman%20Investigation%20III%20-%20Th3%20Sw0rd%200f%20Azr43l%20-%20bi0sCTF%202024"
+      href="https://pinterest.com/pin/create/bookmarklet/?url=https://retr0ds.github.io/posts/bi0sctf_ransomware/&amp;description=Rust%20Ransomware%20Analysis"
       title="Pin on Pinterest"
       aria-label="Pin on Pinterest"
       >
@@ -3708,7 +4224,7 @@ GetCurrentProcess</p>
       <a
       target="_blank"
       class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
-      href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:1313/posts/bi0sctf_ransomware/&amp;quote=Batman%20Investigation%20III%20-%20Th3%20Sw0rd%200f%20Azr43l%20-%20bi0sCTF%202024"
+      href="https://www.facebook.com/sharer/sharer.php?u=https://retr0ds.github.io/posts/bi0sctf_ransomware/&amp;quote=Rust%20Ransomware%20Analysis"
       title="Share on Facebook"
       aria-label="Share on Facebook"
       >
@@ -3727,7 +4243,7 @@ GetCurrentProcess</p>
       <a
       target="_blank"
       class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
-      href="mailto:?body=http://localhost:1313/posts/bi0sctf_ransomware/&amp;subject=Batman%20Investigation%20III%20-%20Th3%20Sw0rd%200f%20Azr43l%20-%20bi0sCTF%202024"
+      href="mailto:?body=https://retr0ds.github.io/posts/bi0sctf_ransomware/&amp;subject=Rust%20Ransomware%20Analysis"
       title="Send via email"
       aria-label="Send via email"
       >
@@ -3746,7 +4262,7 @@ GetCurrentProcess</p>
       <a
       target="_blank"
       class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
-      href="https://api.whatsapp.com/send?text=http://localhost:1313/posts/bi0sctf_ransomware/&amp;resubmit=true&amp;title=Batman%20Investigation%20III%20-%20Th3%20Sw0rd%200f%20Azr43l%20-%20bi0sCTF%202024"
+      href="https://api.whatsapp.com/send?text=https://retr0ds.github.io/posts/bi0sctf_ransomware/&amp;resubmit=true&amp;title=Rust%20Ransomware%20Analysis"
       title=""
       aria-label=""
       >
@@ -3765,7 +4281,7 @@ GetCurrentProcess</p>
       <a
       target="_blank"
       class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
-      href="https://t.me/share/url?url=http://localhost:1313/posts/bi0sctf_ransomware/&amp;resubmit=true&amp;title=Batman%20Investigation%20III%20-%20Th3%20Sw0rd%200f%20Azr43l%20-%20bi0sCTF%202024"
+      href="https://t.me/share/url?url=https://retr0ds.github.io/posts/bi0sctf_ransomware/&amp;resubmit=true&amp;title=Rust%20Ransomware%20Analysis"
       title=""
       aria-label=""
       >
@@ -3795,7 +4311,7 @@ GetCurrentProcess</p>
     
     <div class="min-h-full border border-neutral-200 dark:border-neutral-700 border-2 rounded overflow-hidden shadow-2xl relative">
         
-        <div class="w-full thumbnail_card_related nozoom" style="background-image:url(/img/featured.svg);"></div>
+        <div class="w-full thumbnail_card_related nozoom" style="background-image:url(/posts/vessel_cartographer_htb2023/featured_huc84e63f6dc77192f086a5c0ce1be1001_37469_600x0_resize_q75_box.jpeg);"></div>
         
       
 
@@ -3939,7 +4455,7 @@ GetCurrentProcess</p>
     
     <div class="min-h-full border border-neutral-200 dark:border-neutral-700 border-2 rounded overflow-hidden shadow-2xl relative">
         
-        <div class="w-full thumbnail_card_related nozoom" style="background-image:url(/img/featured.svg);"></div>
+        <div class="w-full thumbnail_card_related nozoom" style="background-image:url(/posts/android_reversing_basic/featured_hucce2129362774e1275484bdd5085ca49_319726_600x0_resize_q75_box.jpeg);"></div>
         
       
 
@@ -4118,6 +4634,28 @@ GetCurrentProcess</p>
         </span>
         <span>
           
+            <a class="flex text-right group ml-3" href="/posts/mal_generated30/">
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >Telegram C2 InfoStealer</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2025-09-25 19:31:40 &#43;0000 UTC">25 September 2025</time>
+                  
+                </span>
+              </span>
+              <span
+                class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400"
+                >&rarr;</span
+              >
+              <span
+                class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400"
+                >&larr;</span
+              >
+            </a>
+          
         </span>
       </div>
     </div>
@@ -4202,7 +4740,7 @@ GetCurrentProcess</p>
 </footer><div
   id="search-wrapper"
   class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]"
-  data-url="http://localhost:1313/"
+  data-url="https://retr0ds.github.io/"
   style="z-index:500"
 >
   <div

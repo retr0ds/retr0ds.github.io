@@ -6,6 +6,7 @@ author: retr0ds
 layout: "background"
 author_url: https://twitter.com/_retr0ds_
 BackgroundImage: "img/background.svg"
+weight: 2
 
 categories:
   - Reversing
